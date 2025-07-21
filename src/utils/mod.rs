@@ -1,5 +1,8 @@
 //! Utility functions for the Deribit FIX framework
+
+/// Display utilities and formatting helpers
 pub mod display;
+/// Logging configuration and setup
 pub(crate) mod logger;
 
 use base64::prelude::*;

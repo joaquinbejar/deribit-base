@@ -12,7 +12,6 @@ pub mod utils;
 
 /// Re-export commonly used types for convenience
 pub mod prelude {
-    //! Convenience re-exports for common types and traits
 
     pub use crate::{
         model::order::{NewOrderRequest, OrderSide, OrderType, TimeInForce},
