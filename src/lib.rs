@@ -11,11 +11,4 @@ pub mod model;
 pub mod utils;
 
 /// Re-export commonly used types for convenience
-pub mod prelude {
-
-    pub use crate::{
-        model::order::{NewOrderRequest, OrderSide, OrderType, TimeInForce},
-        model::position::Position,
-        utils::setup_logger,
-    };
-}
+pub mod prelude;
