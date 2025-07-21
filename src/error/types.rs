@@ -10,7 +10,12 @@ pub enum DeribitError {
     /// Authentication error
     Authentication(String),
     /// API error with code and message
-    Api { code: i32, message: String },
+    Api {
+        /// Error code returned by the API
+        code: i32,
+        /// Human-readable error message
+        message: String,
+    },
     /// Serialization/deserialization error
     Serialization(String),
     /// Network timeout
