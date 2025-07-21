@@ -14,10 +14,7 @@
 [![Documentation](https://img.shields.io/badge/docs-latest-blue.svg)](https://docs.rs/deribit-base)
 [![Wiki](https://img.shields.io/badge/wiki-latest-blue.svg)](https://deepwiki.com/joaquinbejar/deribit-base)
 
-## Deribit Base
-
-This crate provides common structs, traits, and functionality shared across
-all Deribit API client implementations (FIX, HTTP, WebSocket).
+{{readme}}
 
 ## Contribution and Contact
 
