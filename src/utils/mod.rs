@@ -5,12 +5,11 @@ pub mod display;
 /// Logging configuration and setup
 pub(crate) mod logger;
 
+use crate::model::order::{OrderSide, OrderType, TimeInForce};
 use base64::prelude::*;
 use chrono::{DateTime, Utc};
 use rand::{Rng, rng};
 use std::time::{SystemTime, UNIX_EPOCH};
-
-use crate::model::order::{OrderSide, OrderType, TimeInForce};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 /// Setup logging with configurable level
