@@ -178,7 +178,9 @@ impl BookSummary {
 
     /// Check if this is an option
     pub fn is_option(&self) -> bool {
-        self.instrument_name.contains("-C") || self.instrument_name.contains("-P")
+        // Options end with -C or -P (call/put) but not PERPETUAL
+        !self.is_perpetual()
+            && (self.instrument_name.ends_with("-C") || self.instrument_name.ends_with("-P"))
     }
 
     /// Check if this is a future
