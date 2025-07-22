@@ -8,8 +8,8 @@
 
 // Re-export commonly used types
 pub use crate::error::{
+    codes::DeribitErrorCode,
     types::{DeribitError, DeribitResult},
-    codes::DeribitErrorCode
 };
 
 // Model exports

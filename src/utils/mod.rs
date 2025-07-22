@@ -10,9 +10,6 @@ use base64::prelude::*;
 use chrono::{DateTime, Utc};
 use rand::{Rng, rng};
 use std::time::{SystemTime, UNIX_EPOCH};
-use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
-
-
 
 /// Generate a cryptographically secure random nonce
 pub fn generate_nonce(length: usize) -> String {
