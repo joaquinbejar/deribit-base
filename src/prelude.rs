@@ -27,15 +27,8 @@ pub use crate::model::{
     order::{OrderSide, OrderStatus, OrderType, TimeInForce},
     position::Position,
     request::{
-        AdvancedOrderType,
-        AuthRequest,
-        CancelAllOrdersRequest,
-        CancelOrderRequest,
-        ClosePositionRequest,
-        ModifyOrderRequest,
-        NewOrderRequest,
-        TriggerType,
-        fix, // FIX protocol structures
+        AdvancedOrderType, AuthRequest, CancelAllOrdersRequest, CancelOrderRequest,
+        ClosePositionRequest, ModifyOrderRequest, NewOrderRequest, TriggerType,
     },
     response::{
         AuthResponse, HeartbeatResponse, JsonRpcError, JsonRpcResponse, Notification,
