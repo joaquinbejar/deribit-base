@@ -8,4 +8,4 @@ pub mod display;
 /// Logging configuration and setup
 pub mod logger;
 /// Common utility functions and constants
-mod tools;
+pub(crate) mod tools;
