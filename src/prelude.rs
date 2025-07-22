@@ -7,7 +7,10 @@
 //! Common exports for easy importing
 
 // Re-export commonly used types
-pub use crate::error::types::{DeribitError, DeribitResult};
+pub use crate::error::{
+    types::{DeribitError, DeribitResult},
+    codes::DeribitErrorCode
+};
 
 // Model exports
 pub use crate::model::{
@@ -46,4 +49,4 @@ pub use crate::model::{
 };
 
 // Utility exports - macros and functions
-pub use crate::utils::setup_logger;
+pub use crate::utils::logger::setup_logger;
