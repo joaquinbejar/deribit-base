@@ -1,4 +1,7 @@
-//! Utility functions for the Deribit FIX framework
+//! Utility functions and helpers for Deribit API operations
+//!
+//! This module contains various utility functions and helpers used across
+//! all Deribit API client implementations (FIX, HTTP REST, WebSocket).
 
 /// Display utilities and formatting helpers
 pub mod display;
@@ -6,4 +9,3 @@ pub mod display;
 pub mod logger;
 /// Common utility functions and constants
 mod tools;
-

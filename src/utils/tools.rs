@@ -1,8 +1,17 @@
 /******************************************************************************
-    Author: Joaquín Béjar García
-    Email: jb@taunais.com 
-    Date: 22/7/25
- ******************************************************************************/
+   Author: Joaquín Béjar García
+   Email: jb@taunais.com
+   Date: 22/7/25
+******************************************************************************/
+
+//! Utility functions and tools for Deribit API operations
+//!
+//! This module provides various utility functions for:
+//! - Cryptographic operations (nonce generation, checksums)
+//! - Time and timestamp formatting
+//! - FIX protocol message formatting and validation
+//! - Order and instrument data conversion
+//! - String escaping and parsing utilities
 
 use crate::model::order::{OrderSide, OrderType, TimeInForce};
 use base64::prelude::*;

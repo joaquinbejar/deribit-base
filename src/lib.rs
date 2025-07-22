@@ -1,3 +1,5 @@
+#![warn(missing_docs)]
+
 //! # Deribit Base
 //!
 //! This crate provides common structs, traits, and functionality shared across
@@ -10,6 +12,6 @@ pub mod model;
 /// Utility functions and helpers
 pub mod utils;
 
+pub mod constants;
 /// Re-export commonly used types for convenience
 pub mod prelude;
-pub mod constants;
