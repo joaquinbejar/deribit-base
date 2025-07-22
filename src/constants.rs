@@ -335,31 +335,68 @@ mod tests {
 
     #[test]
     fn test_rate_limits() {
-        assert!(MAX_REQUESTS_PER_SECOND_AUTH > MAX_REQUESTS_PER_SECOND_UNAUTH);
-        assert!(MAX_SUBSCRIPTIONS_PER_CONNECTION > 0);
-        assert!(MAX_MESSAGE_SIZE_BYTES > 0);
+        // Validate rate limit relationships - these are important business logic constraints
+        #[allow(clippy::assertions_on_constants)]
+        {
+            assert!(MAX_REQUESTS_PER_SECOND_AUTH > MAX_REQUESTS_PER_SECOND_UNAUTH);
+            assert!(MAX_SUBSCRIPTIONS_PER_CONNECTION > 0);
+            assert!(MAX_MESSAGE_SIZE_BYTES > 0);
+        }
+
+        // Runtime validation of actual values
+        assert_eq!(MAX_REQUESTS_PER_SECOND_AUTH, 20);
+        assert_eq!(MAX_REQUESTS_PER_SECOND_UNAUTH, 10);
+        assert_eq!(MAX_SUBSCRIPTIONS_PER_CONNECTION, 200);
+        assert_eq!(MAX_MESSAGE_SIZE_BYTES, 65536);
     }
 
     #[test]
     fn test_timeouts() {
-        assert!(DEFAULT_CONNECTION_TIMEOUT_MS > 0);
-        assert!(DEFAULT_REQUEST_TIMEOUT_MS > DEFAULT_CONNECTION_TIMEOUT_MS);
-        assert!(HEARTBEAT_INTERVAL_MS > HEARTBEAT_TIMEOUT_MS);
+        // Validate timeout relationships - these are important for connection stability
+        #[allow(clippy::assertions_on_constants)]
+        {
+            assert!(DEFAULT_CONNECTION_TIMEOUT_MS > 0);
+            assert!(DEFAULT_REQUEST_TIMEOUT_MS > DEFAULT_CONNECTION_TIMEOUT_MS);
+            assert!(HEARTBEAT_INTERVAL_MS > HEARTBEAT_TIMEOUT_MS);
+        }
+
+        // Runtime validation of actual values
+        assert_eq!(DEFAULT_CONNECTION_TIMEOUT_MS, 5000);
+        assert_eq!(DEFAULT_REQUEST_TIMEOUT_MS, 10000);
+        assert_eq!(HEARTBEAT_INTERVAL_MS, 10000);
+        assert_eq!(HEARTBEAT_TIMEOUT_MS, 5000);
     }
 
     #[test]
     fn test_order_limits() {
-        assert!(MIN_ORDER_AMOUNT_BTC > 0.0);
-        assert!(MIN_ORDER_AMOUNT_ETH > 0.0);
-        assert!(MIN_ORDER_AMOUNT_SOL > 0.0);
-        assert!(MAX_ORDER_AMOUNT > MIN_ORDER_AMOUNT_BTC);
-        assert!(MAX_OPEN_ORDERS_TOTAL > MAX_OPEN_ORDERS_PER_INSTRUMENT);
+        // Validate order limit relationships - these are important trading constraints
+        #[allow(clippy::assertions_on_constants)]
+        {
+            assert!(MIN_ORDER_AMOUNT_BTC > 0.0);
+            assert!(MIN_ORDER_AMOUNT_ETH > 0.0);
+            assert!(MIN_ORDER_AMOUNT_SOL > 0.0);
+            assert!(MAX_ORDER_AMOUNT > MIN_ORDER_AMOUNT_BTC);
+            assert!(MAX_OPEN_ORDERS_TOTAL > MAX_OPEN_ORDERS_PER_INSTRUMENT);
+        }
+
+        // Runtime validation using helper functions
+        assert_eq!(get_min_order_amount(CURRENCY_BTC), MIN_ORDER_AMOUNT_BTC);
+        assert_eq!(get_min_order_amount(CURRENCY_ETH), MIN_ORDER_AMOUNT_ETH);
+        assert_eq!(get_min_order_amount(CURRENCY_SOL), MIN_ORDER_AMOUNT_SOL);
     }
 
     #[test]
     fn test_jsonrpc_constants() {
         assert_eq!(JSONRPC_VERSION, "2.0");
-        assert!(DEFAULT_REQUEST_ID > 0);
+
+        // Validate request ID is positive - important for protocol compliance
+        #[allow(clippy::assertions_on_constants)]
+        {
+            assert!(DEFAULT_REQUEST_ID > 0);
+        }
+
+        // Runtime validation
+        assert_eq!(DEFAULT_REQUEST_ID, 1);
     }
 
     #[test]
@@ -367,15 +404,35 @@ mod tests {
         assert_eq!(FIX_VERSION, "FIX.4.4");
         assert_eq!(FIX_DELIMITER, '\x01');
         assert_eq!(FIX_DELIMITER_STR, "\x01");
-        assert!(FIX_HEARTBEAT_INTERVAL > 0);
+
+        // Validate heartbeat interval is positive - important for FIX protocol
+        #[allow(clippy::assertions_on_constants)]
+        {
+            assert!(FIX_HEARTBEAT_INTERVAL > 0);
+        }
+
+        // Runtime validation
+        assert_eq!(FIX_HEARTBEAT_INTERVAL, 30);
     }
 
     #[test]
     fn test_channel_names() {
-        assert!(!CHANNEL_BOOK.is_empty());
-        assert!(!CHANNEL_TRADES.is_empty());
-        assert!(!CHANNEL_TICKER.is_empty());
-        assert!(!CHANNEL_QUOTE.is_empty());
+        // Validate channel names are not empty - important for WebSocket subscriptions
+        #[allow(clippy::const_is_empty)]
+        {
+            assert!(!CHANNEL_BOOK.is_empty());
+            assert!(!CHANNEL_TRADES.is_empty());
+            assert!(!CHANNEL_TICKER.is_empty());
+            assert!(!CHANNEL_QUOTE.is_empty());
+        }
+
+        // Runtime validation of actual channel names
+        assert_eq!(CHANNEL_BOOK, "book");
+        assert_eq!(CHANNEL_TRADES, "trades");
+        assert_eq!(CHANNEL_TICKER, "ticker");
+        assert_eq!(CHANNEL_QUOTE, "quote");
+
+        // Validate user channel prefixes
         assert!(CHANNEL_USER_ORDERS.starts_with("user."));
         assert!(CHANNEL_USER_TRADES.starts_with("user."));
         assert!(CHANNEL_USER_PORTFOLIO.starts_with("user."));
@@ -399,23 +456,51 @@ mod tests {
 
     #[test]
     fn test_authentication_constants() {
-        assert!(ACCESS_TOKEN_EXPIRATION_SEC > 0);
-        assert!(REFRESH_TOKEN_EXPIRATION_SEC > ACCESS_TOKEN_EXPIRATION_SEC);
-        assert!(TOKEN_REFRESH_BUFFER_SEC < ACCESS_TOKEN_EXPIRATION_SEC);
+        // Validate token expiration relationships - critical for authentication security
+        #[allow(clippy::assertions_on_constants)]
+        {
+            assert!(ACCESS_TOKEN_EXPIRATION_SEC > 0);
+            assert!(REFRESH_TOKEN_EXPIRATION_SEC > ACCESS_TOKEN_EXPIRATION_SEC);
+            assert!(TOKEN_REFRESH_BUFFER_SEC < ACCESS_TOKEN_EXPIRATION_SEC);
+        }
+
+        // Runtime validation of actual values
+        assert_eq!(ACCESS_TOKEN_EXPIRATION_SEC, 28800); // 8 hours
+        assert_eq!(REFRESH_TOKEN_EXPIRATION_SEC, 2592000); // 30 days
+        assert_eq!(TOKEN_REFRESH_BUFFER_SEC, 300); // 5 minutes
     }
 
     #[test]
     fn test_market_data_constants() {
-        assert!(MAX_ORDER_BOOK_DEPTH > DEFAULT_ORDER_BOOK_DEPTH);
-        assert!(MAX_RECENT_TRADES > DEFAULT_RECENT_TRADES);
-        assert!(DEFAULT_ORDER_BOOK_DEPTH > 0);
-        assert!(DEFAULT_RECENT_TRADES > 0);
+        // Validate market data limit relationships - important for performance
+        #[allow(clippy::assertions_on_constants)]
+        {
+            assert!(MAX_ORDER_BOOK_DEPTH > DEFAULT_ORDER_BOOK_DEPTH);
+            assert!(MAX_RECENT_TRADES > DEFAULT_RECENT_TRADES);
+            assert!(DEFAULT_ORDER_BOOK_DEPTH > 0);
+            assert!(DEFAULT_RECENT_TRADES > 0);
+        }
+
+        // Runtime validation of actual values
+        assert_eq!(MAX_ORDER_BOOK_DEPTH, 10000);
+        assert_eq!(DEFAULT_ORDER_BOOK_DEPTH, 20);
+        assert_eq!(MAX_RECENT_TRADES, 10000);
+        assert_eq!(DEFAULT_RECENT_TRADES, 100);
     }
 
     #[test]
     fn test_error_handling_constants() {
-        assert!(MAX_RETRY_ATTEMPTS > 0);
-        assert!(RETRY_BASE_DELAY_MS > 0);
-        assert!(RETRY_MAX_DELAY_MS > RETRY_BASE_DELAY_MS);
+        // Validate retry logic relationships - important for resilience
+        #[allow(clippy::assertions_on_constants)]
+        {
+            assert!(MAX_RETRY_ATTEMPTS > 0);
+            assert!(RETRY_BASE_DELAY_MS > 0);
+            assert!(RETRY_MAX_DELAY_MS > RETRY_BASE_DELAY_MS);
+        }
+
+        // Runtime validation of actual values
+        assert_eq!(MAX_RETRY_ATTEMPTS, 3);
+        assert_eq!(RETRY_BASE_DELAY_MS, 1000);
+        assert_eq!(RETRY_MAX_DELAY_MS, 30000);
     }
 }
