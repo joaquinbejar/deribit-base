@@ -7,6 +7,7 @@
 use crate::model::currency::Currency;
 use serde::{Deserialize, Serialize};
 
+use crate::{impl_json_debug_pretty, impl_json_display};
 /// Instrument kind enumeration
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
@@ -46,7 +47,7 @@ pub enum InstrumentType {
 }
 
 /// Instrument information
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)] 
 pub struct Instrument {
     /// Instrument name (e.g., "BTC-PERPETUAL", "ETH-25JUL25-3000-C")
     pub instrument_name: String,
@@ -115,3 +116,13 @@ impl Instrument {
         self.currency.as_str()
     }
 }
+
+// Debug implementations using pretty JSON formatting
+impl_json_debug_pretty!(
+    Instrument
+);
+
+// Display implementations using compact JSON formatting
+impl_json_display!(
+    Instrument
+);

@@ -5,6 +5,7 @@
 ******************************************************************************/
 
 use crate::model::order::{OrderSide, OrderType, TimeInForce};
+use crate::{impl_json_debug_pretty, impl_json_display};
 use serde::{Deserialize, Serialize};
 
 /// FIX protocol compatible structures
@@ -12,7 +13,7 @@ pub mod fix {
     use super::*;
 
     /// New order request structure for FIX protocol
-    #[derive(Debug, Clone, Serialize, Deserialize)]
+    #[derive(Clone, Serialize, Deserialize)]
     pub struct NewOrderRequest {
         /// Instrument symbol (e.g., "BTC-PERPETUAL")
         pub symbol: String,
@@ -137,7 +138,7 @@ pub mod fix {
 }
 
 /// Generic request for creating new orders
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct NewOrderRequest {
     /// Instrument name
     pub instrument_name: String,
@@ -289,7 +290,7 @@ impl NewOrderRequest {
 }
 
 /// Trigger type for stop orders
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum TriggerType {
     /// Index price trigger
@@ -301,7 +302,7 @@ pub enum TriggerType {
 }
 
 /// Advanced order type
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum AdvancedOrderType {
     /// USD denomination
@@ -311,7 +312,7 @@ pub enum AdvancedOrderType {
 }
 
 /// Order modification request
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct ModifyOrderRequest {
     /// Order ID to modify
     pub order_id: String,
@@ -332,14 +333,14 @@ pub struct ModifyOrderRequest {
 }
 
 /// Order cancellation request
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct CancelOrderRequest {
     /// Order ID to cancel
     pub order_id: String,
 }
 
 /// Cancel all orders request
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct CancelAllOrdersRequest {
     /// Currency filter
     pub currency: Option<String>,
@@ -351,7 +352,7 @@ pub struct CancelAllOrdersRequest {
 }
 
 /// Position close request
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct ClosePositionRequest {
     /// Instrument name
     pub instrument_name: String,
@@ -363,7 +364,7 @@ pub struct ClosePositionRequest {
 }
 
 /// Authentication request
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct AuthRequest {
     /// Grant type
     pub grant_type: String,
@@ -400,3 +401,29 @@ impl AuthRequest {
         }
     }
 }
+
+// Debug implementations using pretty JSON formatting
+impl_json_debug_pretty!(
+    fix::NewOrderRequest,
+    NewOrderRequest,
+    TriggerType,
+    AdvancedOrderType,
+    ModifyOrderRequest,
+    CancelOrderRequest,
+    CancelAllOrdersRequest,
+    ClosePositionRequest,
+    AuthRequest
+);
+
+// Display implementations using compact JSON formatting
+impl_json_display!(
+    fix::NewOrderRequest,
+    NewOrderRequest,
+    TriggerType,
+    AdvancedOrderType,
+    ModifyOrderRequest,
+    CancelOrderRequest,
+    CancelAllOrdersRequest,
+    ClosePositionRequest,
+    AuthRequest
+);

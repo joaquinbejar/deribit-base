@@ -7,8 +7,9 @@
 use crate::model::currency::Currency;
 use serde::{Deserialize, Serialize};
 
+use crate::{impl_json_debug_pretty, impl_json_display};
 /// Account summary information
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct AccountSummary {
     /// Account currency
     pub currency: Currency,
@@ -112,7 +113,7 @@ impl AccountSummary {
 }
 
 /// Portfolio information
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct Portfolio {
     /// Currency of the portfolio
     pub currency: Currency,
@@ -160,3 +161,13 @@ impl Portfolio {
         self.accounts.iter().map(|acc| acc.realized_pnl).sum()
     }
 }
+
+// Debug implementations using pretty JSON formatting
+impl_json_debug_pretty!(
+    AccountSummary,    Portfolio
+);
+
+// Display implementations using compact JSON formatting
+impl_json_display!(
+    AccountSummary,    Portfolio
+);

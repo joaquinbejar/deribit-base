@@ -4,10 +4,11 @@
    Date: 21/7/25
 ******************************************************************************/
 
+use crate::{impl_json_debug_pretty, impl_json_display};
 use serde::{Deserialize, Serialize};
 
 /// Deribit API configuration
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct DeribitConfig {
     /// Client ID for API authentication
     pub client_id: String,
@@ -129,7 +130,7 @@ impl DeribitUrls {
 }
 
 /// Connection configuration for WebSocket
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct WebSocketConfig {
     /// Base configuration
     pub base: DeribitConfig,
@@ -193,7 +194,7 @@ impl WebSocketConfig {
 }
 
 /// HTTP client configuration
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct HttpConfig {
     /// Base configuration
     pub base: DeribitConfig,
@@ -243,3 +244,13 @@ impl HttpConfig {
         self
     }
 }
+
+// Debug implementations using pretty JSON formatting
+impl_json_debug_pretty!(
+    DeribitConfig,    WebSocketConfig,    HttpConfig
+);
+
+// Display implementations using compact JSON formatting
+impl_json_display!(
+    DeribitConfig,    WebSocketConfig,    HttpConfig
+);

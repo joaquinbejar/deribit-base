@@ -7,8 +7,9 @@
 use crate::model::{currency::Currency, instrument::InstrumentKind, order::OrderSide};
 use serde::{Deserialize, Serialize};
 
+use crate::{impl_json_debug_pretty, impl_json_display};
 /// Liquidity type enumeration
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Liquidity {
     /// Maker (provided liquidity)
     #[serde(rename = "M")]
@@ -22,7 +23,7 @@ pub enum Liquidity {
 }
 
 /// Trade execution information
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct Trade {
     /// Unique trade identifier
     pub trade_id: String,
@@ -107,7 +108,7 @@ impl Trade {
 }
 
 /// Trade statistics
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct TradeStats {
     /// Total number of trades
     pub count: u64,
@@ -154,3 +155,9 @@ impl Default for TradeStats {
         Self::new()
     }
 }
+
+// Debug implementations using pretty JSON formatting
+impl_json_debug_pretty!(Liquidity, Trade, TradeStats);
+
+// Display implementations using compact JSON formatting
+impl_json_display!(Liquidity, Trade, TradeStats);
