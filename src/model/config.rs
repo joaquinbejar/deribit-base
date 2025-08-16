@@ -246,11 +246,7 @@ impl HttpConfig {
 }
 
 // Debug implementations using pretty JSON formatting
-impl_json_debug_pretty!(
-    DeribitConfig,    WebSocketConfig,    HttpConfig
-);
+impl_json_debug_pretty!(DeribitConfig, WebSocketConfig, HttpConfig);
 
 // Display implementations using compact JSON formatting
-impl_json_display!(
-    DeribitConfig,    WebSocketConfig,    HttpConfig
-);
+impl_json_display!(DeribitConfig, WebSocketConfig, HttpConfig);

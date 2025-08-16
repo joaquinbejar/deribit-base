@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{impl_json_debug_pretty, impl_json_display};
 /// Ticker information
-#[derive(Clone, Serialize, Deserialize)] 
+#[derive(Clone, Serialize, Deserialize)]
 pub struct Ticker {
     /// Instrument name
     pub instrument_name: String,
@@ -91,7 +91,7 @@ impl Ticker {
 }
 
 /// Order book entry
-#[derive(Clone, Serialize, Deserialize)] 
+#[derive(Clone, Serialize, Deserialize)]
 pub struct OrderBookEntry {
     /// Price level
     pub price: f64,
@@ -112,7 +112,7 @@ impl OrderBookEntry {
 }
 
 /// Order book data
-#[derive(Clone, Serialize, Deserialize)] 
+#[derive(Clone, Serialize, Deserialize)]
 pub struct OrderBook {
     /// Instrument name
     pub instrument_name: String,
@@ -189,7 +189,7 @@ impl OrderBook {
 }
 
 /// Greeks for options
-#[derive(Clone, Serialize, Deserialize)] 
+#[derive(Clone, Serialize, Deserialize)]
 pub struct Greeks {
     /// Delta - sensitivity to underlying price changes
     pub delta: f64,
@@ -204,7 +204,7 @@ pub struct Greeks {
 }
 
 /// Market statistics
-#[derive(Clone, Serialize, Deserialize)] 
+#[derive(Clone, Serialize, Deserialize)]
 pub struct MarketStats {
     /// Currency
     pub currency: Currency,
@@ -225,7 +225,7 @@ pub struct MarketStats {
 }
 
 /// Candlestick/OHLCV data
-#[derive(Clone, Serialize, Deserialize)] 
+#[derive(Clone, Serialize, Deserialize)]
 pub struct Candle {
     /// Timestamp
     pub timestamp: i64,
@@ -277,10 +277,20 @@ impl Candle {
 
 // Debug implementations using pretty JSON formatting
 impl_json_debug_pretty!(
-    Ticker,    OrderBookEntry,    OrderBook,    Greeks,    MarketStats,    Candle
+    Ticker,
+    OrderBookEntry,
+    OrderBook,
+    Greeks,
+    MarketStats,
+    Candle
 );
 
 // Display implementations using compact JSON formatting
 impl_json_display!(
-    Ticker,    OrderBookEntry,    OrderBook,    Greeks,    MarketStats,    Candle
+    Ticker,
+    OrderBookEntry,
+    OrderBook,
+    Greeks,
+    MarketStats,
+    Candle
 );

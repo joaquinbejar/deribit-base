@@ -70,10 +70,10 @@ pub fn validate_checksum(message: &str) -> bool {
         let message_without_checksum = &message[..checksum_pos];
         let expected_checksum = calculate_checksum(message_without_checksum);
 
-        if let Some(checksum_str) = message[checksum_pos + 3..].split('\x01').next() {
-            if let Ok(actual_checksum) = checksum_str.parse::<u8>() {
-                return expected_checksum == actual_checksum;
-            }
+        if let Some(checksum_str) = message[checksum_pos + 3..].split('\x01').next()
+            && let Ok(actual_checksum) = checksum_str.parse::<u8>()
+        {
+            return expected_checksum == actual_checksum;
         }
     }
     false

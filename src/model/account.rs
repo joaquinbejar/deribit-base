@@ -163,11 +163,7 @@ impl Portfolio {
 }
 
 // Debug implementations using pretty JSON formatting
-impl_json_debug_pretty!(
-    AccountSummary,    Portfolio
-);
+impl_json_debug_pretty!(AccountSummary, Portfolio);
 
 // Display implementations using compact JSON formatting
-impl_json_display!(
-    AccountSummary,    Portfolio
-);
+impl_json_display!(AccountSummary, Portfolio);

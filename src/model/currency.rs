@@ -9,7 +9,7 @@ use std::str::FromStr;
 
 use crate::{impl_json_debug_pretty, impl_json_display};
 /// Currencies supported by Deribit
-#[derive(Clone, PartialEq, Eq, Hash, Serialize, Deserialize)] 
+#[derive(Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum Currency {
     /// Bitcoin
     #[serde(rename = "BTC")]
@@ -114,11 +114,7 @@ impl FromStr for Currency {
 }
 
 // Debug implementations using pretty JSON formatting
-impl_json_debug_pretty!(
-    Currency
-);
+impl_json_debug_pretty!(Currency);
 
 // Display implementations using compact JSON formatting
-impl_json_display!(
-    Currency
-);
+impl_json_display!(Currency);
