@@ -39,6 +39,7 @@ pub use crate::model::{
     transfer::{
         AddressBookEntry, AddressType, SubaccountTransfer, Transfer, TransferState, Transfers,
     },
+    ticker::{TickerStats, TickerData},
 };
 
 // Utility exports - macros and functions

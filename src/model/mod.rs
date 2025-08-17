@@ -45,3 +45,5 @@ pub mod settlement;
 pub mod trade;
 /// Transfer and withdrawal data structures
 pub mod transfer;
+
+pub mod ticker;
