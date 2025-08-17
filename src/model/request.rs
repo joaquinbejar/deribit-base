@@ -66,7 +66,7 @@ pub mod fix {
                 order_type: OrderType::Limit,
                 quantity,
                 price: Some(price),
-                time_in_force: TimeInForce::GoodTillCancel,
+                time_in_force: TimeInForce::GoodTilCancelled,
                 client_order_id: None,
             }
         }
@@ -79,7 +79,7 @@ pub mod fix {
                 order_type: OrderType::Limit,
                 quantity,
                 price: Some(price),
-                time_in_force: TimeInForce::GoodTillCancel,
+                time_in_force: TimeInForce::GoodTilCancelled,
                 client_order_id: None,
             }
         }
@@ -228,7 +228,7 @@ impl NewOrderRequest {
             order_type: OrderType::Limit,
             side: OrderSide::Buy,
             price: Some(price),
-            time_in_force: TimeInForce::GoodTillCancel,
+            time_in_force: TimeInForce::GoodTilCancelled,
             post_only: None,
             reduce_only: None,
             label: None,
@@ -250,7 +250,7 @@ impl NewOrderRequest {
             order_type: OrderType::Limit,
             side: OrderSide::Sell,
             price: Some(price),
-            time_in_force: TimeInForce::GoodTillCancel,
+            time_in_force: TimeInForce::GoodTilCancelled,
             post_only: None,
             reduce_only: None,
             label: None,

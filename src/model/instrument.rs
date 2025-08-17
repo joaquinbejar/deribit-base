@@ -85,6 +85,9 @@ pub struct Instrument {
     pub maker_commission: Option<f64>,
     /// Taker commission rate
     pub taker_commission: Option<f64>,
+    pub instrument_id: Option<u32>,
+    pub base_currency: String,
+    pub counter_currency: String,
 }
 
 impl Instrument {

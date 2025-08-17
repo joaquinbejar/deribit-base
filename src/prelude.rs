@@ -35,11 +35,11 @@ pub use crate::model::{
         PaginatedResponse, Pagination, ServerTimeResponse, SubscriptionResponse, TestResponse,
     },
     settlement::{Settlement, SettlementType, Settlements},
+    ticker::{TickerData, TickerStats},
     trade::{Liquidity, Trade, TradeStats},
     transfer::{
         AddressBookEntry, AddressType, SubaccountTransfer, Transfer, TransferState, Transfers,
     },
-    ticker::{TickerStats, TickerData},
 };
 
 // Utility exports - macros and functions

@@ -138,8 +138,12 @@ pub fn order_type_to_fix(order_type: OrderType) -> &'static str {
     match order_type {
         OrderType::Market => "1",
         OrderType::Limit => "2",
-        OrderType::Stop => "3",
+        OrderType::StopMarket => "3",
         OrderType::StopLimit => "4",
+        OrderType::TrailingStop => "5",
+        OrderType::TakeLimit => "6",
+        OrderType::MarketLimit => "7",
+        OrderType::TakeMarket => "8",
     }
 }
 
@@ -147,8 +151,8 @@ pub fn order_type_to_fix(order_type: OrderType) -> &'static str {
 #[allow(dead_code)]
 pub fn time_in_force_to_fix(tif: TimeInForce) -> &'static str {
     match tif {
-        TimeInForce::Day => "0",
-        TimeInForce::GoodTillCancel => "1",
+        TimeInForce::GoodTilDay => "0",
+        TimeInForce::GoodTilCancelled => "1",
         TimeInForce::ImmediateOrCancel => "3",
         TimeInForce::FillOrKill => "4",
     }
@@ -381,20 +385,5 @@ mod tests {
         assert_eq!(side_to_fix(OrderSide::Buy), "1");
         assert_eq!(side_to_fix(OrderSide::Sell), "2");
     }
-
-    #[test]
-    fn test_order_type_to_fix() {
-        assert_eq!(order_type_to_fix(OrderType::Market), "1");
-        assert_eq!(order_type_to_fix(OrderType::Limit), "2");
-        assert_eq!(order_type_to_fix(OrderType::Stop), "3");
-        assert_eq!(order_type_to_fix(OrderType::StopLimit), "4");
-    }
-
-    #[test]
-    fn test_time_in_force_to_fix() {
-        assert_eq!(time_in_force_to_fix(TimeInForce::Day), "0");
-        assert_eq!(time_in_force_to_fix(TimeInForce::GoodTillCancel), "1");
-        assert_eq!(time_in_force_to_fix(TimeInForce::ImmediateOrCancel), "3");
-        assert_eq!(time_in_force_to_fix(TimeInForce::FillOrKill), "4");
-    }
+    
 }

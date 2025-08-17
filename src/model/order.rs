@@ -9,14 +9,25 @@ use serde::{Deserialize, Serialize};
 /// Time in force enumeration
 #[derive(Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum TimeInForce {
-    /// Order is valid for the current trading day only
-    Day,
-    /// Order remains active until explicitly cancelled
-    GoodTillCancel,
-    /// Order must be executed immediately or cancelled
-    ImmediateOrCancel,
-    /// Order must be filled completely or cancelled
+    #[serde(rename = "good_til_cancelled")]
+    GoodTilCancelled,
+    #[serde(rename = "good_til_day")]
+    GoodTilDay,
+    #[serde(rename = "fill_or_kill")]
     FillOrKill,
+    #[serde(rename = "immediate_or_cancel")]
+    ImmediateOrCancel,
+}
+
+impl TimeInForce {
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            TimeInForce::GoodTilCancelled => "good_til_cancelled",
+            TimeInForce::GoodTilDay => "good_til_day",
+            TimeInForce::FillOrKill => "fill_or_kill",
+            TimeInForce::ImmediateOrCancel => "immediate_or_cancel",
+        }
+    }
 }
 
 /// Order side enumeration
@@ -28,17 +39,40 @@ pub enum OrderSide {
     Sell,
 }
 
-/// Order type enumeration
+/// Order type enum
 #[derive(Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum OrderType {
-    /// Market order - executed immediately at current market price
-    Market,
-    /// Limit order - executed only at specified price or better
+    #[serde(rename = "limit")]
     Limit,
-    /// Stop order - becomes market order when stop price is reached
-    Stop,
-    /// Stop limit order - becomes limit order when stop price is reached
+    #[serde(rename = "market")]
+    Market,
+    #[serde(rename = "stop_limit")]
     StopLimit,
+    #[serde(rename = "stop_market")]
+    StopMarket,
+    #[serde(rename = "take_limit")]
+    TakeLimit,
+    #[serde(rename = "take_market")]
+    TakeMarket,
+    #[serde(rename = "market_limit")]
+    MarketLimit,
+    #[serde(rename = "trailing_stop")]
+    TrailingStop,
+}
+
+impl OrderType {
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            OrderType::Limit => "limit",
+            OrderType::Market => "market",
+            OrderType::StopLimit => "stop_limit",
+            OrderType::StopMarket => "stop_market",
+            OrderType::TakeLimit => "take_limit",
+            OrderType::TakeMarket => "take_market",
+            OrderType::MarketLimit => "market_limit",
+            OrderType::TrailingStop => "trailing_stop",
+        }
+    }
 }
 
 /// New order request structure
