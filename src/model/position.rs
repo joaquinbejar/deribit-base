@@ -6,19 +6,34 @@
 use crate::{impl_json_debug_pretty, impl_json_display};
 use serde::{Deserialize, Serialize};
 
-/// Position information
+/// Position structure
 #[derive(Clone, Serialize, Deserialize)]
 pub struct Position {
-    /// Trading symbol/instrument name
-    pub symbol: String,
-    /// Position quantity (positive for long, negative for short)
-    pub quantity: f64,
-    /// Average price of the position
     pub average_price: f64,
-    /// Unrealized profit and loss
-    pub unrealized_pnl: f64,
-    /// Realized profit and loss
-    pub realized_pnl: f64,
+    pub average_price_usd: Option<f64>,
+    pub delta: f64,
+    pub direction: String,
+    pub estimated_liquidation_price: Option<f64>,
+    pub floating_profit_loss: f64,
+    pub floating_profit_loss_usd: Option<f64>,
+    pub gamma: f64,
+    pub index_price: f64,
+    pub initial_margin: f64,
+    pub instrument_name: String,
+    pub interest_value: Option<f64>,
+    pub kind: String,
+    pub leverage: Option<i32>,
+    pub maintenance_margin: f64,
+    pub mark_price: f64,
+    pub open_orders_margin: f64,
+    pub realized_funding: Option<f64>,
+    pub realized_profit_loss: f64,
+    pub settlement_price: f64,
+    pub size: f64,
+    pub size_currency: Option<f64>,
+    pub theta: f64,
+    pub total_profit_loss: f64,
+    pub vega: f64,
 }
 
 impl_json_debug_pretty!(Position);
