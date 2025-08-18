@@ -7,8 +7,8 @@
 use serde::{Deserialize, Serialize};
 use std::str::FromStr;
 
-use crate::{impl_json_debug_pretty, impl_json_display};
 use crate::prelude::WithdrawalPriority;
+use crate::{impl_json_debug_pretty, impl_json_display};
 
 /// Currencies supported by Deribit
 #[derive(Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -135,8 +135,6 @@ pub struct Currency {
     /// APR for yield-generating tokens
     pub apr: Option<f64>,
 }
-
-
 
 // Debug implementations using pretty JSON formatting
 impl_json_debug_pretty!(Currencies, Currency);
