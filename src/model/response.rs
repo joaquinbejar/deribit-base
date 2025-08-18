@@ -320,76 +320,98 @@ impl SettlementsResponse {
 /// Contract size response
 #[derive(Clone, Serialize, Deserialize)]
 pub struct ContractSizeResponse {
+    /// Contract size value
     pub contract_size: f64,
 }
 
 /// Status response
 #[derive(Clone, Serialize, Deserialize)]
 pub struct StatusResponse {
+    /// Whether the system is locked
     pub locked: bool,
+    /// Status message
     pub message: String,
+    /// List of locked indices
     pub locked_indices: Vec<String>,
 }
 
 /// APR history response
 #[derive(Clone, Serialize, Deserialize)]
 pub struct AprHistoryResponse {
+    /// List of APR data points
     pub data: Vec<AprDataPoint>,
+    /// Continuation token for pagination
     pub continuation: Option<String>,
 }
 /// APR data point
 #[derive(Clone, Serialize, Deserialize)]
 pub struct AprDataPoint {
+    /// Annual percentage rate
     pub apr: f64,
+    /// Timestamp of the data point
     pub timestamp: u64,
+    /// Day of the data point
     pub day: i32,
 }
 
 /// Hello response
 #[derive(Clone, Serialize, Deserialize)]
 pub struct HelloResponse {
+    /// Version string
     pub version: String,
 }
 
 /// Delivery prices response
 #[derive(Clone, Serialize, Deserialize)]
 pub struct DeliveryPricesResponse {
+    /// List of delivery price data
     pub data: Vec<DeliveryPriceData>,
+    /// Total number of records
     pub records_total: u32,
 }
 
 /// Delivery price data
 #[derive(Clone, Serialize, Deserialize)]
 pub struct DeliveryPriceData {
+    /// Date of the delivery price
     pub date: String,
+    /// Delivery price value
     pub delivery_price: f64,
 }
 
 /// Expirations response
 #[derive(Clone, Serialize, Deserialize)]
 pub struct ExpirationsResponse {
+    /// List of expiration dates
     pub expirations: Vec<String>,
+    /// Future instrument expirations
     pub future: Option<Vec<String>>,
+    /// Option instrument expirations
     pub option: Option<Vec<String>>,
 }
 
 /// Last trades response
 #[derive(Clone, Serialize, Deserialize)]
 pub struct LastTradesResponse {
+    /// Whether there are more trades available
     pub has_more: bool,
+    /// List of recent trades
     pub trades: Vec<LastTrade>,
 }
 
 /// Order response
 #[derive(Clone, Serialize, Deserialize)]
 pub struct OrderResponse {
+    /// Order information
     pub order: OrderInfo,
+    /// List of trade executions for the order
     pub trades: Vec<TradeExecution>,
 }
 
 /// Mass quote response
 #[derive(Clone, Serialize, Deserialize)]
 pub struct MassQuoteResponse {
+    /// List of quote results
     pub quotes: Vec<QuoteResult>,
 }
 

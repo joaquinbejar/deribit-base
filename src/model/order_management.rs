@@ -11,13 +11,21 @@ use serde::{Deserialize, Serialize};
 /// Buy order request
 #[derive(Clone, Serialize, Deserialize)]
 pub struct BuyOrderRequest {
+    /// Name of the instrument to trade
     pub instrument_name: String,
+    /// Amount/quantity to buy
     pub amount: f64,
+    /// Order price (required for limit orders)
     pub price: Option<f64>,
+    /// User-defined label for the order
     pub label: Option<String>,
+    /// Time in force specification
     pub time_in_force: Option<TimeInForce>,
+    /// Whether this order only reduces position
     pub reduce_only: Option<bool>,
+    /// Whether this is a post-only order
     pub post_only: Option<bool>,
+    /// Type of order to place
     pub type_: Option<OrderType>,
 }
 
@@ -27,13 +35,21 @@ impl_json_debug_pretty!(BuyOrderRequest);
 /// Sell order request
 #[derive(Clone, Serialize, Deserialize)]
 pub struct SellOrderRequest {
+    /// Name of the instrument to trade
     pub instrument_name: String,
+    /// Amount/quantity to sell
     pub amount: f64,
+    /// Order price (required for limit orders)
     pub price: Option<f64>,
+    /// User-defined label for the order
     pub label: Option<String>,
+    /// Time in force specification
     pub time_in_force: Option<TimeInForce>,
+    /// Whether this order only reduces position
     pub reduce_only: Option<bool>,
+    /// Whether this is a post-only order
     pub post_only: Option<bool>,
+    /// Type of order to place
     pub type_: Option<OrderType>,
 }
 
@@ -43,11 +59,17 @@ impl_json_debug_pretty!(SellOrderRequest);
 /// Edit order request
 #[derive(Clone, Serialize, Deserialize)]
 pub struct EditOrderRequest {
+    /// Unique identifier of the order to edit
     pub order_id: String,
+    /// New order amount/quantity
     pub amount: Option<f64>,
+    /// New order price
     pub price: Option<f64>,
+    /// Whether this is a post-only order
     pub post_only: Option<bool>,
+    /// Whether this order only reduces position
     pub reduce_only: Option<bool>,
+    /// Time in force specification
     pub time_in_force: Option<TimeInForce>,
 }
 
@@ -57,16 +79,22 @@ impl_json_debug_pretty!(EditOrderRequest);
 /// Mass quote request item
 #[derive(Clone, Serialize, Deserialize)]
 pub struct MassQuoteItem {
+    /// Name of the instrument to quote
     pub instrument_name: String,
+    /// Order side (buy or sell)
     pub side: OrderSide,
+    /// Quote amount/quantity
     pub amount: f64,
+    /// Quote price
     pub price: f64,
 }
 
 /// Mass quote request
 #[derive(Clone, Serialize, Deserialize)]
 pub struct MassQuoteRequest {
+    /// List of quote items
     pub items: Vec<MassQuoteItem>,
+    /// User-defined label for the mass quote
     pub label: Option<String>,
 }
 
@@ -76,7 +104,9 @@ impl_json_debug_pretty!(MassQuoteRequest);
 /// Transfer result for order-related transfers (e.g., fee rebates)
 #[derive(Clone, Serialize, Deserialize)]
 pub struct TransferResult {
+    /// Transfer identifier
     pub id: String,
+    /// Transfer status
     pub status: String,
 }
 
@@ -86,8 +116,11 @@ impl_json_debug_pretty!(TransferResult);
 /// Quote result
 #[derive(Clone, Serialize, Deserialize)]
 pub struct QuoteResult {
+    /// Name of the instrument that was quoted
     pub instrument_name: String,
+    /// Whether the quote was successful
     pub success: bool,
+    /// Error message if quote failed
     pub error: Option<String>,
 }
 

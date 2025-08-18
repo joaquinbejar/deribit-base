@@ -84,8 +84,11 @@ pub struct Instrument {
     pub maker_commission: Option<f64>,
     /// Taker commission rate
     pub taker_commission: Option<f64>,
+    /// Unique instrument identifier
     pub instrument_id: Option<u32>,
+    /// Base currency for the instrument
     pub base_currency: String,
+    /// Counter currency for the instrument
     pub counter_currency: String,
 }
 
@@ -142,7 +145,9 @@ pub struct IndexData {
 /// Index price data
 #[derive(Clone, Serialize, Deserialize)]
 pub struct IndexPriceData {
+    /// Current index price
     pub index_price: f64,
+    /// Estimated delivery price
     pub estimated_delivery_price: f64,
 }
 

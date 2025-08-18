@@ -159,70 +159,125 @@ impl Default for TradeStats {
 /// Trade execution
 #[derive(Clone, Serialize, Deserialize)]
 pub struct TradeExecution {
+    /// Trade amount
     pub amount: f64,
+    /// Trade direction (buy/sell)
     pub direction: String,
+    /// Trading fee paid
     pub fee: f64,
+    /// Currency of the trading fee
     pub fee_currency: String,
+    /// Index price at execution time
     pub index_price: f64,
+    /// Name of the traded instrument
     pub instrument_name: String,
+    /// Implied volatility (for options)
     pub iv: Option<f64>,
+    /// User-defined label for the trade
     pub label: String,
+    /// Liquidity type (maker/taker)
     pub liquidity: String,
+    /// Mark price at execution time
     pub mark_price: f64,
+    /// Matching engine identifier
     pub matching_id: Option<String>,
+    /// Order ID that generated this trade
     pub order_id: String,
+    /// Type of the order that generated this trade
     pub order_type: String,
+    /// Original order type before modifications
     pub original_order_type: Option<String>,
+    /// Execution price
     pub price: f64,
+    /// Whether this was a self trade
     pub self_trade: bool,
+    /// Current state of the trade
     pub state: String,
+    /// Price tick direction (1=up, -1=down, 0=no change)
     pub tick_direction: i32,
+    /// Execution timestamp
     pub timestamp: u64,
+    /// Unique trade identifier
     pub trade_id: String,
+    /// Trade sequence number
     pub trade_seq: u64,
+    /// Underlying asset price (for derivatives)
     pub underlying_price: Option<f64>,
 }
 
 /// User trade information
 #[derive(Clone, Serialize, Deserialize)]
 pub struct UserTrade {
+    /// Trade amount
     pub amount: f64,
+    /// Trade direction (buy/sell)
     pub direction: String,
+    /// Trading fee paid
     pub fee: f64,
+    /// Currency of the trading fee
     pub fee_currency: String,
+    /// Index price at execution time
     pub index_price: f64,
+    /// Name of the traded instrument
     pub instrument_name: String,
+    /// Implied volatility (for options)
     pub iv: Option<f64>,
+    /// User-defined label for the trade
     pub label: String,
+    /// Liquidity type (maker/taker)
     pub liquidity: String,
+    /// Mark price at execution time
     pub mark_price: f64,
+    /// Matching engine identifier
     pub matching_id: Option<String>,
+    /// Order ID that generated this trade
     pub order_id: String,
+    /// Type of the order that generated this trade
     pub order_type: String,
+    /// Original order type before modifications
     pub original_order_type: Option<String>,
+    /// Execution price
     pub price: f64,
+    /// Whether this was a self trade
     pub self_trade: bool,
+    /// Current state of the trade
     pub state: String,
+    /// Price tick direction (1=up, -1=down, 0=no change)
     pub tick_direction: i32,
+    /// Execution timestamp
     pub timestamp: u64,
+    /// Unique trade identifier
     pub trade_id: String,
+    /// Trade sequence number
     pub trade_seq: u64,
+    /// Underlying asset price (for derivatives)
     pub underlying_price: Option<f64>,
 }
 
 /// Last trade
 #[derive(Clone, Serialize, Deserialize)]
 pub struct LastTrade {
+    /// Trade amount
     pub amount: f64,
+    /// Trade direction (buy/sell)
     pub direction: String,
+    /// Index price at execution time
     pub index_price: f64,
+    /// Name of the traded instrument
     pub instrument_name: String,
+    /// Implied volatility (for options)
     pub iv: Option<f64>,
+    /// Liquidity information
     pub liquid: Option<String>,
+    /// Execution price
     pub price: f64,
+    /// Price tick direction (1=up, -1=down, 0=no change)
     pub tick_direction: i32,
+    /// Execution timestamp
     pub timestamp: u64,
+    /// Unique trade identifier
     pub trade_id: String,
+    /// Trade sequence number
     pub trade_seq: u64,
 }
 

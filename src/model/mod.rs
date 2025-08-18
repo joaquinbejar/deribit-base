@@ -27,6 +27,7 @@ pub mod config;
 pub mod currency;
 /// Extended market data structures
 pub mod extended_market_data;
+/// Funding-related data structures and types
 pub mod funding;
 /// Instrument-related data structures and types
 pub mod instrument;
@@ -34,6 +35,7 @@ pub mod instrument;
 pub mod market_data;
 /// Order-related data structures and types
 pub mod order;
+/// Order management operations and requests
 pub mod order_management;
 /// Position-related data structures and types
 pub mod position;
@@ -47,6 +49,7 @@ pub mod settlement;
 pub mod ticker;
 /// Trade-related data structures and types
 pub mod trade;
+/// Transaction history and ledger data structures
 pub mod transaction;
 /// Transfer and withdrawal data structures
 pub mod transfer;
