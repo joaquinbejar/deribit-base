@@ -4,7 +4,6 @@
    Date: 21/7/25
 ******************************************************************************/
 
-use crate::model::currency::Currencies;
 use serde::{Deserialize, Serialize};
 
 use crate::{impl_json_debug_pretty, impl_json_display};
@@ -54,7 +53,7 @@ pub struct Instrument {
     /// Instrument kind
     pub kind: InstrumentKind,
     /// Base currency
-    pub currency: Currencies,
+    pub currency: String,
     /// Whether the instrument is active for trading
     pub is_active: bool,
     /// Expiration timestamp (None for perpetuals)
@@ -74,9 +73,9 @@ pub struct Instrument {
     /// Instrument type (linear/reversed)
     pub instrument_type: Option<InstrumentType>,
     /// Quote currency
-    pub quote_currency: Option<Currencies>,
+    pub quote_currency: Option<String>,
     /// Settlement currency
-    pub settlement_currency: Option<Currencies>,
+    pub settlement_currency: Option<String>,
     /// Creation timestamp
     pub creation_timestamp: Option<i64>,
     /// Maximum leverage
@@ -113,15 +112,43 @@ impl Instrument {
     pub fn is_spot(&self) -> bool {
         self.kind == InstrumentKind::Spot
     }
-
-    /// Get the base currency as string
-    pub fn currency_str(&self) -> &'static str {
-        self.currency.as_str()
-    }
 }
 
+/// Index data
+#[derive(Clone, Serialize, Deserialize)]
+pub struct IndexData {
+    /// Currency
+    pub currency: String,
+    /// Index price
+    pub index_price: f64,
+    /// Components
+    pub components: Vec<std::collections::HashMap<String, f64>>,
+    /// Timestamp
+    pub timestamp: u64,
+    /// BTC component (optional)
+    pub btc: Option<f64>,
+    /// ETH component (optional)
+    pub eth: Option<f64>,
+    /// USDC component (optional)
+    pub usdc: Option<f64>,
+    /// USDT component (optional)
+    pub usdt: Option<f64>,
+    /// EURR component (optional)
+    pub eurr: Option<f64>,
+    /// EDP (Estimated Delivery Price)
+    pub edp: f64,
+}
+
+/// Index price data
+#[derive(Clone, Serialize, Deserialize)]
+pub struct IndexPriceData {
+    pub index_price: f64,
+    pub estimated_delivery_price: f64,
+}
+
+
 // Debug implementations using pretty JSON formatting
-impl_json_debug_pretty!(Instrument);
+impl_json_debug_pretty!(Instrument, IndexData, IndexPriceData);
 
 // Display implementations using compact JSON formatting
-impl_json_display!(Instrument);
+impl_json_display!(Instrument, IndexData, IndexPriceData);

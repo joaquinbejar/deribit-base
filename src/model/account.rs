@@ -4,15 +4,14 @@
    Date: 21/7/25
 ******************************************************************************/
 
-use crate::model::currency::Currencies;
 use serde::{Deserialize, Serialize};
 
 use crate::{impl_json_debug_pretty, impl_json_display};
 /// Account summary information
 #[derive(Clone, Serialize, Deserialize)]
 pub struct AccountSummary {
-    /// Account currency
-    pub currency: Currencies,
+    /// Account currency (kept as Currencies enum for compatibility)
+    pub currency: String,
     /// Total balance
     pub balance: f64,
     /// Account equity
@@ -74,7 +73,17 @@ pub struct AccountSummary {
     /// System name
     pub system_name: Option<String>,
     /// Type of account
-    pub type_: Option<String>,
+    #[serde(rename = "type")]
+    pub account_type: String,
+    // Additional fields from deribit-http types.rs
+    /// Delta total map (currency -> delta)
+    pub delta_total_map: std::collections::HashMap<String, f64>,
+    /// Deposit address
+    pub deposit_address: String,
+    /// Fees structure
+    pub fees: Vec<std::collections::HashMap<String, f64>>,
+    /// Account limits
+    pub limits: std::collections::HashMap<String, f64>,
 }
 
 impl AccountSummary {
@@ -105,18 +114,66 @@ impl AccountSummary {
             0.0
         }
     }
+}
 
-    /// Get currency as string
-    pub fn currency_str(&self) -> &'static str {
-        self.currency.as_str()
-    }
+/// Subaccount information
+#[derive(Clone, Serialize, Deserialize)]
+pub struct Subaccount {
+    /// Subaccount email
+    pub email: String,
+    /// Subaccount ID
+    pub id: u64,
+    /// Whether login is enabled
+    pub login_enabled: bool,
+    /// Portfolio information (optional)
+    pub portfolio: Option<PortfolioInfo>,
+    /// Whether to receive notifications
+    pub receive_notifications: bool,
+    /// System name
+    pub system_name: String,
+    /// Time in force (optional)
+    pub tif: Option<String>,
+    /// Subaccount type
+    #[serde(rename = "type")]
+    pub subaccount_type: String,
+    /// Username
+    pub username: String,
+}
+
+/// Portfolio information
+#[derive(Clone, Serialize, Deserialize)]
+pub struct PortfolioInfo {
+    /// Available funds
+    pub available_funds: f64,
+    /// Available withdrawal funds
+    pub available_withdrawal_funds: f64,
+    /// Balance
+    pub balance: f64,
+    /// Currency
+    pub currency: String,
+    /// Delta total
+    pub delta_total: f64,
+    /// Equity
+    pub equity: f64,
+    /// Initial margin
+    pub initial_margin: f64,
+    /// Maintenance margin
+    pub maintenance_margin: f64,
+    /// Margin balance
+    pub margin_balance: f64,
+    /// Session realized P&L
+    pub session_rpl: f64,
+    /// Session unrealized P&L
+    pub session_upl: f64,
+    /// Total P&L
+    pub total_pl: f64,
 }
 
 /// Portfolio information
 #[derive(Clone, Serialize, Deserialize)]
 pub struct Portfolio {
     /// Currency of the portfolio
-    pub currency: Currencies,
+    pub currency: String,
     /// Account summaries for different currencies
     pub accounts: Vec<AccountSummary>,
     /// Total portfolio value in USD
@@ -127,7 +184,7 @@ pub struct Portfolio {
 
 impl Portfolio {
     /// Create a new empty portfolio
-    pub fn new(currency: Currencies) -> Self {
+    pub fn new(currency: String) -> Self {
         Self {
             currency,
             accounts: Vec::new(),
@@ -142,7 +199,7 @@ impl Portfolio {
     }
 
     /// Get account summary for a specific currency
-    pub fn get_account(&self, currency: &Currencies) -> Option<&AccountSummary> {
+    pub fn get_account(&self, currency: &String) -> Option<&AccountSummary> {
         self.accounts.iter().find(|acc| &acc.currency == currency)
     }
 
@@ -163,7 +220,7 @@ impl Portfolio {
 }
 
 // Debug implementations using pretty JSON formatting
-impl_json_debug_pretty!(AccountSummary, Portfolio);
+impl_json_debug_pretty!(AccountSummary, Portfolio, Subaccount, PortfolioInfo);
 
 // Display implementations using compact JSON formatting
-impl_json_display!(AccountSummary, Portfolio);
+impl_json_display!(AccountSummary, Portfolio, Subaccount, PortfolioInfo);

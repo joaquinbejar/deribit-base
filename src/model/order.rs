@@ -5,6 +5,7 @@
 ******************************************************************************/
 use crate::{impl_json_debug_pretty, impl_json_display};
 use serde::{Deserialize, Serialize};
+use crate::model::trade::TradeExecution;
 
 /// Time in force enumeration
 #[derive(Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -129,17 +130,60 @@ pub enum OrderStatus {
     PendingReplace,
 }
 
+/// Order response
+#[derive(Clone, Serialize, Deserialize)]
+pub struct OrderResponse {
+    pub order: OrderInfo,
+    pub trades: Vec<TradeExecution>,
+}
+
+/// Order information
+#[derive(Clone, Serialize, Deserialize)]
+pub struct OrderInfo {
+    pub amount: f64,
+    pub api: bool,
+    pub average_price: f64,
+    pub creation_timestamp: u64,
+    pub direction: String,
+    pub filled_amount: f64,
+    pub instrument_name: String,
+    pub is_liquidation: bool,
+    pub label: String,
+    pub last_update_timestamp: u64,
+    pub max_show: f64,
+    pub order_id: String,
+    pub order_state: String,
+    pub order_type: String,
+    pub original_order_type: Option<String>,
+    pub post_only: bool,
+    pub price: f64,
+    pub profit_loss: Option<f64>,
+    pub reduce_only: bool,
+    pub replaced: bool,
+    pub risk_reducing: bool,
+    pub time_in_force: String,
+    pub triggered: Option<bool>,
+    pub trigger: Option<String>,
+    pub usd: Option<f64>,
+    pub web: bool,
+}
+
+
 impl_json_debug_pretty!(
     TimeInForce,
     OrderSide,
     OrderType,
     NewOrderRequest,
-    OrderStatus
+    OrderStatus,
+    OrderResponse,
+    OrderInfo
 );
 impl_json_display!(
     TimeInForce,
     OrderSide,
     OrderType,
     NewOrderRequest,
-    OrderStatus
+    OrderStatus,
+    OrderResponse,
+    OrderInfo
 );

@@ -4,7 +4,6 @@
    Date: 21/7/25
 ******************************************************************************/
 
-use crate::prelude::Currencies;
 use crate::{impl_json_debug_pretty, impl_json_display};
 use serde::{Deserialize, Serialize};
 
@@ -58,7 +57,7 @@ pub struct CurrencyInfo {
     /// Coin type identifier (e.g., "BITCOIN", "ETHEREUM")
     pub coin_type: String,
     /// Currency code
-    pub currency: Currencies,
+    pub currency: String,
     /// Full currency name
     pub currency_long: String,
     /// Fee precision (decimal places)
@@ -86,7 +85,7 @@ impl CurrencyInfo {
     /// Create new currency info
     pub fn new(
         coin_type: String,
-        currency: Currencies,
+        currency: String,
         currency_long: String,
         fee_precision: i32,
         min_confirmations: i32,
@@ -317,7 +316,7 @@ impl_json_debug_pretty!(HistoricalVolatility);
 #[derive(Clone, PartialEq, Serialize, Deserialize)]
 pub struct MarketStatistics {
     /// Currency
-    pub currency: Currencies,
+    pub currency: String,
     /// Total volume 24h
     pub volume_24h: f64,
     /// Total volume 30d
@@ -338,7 +337,7 @@ pub struct MarketStatistics {
 
 impl MarketStatistics {
     /// Create new market statistics
-    pub fn new(currency: Currencies, timestamp: i64) -> Self {
+    pub fn new(currency: String, timestamp: i64) -> Self {
         Self {
             currency,
             volume_24h: 0.0,
@@ -433,7 +432,7 @@ impl CurrencyInfoCollection {
     }
 
     /// Get currency info by currency
-    pub fn get(&self, currency: Currencies) -> Option<&CurrencyInfo> {
+    pub fn get(&self, currency: String) -> Option<&CurrencyInfo> {
         self.currencies.iter().find(|c| c.currency == currency)
     }
 
@@ -475,7 +474,7 @@ mod tests {
     fn test_currency_info() {
         let mut info = CurrencyInfo::new(
             "BITCOIN".to_string(),
-            Currencies::Bitcoin,
+            "BTC".to_string(),
             "Bitcoin".to_string(),
             4,
             1,
@@ -523,7 +522,7 @@ mod tests {
 
     #[test]
     fn test_market_statistics() {
-        let stats = MarketStatistics::new(Currencies::Bitcoin, 1640995200000)
+        let stats = MarketStatistics::new("BTC".to_string(), 1640995200000)
             .with_volume(1000.0, 30000.0, 45000000.0, 1350000000.0)
             .with_trades(500, 15000)
             .with_open_interest(5000000.0);
@@ -541,7 +540,7 @@ mod tests {
 
         let btc_info = CurrencyInfo::new(
             "BITCOIN".to_string(),
-            Currencies::Bitcoin,
+            "BTC".to_string(),
             "Bitcoin".to_string(),
             4,
             1,
@@ -552,7 +551,7 @@ mod tests {
         collection.add(btc_info);
 
         assert_eq!(collection.currencies.len(), 1);
-        assert!(collection.get(Currencies::Bitcoin).is_some());
+        assert!(collection.get("BTC".to_string()).is_some());
         assert_eq!(collection.enabled().len(), 1);
     }
 
@@ -560,7 +559,7 @@ mod tests {
     fn test_serde() {
         let info = CurrencyInfo::new(
             "BITCOIN".to_string(),
-            Currencies::Bitcoin,
+            "BTC".to_string(),
             "Bitcoin".to_string(),
             4,
             1,

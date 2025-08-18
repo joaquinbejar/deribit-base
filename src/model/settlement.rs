@@ -53,6 +53,22 @@ pub struct Settlement {
     /// Funding in base currency (settlement for perpetual product only)
     #[serde(skip_serializing_if = "Option::is_none")]
     pub funding: Option<f64>,
+    // Additional fields from deribit-http types.rs
+    /// Session profit and loss
+    #[serde(default)]
+    pub session_profit_loss: f64,
+    /// Session bankrupt cy
+    #[serde(default)]
+    pub session_bankrupt_cy: f64,
+    /// Session tax
+    #[serde(default)]
+    pub session_tax: f64,
+    /// Session tax rate
+    #[serde(default)]
+    pub session_tax_rate: f64,
+    /// Socialized losses
+    #[serde(default)]
+    pub socialized_losses: f64,
 }
 
 impl Settlement {
@@ -67,6 +83,11 @@ impl Settlement {
             index_price: None,
             profit_loss: None,
             funding: None,
+            session_profit_loss: 0.0,
+            session_bankrupt_cy: 0.0,
+            session_tax: 0.0,
+            session_tax_rate: 0.0,
+            socialized_losses: 0.0,
         }
     }
 
@@ -85,6 +106,11 @@ impl Settlement {
             index_price: None,
             profit_loss: None,
             funding: None,
+            session_profit_loss: 0.0,
+            session_bankrupt_cy: 0.0,
+            session_tax: 0.0,
+            session_tax_rate: 0.0,
+            socialized_losses: 0.0,
         }
     }
 

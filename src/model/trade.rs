@@ -4,7 +4,7 @@
    Date: 21/7/25
 ******************************************************************************/
 
-use crate::model::{currency::Currencies, instrument::InstrumentKind, order::OrderSide};
+use crate::model::{instrument::InstrumentKind, order::OrderSide};
 use serde::{Deserialize, Serialize};
 
 use crate::{impl_json_debug_pretty, impl_json_display};
@@ -42,7 +42,7 @@ pub struct Trade {
     /// Fee amount
     pub fee: f64,
     /// Fee currency
-    pub fee_currency: Currencies,
+    pub fee_currency: String,
     /// Liquidity type (maker/taker)
     pub liquidity: Liquidity,
     /// Mark price at time of trade
@@ -156,8 +156,80 @@ impl Default for TradeStats {
     }
 }
 
+/// Trade execution
+#[derive(Clone, Serialize, Deserialize)]
+pub struct TradeExecution {
+    pub amount: f64,
+    pub direction: String,
+    pub fee: f64,
+    pub fee_currency: String,
+    pub index_price: f64,
+    pub instrument_name: String,
+    pub iv: Option<f64>,
+    pub label: String,
+    pub liquidity: String,
+    pub mark_price: f64,
+    pub matching_id: Option<String>,
+    pub order_id: String,
+    pub order_type: String,
+    pub original_order_type: Option<String>,
+    pub price: f64,
+    pub self_trade: bool,
+    pub state: String,
+    pub tick_direction: i32,
+    pub timestamp: u64,
+    pub trade_id: String,
+    pub trade_seq: u64,
+    pub underlying_price: Option<f64>,
+}
+
+/// User trade information
+#[derive(Clone, Serialize, Deserialize)]
+pub struct UserTrade {
+    pub amount: f64,
+    pub direction: String,
+    pub fee: f64,
+    pub fee_currency: String,
+    pub index_price: f64,
+    pub instrument_name: String,
+    pub iv: Option<f64>,
+    pub label: String,
+    pub liquidity: String,
+    pub mark_price: f64,
+    pub matching_id: Option<String>,
+    pub order_id: String,
+    pub order_type: String,
+    pub original_order_type: Option<String>,
+    pub price: f64,
+    pub self_trade: bool,
+    pub state: String,
+    pub tick_direction: i32,
+    pub timestamp: u64,
+    pub trade_id: String,
+    pub trade_seq: u64,
+    pub underlying_price: Option<f64>,
+}
+
+
+
+/// Last trade
+#[derive(Clone, Serialize, Deserialize)]
+pub struct LastTrade {
+    pub amount: f64,
+    pub direction: String,
+    pub index_price: f64,
+    pub instrument_name: String,
+    pub iv: Option<f64>,
+    pub liquid: Option<String>,
+    pub price: f64,
+    pub tick_direction: i32,
+    pub timestamp: u64,
+    pub trade_id: String,
+    pub trade_seq: u64,
+}
+
 // Debug implementations using pretty JSON formatting
-impl_json_debug_pretty!(Liquidity, Trade, TradeStats);
+impl_json_debug_pretty!(LastTrade,Liquidity, Trade, TradeStats,TradeExecution,UserTrade);
 
 // Display implementations using compact JSON formatting
-impl_json_display!(Liquidity, Trade, TradeStats);
+impl_json_display!(LastTrade,Liquidity, Trade, TradeStats,TradeExecution,UserTrade);

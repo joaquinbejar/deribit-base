@@ -4,10 +4,12 @@
    Date: 21/7/25
 ******************************************************************************/
 
+use crate::model::trade::LastTrade;
+use crate::{impl_json_debug_pretty, impl_json_display};
 use serde::{Deserialize, Serialize};
 
 /// Generic JSON-RPC 2.0 response wrapper
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct JsonRpcResponse<T> {
     /// JSON-RPC version
     pub jsonrpc: String,
@@ -85,7 +87,7 @@ impl<T> JsonRpcResponse<T> {
 }
 
 /// JSON-RPC error information
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct JsonRpcError {
     /// Error code
     pub code: i32,
@@ -150,16 +152,8 @@ impl JsonRpcError {
     }
 }
 
-impl std::fmt::Display for JsonRpcError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "JSON-RPC Error {}: {}", self.code, self.message)
-    }
-}
-
-impl std::error::Error for JsonRpcError {}
-
 /// Authentication response
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct AuthResponse {
     /// Access token
     pub access_token: String,
@@ -174,7 +168,7 @@ pub struct AuthResponse {
 }
 
 /// Pagination information
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct Pagination {
     /// Current page
     pub page: Option<u32>,
@@ -256,7 +250,7 @@ impl<T> Notification<T> {
 }
 
 /// Subscription response
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct SubscriptionResponse {
     /// Subscription ID
     pub subscription: String,
@@ -265,7 +259,7 @@ pub struct SubscriptionResponse {
 }
 
 /// Heartbeat response
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct HeartbeatResponse {
     /// Type (always "heartbeat")
     #[serde(rename = "type")]
@@ -273,15 +267,154 @@ pub struct HeartbeatResponse {
 }
 
 /// Test response for connectivity checks
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct TestResponse {
     /// Version information
     pub version: String,
 }
 
 /// Server time response
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct ServerTimeResponse {
-    /// Server timestamp in milliseconds
+    /// Current server timestamp in milliseconds
     pub timestamp: i64,
 }
+
+/// Settlements response structure
+#[derive(Clone, Serialize, Deserialize)]
+pub struct SettlementsResponse {
+    /// Continuation token for pagination
+    pub continuation: Option<String>,
+    /// List of settlement events
+    pub settlements: Vec<crate::model::settlement::Settlement>,
+}
+
+impl SettlementsResponse {
+    /// Create a new settlements response
+    pub fn new(settlements: Vec<crate::model::settlement::Settlement>) -> Self {
+        Self {
+            continuation: None,
+            settlements,
+        }
+    }
+
+    /// Create settlements response with continuation token
+    pub fn with_continuation(
+        settlements: Vec<crate::model::settlement::Settlement>,
+        continuation: String,
+    ) -> Self {
+        Self {
+            continuation: Some(continuation),
+            settlements,
+        }
+    }
+
+    /// Check if there are more results
+    pub fn has_more(&self) -> bool {
+        self.continuation.is_some()
+    }
+}
+
+/// Contract size response
+#[derive(Clone, Serialize, Deserialize)]
+pub struct ContractSizeResponse {
+    pub contract_size: f64,
+}
+
+/// Status response
+#[derive(Clone, Serialize, Deserialize)]
+pub struct StatusResponse {
+    pub locked: bool,
+    pub message: String,
+    pub locked_indices: Vec<String>,
+}
+
+/// APR history response
+#[derive(Clone, Serialize, Deserialize)]
+pub struct AprHistoryResponse {
+    pub data: Vec<AprDataPoint>,
+    pub continuation: Option<String>,
+}
+/// APR data point
+#[derive(Clone, Serialize, Deserialize)]
+pub struct AprDataPoint {
+    pub apr: f64,
+    pub timestamp: u64,
+    pub day: i32,
+}
+
+/// Hello response
+#[derive(Clone, Serialize, Deserialize)]
+pub struct HelloResponse {
+    pub version: String,
+}
+
+/// Delivery prices response
+#[derive(Clone, Serialize, Deserialize)]
+pub struct DeliveryPricesResponse {
+    pub data: Vec<DeliveryPriceData>,
+    pub records_total: u32,
+}
+
+/// Delivery price data
+#[derive(Clone, Serialize, Deserialize)]
+pub struct DeliveryPriceData {
+    pub date: String,
+    pub delivery_price: f64,
+}
+
+/// Expirations response
+#[derive(Clone, Serialize, Deserialize)]
+pub struct ExpirationsResponse {
+    pub expirations: Vec<String>,
+    pub future: Option<Vec<String>>,
+    pub option: Option<Vec<String>>,
+}
+
+/// Last trades response
+#[derive(Clone, Serialize, Deserialize)]
+pub struct LastTradesResponse {
+    pub has_more: bool,
+    pub trades: Vec<LastTrade>,
+}
+
+impl_json_display!(
+    JsonRpcError,
+    AuthResponse,
+    Pagination,
+    SubscriptionResponse,
+    HeartbeatResponse,
+    TestResponse,
+    ServerTimeResponse,
+    SettlementsResponse,
+    ContractSizeResponse,
+    StatusResponse,
+    AprHistoryResponse,
+    AprDataPoint,
+    HelloResponse,
+    DeliveryPricesResponse,
+    DeliveryPriceData,
+    ExpirationsResponse,
+    LastTradesResponse
+);
+impl_json_debug_pretty!(
+    JsonRpcError,
+    AuthResponse,
+    Pagination,
+    SubscriptionResponse,
+    HeartbeatResponse,
+    TestResponse,
+    ServerTimeResponse,
+    SettlementsResponse,
+    ContractSizeResponse,
+    StatusResponse,
+    AprHistoryResponse,
+    AprDataPoint,
+    HelloResponse,
+    DeliveryPricesResponse,
+    DeliveryPriceData,
+    ExpirationsResponse,
+    LastTradesResponse
+);
+
+impl std::error::Error for JsonRpcError {}
