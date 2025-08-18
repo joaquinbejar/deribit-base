@@ -385,5 +385,4 @@ mod tests {
         assert_eq!(side_to_fix(OrderSide::Buy), "1");
         assert_eq!(side_to_fix(OrderSide::Sell), "2");
     }
-    
 }
