@@ -327,12 +327,15 @@ pub struct ContractSizeResponse {
 /// Status response
 #[derive(Clone, Serialize, Deserialize)]
 pub struct StatusResponse {
-    /// Whether the system is locked
-    pub locked: bool,
-    /// Status message
-    pub message: String,
-    /// List of locked indices
-    pub locked_indices: Vec<String>,
+    /// Whether the system is locked (optional)
+    pub locked: Option<bool>,
+    /// Status message (optional)
+    pub message: Option<String>,
+    /// List of locked indices (optional)
+    pub locked_indices: Option<Vec<String>>,
+    /// Additional fields that might be present in the API response
+    #[serde(flatten)]
+    pub additional_fields: std::collections::HashMap<String, serde_json::Value>,
 }
 
 /// APR history response
@@ -348,8 +351,8 @@ pub struct AprHistoryResponse {
 pub struct AprDataPoint {
     /// Annual percentage rate
     pub apr: f64,
-    /// Timestamp of the data point
-    pub timestamp: u64,
+    /// Timestamp of the data point (optional)
+    pub timestamp: Option<u64>,
     /// Day of the data point
     pub day: i32,
 }
@@ -379,15 +382,25 @@ pub struct DeliveryPriceData {
     pub delivery_price: f64,
 }
 
-/// Expirations response
+/// Currency-specific expirations
 #[derive(Clone, Serialize, Deserialize)]
-pub struct ExpirationsResponse {
-    /// List of expiration dates
-    pub expirations: Vec<String>,
+pub struct CurrencyExpirations {
     /// Future instrument expirations
     pub future: Option<Vec<String>>,
     /// Option instrument expirations
     pub option: Option<Vec<String>>,
+}
+
+/// Expirations response
+#[derive(Clone, Serialize, Deserialize)]
+pub struct ExpirationsResponse {
+    /// Direct future expirations (when currency="any")
+    pub future: Option<Vec<String>>,
+    /// Direct option expirations (when currency="any")
+    pub option: Option<Vec<String>>,
+    /// Map of currency to their expirations (when specific currency)
+    #[serde(flatten)]
+    pub currencies: std::collections::HashMap<String, CurrencyExpirations>,
 }
 
 /// Last trades response
@@ -432,6 +445,7 @@ impl_json_display!(
     HelloResponse,
     DeliveryPricesResponse,
     DeliveryPriceData,
+    CurrencyExpirations,
     ExpirationsResponse,
     LastTradesResponse,
     OrderResponse
@@ -453,6 +467,7 @@ impl_json_debug_pretty!(
     HelloResponse,
     DeliveryPricesResponse,
     DeliveryPriceData,
+    CurrencyExpirations,
     ExpirationsResponse,
     LastTradesResponse,
     OrderResponse

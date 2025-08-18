@@ -51,11 +51,14 @@ pub struct Instrument {
     /// Instrument name (e.g., "BTC-PERPETUAL", "ETH-25JUL25-3000-C")
     pub instrument_name: String,
     /// Instrument kind
-    pub kind: InstrumentKind,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kind: Option<InstrumentKind>,
     /// Base currency
-    pub currency: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub currency: Option<String>,
     /// Whether the instrument is active for trading
-    pub is_active: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_active: Option<bool>,
     /// Expiration timestamp (None for perpetuals)
     pub expiration_timestamp: Option<i64>,
     /// Strike price (for options)
@@ -63,11 +66,14 @@ pub struct Instrument {
     /// Option type (call/put, for options only)
     pub option_type: Option<OptionType>,
     /// Minimum price movement
-    pub tick_size: f64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tick_size: Option<f64>,
     /// Minimum trade amount
-    pub min_trade_amount: f64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub min_trade_amount: Option<f64>,
     /// Contract size
-    pub contract_size: f64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contract_size: Option<f64>,
     /// Settlement period
     pub settlement_period: Option<String>,
     /// Instrument type (linear/reversed)
@@ -87,47 +93,38 @@ pub struct Instrument {
     /// Unique instrument identifier
     pub instrument_id: Option<u32>,
     /// Base currency for the instrument
-    pub base_currency: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub base_currency: Option<String>,
     /// Counter currency for the instrument
-    pub counter_currency: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub counter_currency: Option<String>,
 }
 
 impl Instrument {
     /// Check if the instrument is a perpetual contract
     pub fn is_perpetual(&self) -> bool {
-        self.expiration_timestamp.is_none() && self.kind == InstrumentKind::Future
+        self.expiration_timestamp.is_none() && self.kind.as_ref().map_or(false, |k| matches!(k, InstrumentKind::Future))
     }
 
     /// Check if the instrument is an option
     pub fn is_option(&self) -> bool {
-        self.kind == InstrumentKind::Option
+        self.kind.as_ref().map_or(false, |k| matches!(k, InstrumentKind::Option | InstrumentKind::OptionCombo))
     }
 
     /// Check if the instrument is a future
     pub fn is_future(&self) -> bool {
-        matches!(
-            self.kind,
-            InstrumentKind::Future | InstrumentKind::FutureCombo
-        )
+        self.kind.as_ref().map_or(false, |k| matches!(k, InstrumentKind::Future | InstrumentKind::FutureCombo))
     }
 
     /// Check if the instrument is a spot
     pub fn is_spot(&self) -> bool {
-        self.kind == InstrumentKind::Spot
+        self.kind.as_ref().map_or(false, |k| matches!(k, InstrumentKind::Spot))
     }
 }
 
 /// Index data
 #[derive(Clone, Serialize, Deserialize)]
 pub struct IndexData {
-    /// Currency
-    pub currency: String,
-    /// Index price
-    pub index_price: f64,
-    /// Components
-    pub components: Vec<std::collections::HashMap<String, f64>>,
-    /// Timestamp
-    pub timestamp: u64,
     /// BTC component (optional)
     pub btc: Option<f64>,
     /// ETH component (optional)

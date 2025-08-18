@@ -32,6 +32,7 @@ impl_json_debug_pretty!(SettlementType);
 #[derive(Clone, PartialEq, Serialize, Deserialize)]
 pub struct Settlement {
     /// Type of settlement event
+    #[serde(alias = "type")]
     pub settlement_type: SettlementType,
     /// Timestamp of the settlement event (milliseconds since Unix epoch)
     pub timestamp: i64,
@@ -39,7 +40,7 @@ pub struct Settlement {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instrument_name: Option<String>,
     /// Position size in quote currency (settlement and delivery only)
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(alias = "position", skip_serializing_if = "Option::is_none")]
     pub position_size: Option<f64>,
     /// Mark price at settlement time in quote currency (settlement and delivery only)
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -54,21 +55,24 @@ pub struct Settlement {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub funding: Option<f64>,
     // Additional fields from deribit-http types.rs
-    /// Session profit and loss
-    #[serde(default)]
-    pub session_profit_loss: f64,
-    /// Session bankrupt cy
-    #[serde(default)]
-    pub session_bankrupt_cy: f64,
-    /// Session tax
-    #[serde(default)]
-    pub session_tax: f64,
-    /// Session tax rate
-    #[serde(default)]
-    pub session_tax_rate: f64,
-    /// Socialized losses
-    #[serde(default)]
-    pub socialized_losses: f64,
+    /// Session profit and loss (optional)
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub session_profit_loss: Option<f64>,
+    /// Session bankruptcy (optional)
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub session_bankrupt_cy: Option<f64>,
+    /// Session tax (optional)
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub session_tax: Option<f64>,
+    /// Session tax rate (optional)
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub session_tax_rate: Option<f64>,
+    /// Socialized losses (optional)
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub socialized_losses: Option<f64>,
+    /// Additional fields that might be present in the API response
+    #[serde(flatten)]
+    pub additional_fields: std::collections::HashMap<String, serde_json::Value>,
 }
 
 impl Settlement {
@@ -83,11 +87,12 @@ impl Settlement {
             index_price: None,
             profit_loss: None,
             funding: None,
-            session_profit_loss: 0.0,
-            session_bankrupt_cy: 0.0,
-            session_tax: 0.0,
-            session_tax_rate: 0.0,
-            socialized_losses: 0.0,
+            session_profit_loss: None,
+            session_bankrupt_cy: None,
+            session_tax: None,
+            session_tax_rate: None,
+            socialized_losses: None,
+            additional_fields: std::collections::HashMap::new(),
         }
     }
 
@@ -106,11 +111,12 @@ impl Settlement {
             index_price: None,
             profit_loss: None,
             funding: None,
-            session_profit_loss: 0.0,
-            session_bankrupt_cy: 0.0,
-            session_tax: 0.0,
-            session_tax_rate: 0.0,
-            socialized_losses: 0.0,
+            session_profit_loss: None,
+            session_bankrupt_cy: None,
+            session_tax: None,
+            session_tax_rate: None,
+            socialized_losses: None,
+            additional_fields: std::collections::HashMap::new(),
         }
     }
 

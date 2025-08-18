@@ -66,47 +66,34 @@ impl_json_debug_pretty!(FundingDataPoint);
 /// Funding rate data structure for historical funding rates
 #[derive(Clone, Serialize, Deserialize)]
 pub struct FundingRateData {
-    /// Funding rate value
-    pub funding_rate: f64,
-    /// Index price at the time
-    pub index_price: f64,
-    /// Interest rate
-    pub interest_rate: f64,
-    /// Previous index price
-    pub prev_index_price: f64,
     /// Timestamp of the funding event
     pub timestamp: u64,
+    /// Index price at the time
+    pub index_price: f64,
     /// 8h interest rate
     pub interest_8h: f64,
     /// 1h interest rate
     pub interest_1h: f64,
+    /// Previous index price
+    pub prev_index_price: f64,
 }
 
 impl FundingRateData {
     /// Create new funding rate data
     pub fn new(
-        funding_rate: f64,
-        index_price: f64,
-        interest_rate: f64,
-        prev_index_price: f64,
         timestamp: u64,
+        index_price: f64,
+        interest_8h: f64,
+        interest_1h: f64,
+        prev_index_price: f64,
     ) -> Self {
         Self {
-            funding_rate,
-            index_price,
-            interest_rate,
-            prev_index_price,
             timestamp,
-            interest_8h: 0.0,
-            interest_1h: 0.0,
+            index_price,
+            interest_8h,
+            interest_1h,
+            prev_index_price,
         }
-    }
-
-    /// Set interest rates
-    pub fn with_interest_rates(mut self, interest_8h: f64, interest_1h: f64) -> Self {
-        self.interest_8h = interest_8h;
-        self.interest_1h = interest_1h;
-        self
     }
 }
 
@@ -213,15 +200,16 @@ mod tests {
     #[test]
     fn test_serde() {
         let funding_data = FundingRateData::new(
-            0.0001,        // funding_rate
-            45000.0,       // index_price
-            0.05,          // interest_rate
-            44900.0,       // prev_index_price
             1640995200000, // timestamp
+            45000.0,       // index_price
+            0.0001,        // interest_8h
+            0.00001,       // interest_1h
+            44900.0,       // prev_index_price
         );
 
         let json = serde_json::to_string(&funding_data).unwrap();
         let deserialized: FundingRateData = serde_json::from_str(&json).unwrap();
-        assert_eq!(funding_data.funding_rate, deserialized.funding_rate);
+        assert_eq!(funding_data.timestamp, deserialized.timestamp);
+        assert_eq!(funding_data.index_price, deserialized.index_price);
     }
 }
