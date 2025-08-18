@@ -17,7 +17,7 @@ pub use crate::model::{
     account::{AccountSummary, Portfolio},
     book_summary::{BookSummaries, BookSummary},
     config::{DeribitConfig, DeribitUrls, HttpConfig, WebSocketConfig},
-    currency::Currencies,
+    currency::{Currencies, Currency},
     extended_market_data::{
         CurrencyInfo, CurrencyInfoCollection, FundingRate, HistoricalVolatility, IndexPrice,
         MarketStatistics, WithdrawalPriority,

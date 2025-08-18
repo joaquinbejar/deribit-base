@@ -8,6 +8,8 @@ use serde::{Deserialize, Serialize};
 use std::str::FromStr;
 
 use crate::{impl_json_debug_pretty, impl_json_display};
+use crate::prelude::WithdrawalPriority;
+
 /// Currencies supported by Deribit
 #[derive(Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum Currencies {
@@ -134,15 +136,10 @@ pub struct Currency {
     pub apr: Option<f64>,
 }
 
-/// Withdrawal priority structure
-#[derive(Clone, Serialize, Deserialize)]
-pub struct WithdrawalPriority {
-    pub name: String,
-    pub value: f64,
-}
+
 
 // Debug implementations using pretty JSON formatting
-impl_json_debug_pretty!(Currencies, Currency, WithdrawalPriority);
+impl_json_debug_pretty!(Currencies, Currency);
 
 // Display implementations using compact JSON formatting
-impl_json_display!(Currencies, Currency, WithdrawalPriority);
+impl_json_display!(Currencies, Currency);
