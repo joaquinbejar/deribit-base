@@ -146,7 +146,6 @@ pub struct IndexPriceData {
     pub estimated_delivery_price: f64,
 }
 
-
 // Debug implementations using pretty JSON formatting
 impl_json_debug_pretty!(Instrument, IndexData, IndexPriceData);
 

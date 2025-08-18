@@ -5,7 +5,6 @@
 ******************************************************************************/
 use crate::{impl_json_debug_pretty, impl_json_display};
 use serde::{Deserialize, Serialize};
-use crate::model::trade::TradeExecution;
 
 /// Time in force enumeration
 #[derive(Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -130,8 +129,6 @@ pub enum OrderStatus {
     PendingReplace,
 }
 
-
-
 /// Order information
 #[derive(Clone, Serialize, Deserialize)]
 pub struct OrderInfo {
@@ -162,7 +159,6 @@ pub struct OrderInfo {
     pub usd: Option<f64>,
     pub web: bool,
 }
-
 
 impl_json_debug_pretty!(
     TimeInForce,

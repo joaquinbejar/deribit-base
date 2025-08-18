@@ -210,8 +210,6 @@ pub struct UserTrade {
     pub underlying_price: Option<f64>,
 }
 
-
-
 /// Last trade
 #[derive(Clone, Serialize, Deserialize)]
 pub struct LastTrade {
@@ -229,7 +227,21 @@ pub struct LastTrade {
 }
 
 // Debug implementations using pretty JSON formatting
-impl_json_debug_pretty!(LastTrade,Liquidity, Trade, TradeStats,TradeExecution,UserTrade);
+impl_json_debug_pretty!(
+    LastTrade,
+    Liquidity,
+    Trade,
+    TradeStats,
+    TradeExecution,
+    UserTrade
+);
 
 // Display implementations using compact JSON formatting
-impl_json_display!(LastTrade,Liquidity, Trade, TradeStats,TradeExecution,UserTrade);
+impl_json_display!(
+    LastTrade,
+    Liquidity,
+    Trade,
+    TradeStats,
+    TradeExecution,
+    UserTrade
+);

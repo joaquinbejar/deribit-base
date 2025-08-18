@@ -430,7 +430,7 @@ mod tests {
         );
 
         assert_eq!(transfer.id, 12345);
-        assert_eq!(transfer.currency, "Bitcoin");
+        assert_eq!(transfer.currency, "BTC");
         assert_eq!(transfer.amount, 1.0);
         assert_eq!(transfer.fee, 0.0005);
         assert_eq!(transfer.net_amount(), 0.9995);

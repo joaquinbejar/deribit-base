@@ -150,6 +150,7 @@ impl TradingViewChartData {
     }
 
     /// Add a new candle to the data
+    #[allow(clippy::too_many_arguments)]
     pub fn add_candle(
         &mut self,
         timestamp: u64,

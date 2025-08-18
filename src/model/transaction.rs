@@ -7,10 +7,11 @@
 use crate::{impl_json_debug_pretty, impl_json_display};
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize, Default)]
 pub enum TransactionType {
     Deposit,
     Withdrawal,
+    #[default]
     Trade,
     Transfer,
     Fee,
@@ -19,12 +20,6 @@ pub enum TransactionType {
     Dividend,
     Liquidation,
     Insurance,
-}
-
-impl Default for TransactionType {
-    fn default() -> Self {
-        TransactionType::Trade
-    }
 }
 
 /// Generic transaction log entry
@@ -57,21 +52,12 @@ impl_json_display!(TransactionLogEntry);
 impl_json_debug_pretty!(TransactionLogEntry);
 
 /// Paginated transaction log response
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize, Default)]
 pub struct TransactionLog {
     /// Continuation token for pagination
     pub continuation: Option<String>,
     /// List of transaction log entries
     pub logs: Vec<TransactionLogEntry>,
-}
-
-impl Default for TransactionLog {
-    fn default() -> Self {
-        Self {
-            continuation: None,
-            logs: Vec::new(),
-        }
-    }
 }
 
 impl_json_display!(TransactionLog);

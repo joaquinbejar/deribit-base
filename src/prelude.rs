@@ -17,14 +17,17 @@ pub use crate::model::{
     account::{AccountSummary, Portfolio, Subaccount},
     book_summary::{BookSummaries, BookSummary},
     config::{DeribitConfig, DeribitUrls, HttpConfig, WebSocketConfig},
+    currency::Currency,
     extended_market_data::{
         CurrencyInfo, CurrencyInfoCollection, FundingRate, HistoricalVolatility, IndexPrice,
         MarketStatistics, WithdrawalPriority,
     },
     funding::{FundingChartData, FundingDataPoint, FundingRateData, TradingViewChartData},
-    instrument::{Instrument, InstrumentKind, InstrumentType, OptionType, IndexData, IndexPriceData},
+    instrument::{
+        IndexData, IndexPriceData, Instrument, InstrumentKind, InstrumentType, OptionType,
+    },
     market_data::{Candle, Greeks, MarketStats, OrderBook, OrderBookEntry, Ticker},
-    order::{OrderSide, OrderStatus, OrderType, TimeInForce, OrderInfo},
+    order::{OrderInfo, OrderSide, OrderStatus, OrderType, TimeInForce},
     order_management::{
         BuyOrderRequest, EditOrderRequest, MassQuoteItem, MassQuoteRequest, SellOrderRequest,
         TransferResult,
@@ -35,15 +38,15 @@ pub use crate::model::{
         ClosePositionRequest, ModifyOrderRequest, NewOrderRequest, TriggerType,
     },
     response::{
-        AuthResponse, HeartbeatResponse, JsonRpcError, JsonRpcResponse, Notification,
-        PaginatedResponse, Pagination, ServerTimeResponse, SubscriptionResponse, TestResponse,
-        OrderResponse, MassQuoteResponse, AprHistoryResponse, ContractSizeResponse, DeliveryPricesResponse,
-        ExpirationsResponse, HelloResponse, LastTradesResponse,
-        SettlementsResponse, StatusResponse,
+        AprHistoryResponse, AuthResponse, ContractSizeResponse, DeliveryPricesResponse,
+        ExpirationsResponse, HeartbeatResponse, HelloResponse, JsonRpcError, JsonRpcResponse,
+        LastTradesResponse, MassQuoteResponse, Notification, OrderResponse, PaginatedResponse,
+        Pagination, ServerTimeResponse, SettlementsResponse, StatusResponse, SubscriptionResponse,
+        TestResponse,
     },
     settlement::{Settlement, SettlementType, Settlements},
     ticker::{TickerData, TickerStats},
-    trade::{Liquidity, Trade, TradeStats,UserTrade},
+    trade::{Liquidity, Trade, TradeStats, UserTrade},
     transaction::{
         Deposit, DepositsResponse, TransactionLog, TransactionLogEntry, TransactionType,
         Withdrawal, WithdrawalsResponse,
@@ -51,7 +54,6 @@ pub use crate::model::{
     transfer::{
         AddressBookEntry, AddressType, SubaccountTransfer, Transfer, TransferState, Transfers,
     },
-    currency::Currency,
 };
 
 // Utility exports - macros and functions

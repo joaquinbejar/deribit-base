@@ -4,11 +4,11 @@
    Date: 21/7/25
 ******************************************************************************/
 
+use crate::model::order::OrderInfo;
+use crate::model::order_management::QuoteResult;
 use crate::model::trade::{LastTrade, TradeExecution};
 use crate::{impl_json_debug_pretty, impl_json_display};
 use serde::{Deserialize, Serialize};
-use crate::model::order::OrderInfo;
-use crate::model::order_management::QuoteResult;
 
 /// Generic JSON-RPC 2.0 response wrapper
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -392,7 +392,6 @@ pub struct OrderResponse {
 pub struct MassQuoteResponse {
     pub quotes: Vec<QuoteResult>,
 }
-
 
 impl_json_display!(
     MassQuoteResponse,

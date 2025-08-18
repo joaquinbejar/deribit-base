@@ -83,7 +83,6 @@ pub struct TransferResult {
 impl_json_display!(TransferResult);
 impl_json_debug_pretty!(TransferResult);
 
-
 /// Quote result
 #[derive(Clone, Serialize, Deserialize)]
 pub struct QuoteResult {
