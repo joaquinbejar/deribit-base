@@ -4,7 +4,7 @@
    Date: 21/7/25
 ******************************************************************************/
 
-use crate::prelude::Currency;
+use crate::prelude::Currencies;
 use crate::{impl_json_debug_pretty, impl_json_display};
 use serde::{Deserialize, Serialize};
 
@@ -14,7 +14,7 @@ pub struct BookSummary {
     /// Instrument name
     pub instrument_name: String,
     /// Base currency
-    pub base_currency: Currency,
+    pub base_currency: Currencies,
     /// Quote currency (usually USD)
     pub quote_currency: String,
     /// 24h trading volume
@@ -66,7 +66,7 @@ impl BookSummary {
     /// Create a new book summary
     pub fn new(
         instrument_name: String,
-        base_currency: Currency,
+        base_currency: Currencies,
         quote_currency: String,
         mark_price: f64,
         creation_timestamp: i64,
@@ -224,7 +224,7 @@ impl BookSummaries {
     }
 
     /// Get summaries by currency
-    pub fn by_currency(&self, currency: Currency) -> Vec<&BookSummary> {
+    pub fn by_currency(&self, currency: Currencies) -> Vec<&BookSummary> {
         self.summaries
             .iter()
             .filter(|s| s.base_currency == currency)
@@ -276,14 +276,14 @@ mod tests {
     fn test_book_summary_creation() {
         let summary = BookSummary::new(
             "BTC-PERPETUAL".to_string(),
-            Currency::Bitcoin,
+            Currencies::Bitcoin,
             "USD".to_string(),
             45000.0,
             1640995200000,
         );
 
         assert_eq!(summary.instrument_name, "BTC-PERPETUAL");
-        assert_eq!(summary.base_currency, Currency::Bitcoin);
+        assert_eq!(summary.base_currency, Currencies::Bitcoin);
         assert_eq!(summary.mark_price, 45000.0);
         assert!(summary.is_perpetual());
     }
@@ -292,7 +292,7 @@ mod tests {
     fn test_book_summary_builder() {
         let summary = BookSummary::new(
             "BTC-25MAR23-50000-C".to_string(),
-            Currency::Bitcoin,
+            Currencies::Bitcoin,
             "USD".to_string(),
             2500.0,
             1640995200000,
@@ -320,7 +320,7 @@ mod tests {
     fn test_spread_calculation() {
         let summary = BookSummary::new(
             "BTC-PERPETUAL".to_string(),
-            Currency::Bitcoin,
+            Currencies::Bitcoin,
             "USD".to_string(),
             45000.0,
             1640995200000,
@@ -338,7 +338,7 @@ mod tests {
     fn test_instrument_type_detection() {
         let perpetual = BookSummary::new(
             "BTC-PERPETUAL".to_string(),
-            Currency::Bitcoin,
+            Currencies::Bitcoin,
             "USD".to_string(),
             45000.0,
             0,
@@ -349,7 +349,7 @@ mod tests {
 
         let option = BookSummary::new(
             "BTC-25MAR23-50000-C".to_string(),
-            Currency::Bitcoin,
+            Currencies::Bitcoin,
             "USD".to_string(),
             2500.0,
             0,
@@ -360,7 +360,7 @@ mod tests {
 
         let future = BookSummary::new(
             "BTC-25MAR23".to_string(),
-            Currency::Bitcoin,
+            Currencies::Bitcoin,
             "USD".to_string(),
             45000.0,
             0,
@@ -377,7 +377,7 @@ mod tests {
         summaries.add(
             BookSummary::new(
                 "BTC-PERPETUAL".to_string(),
-                Currency::Bitcoin,
+                Currencies::Bitcoin,
                 "USD".to_string(),
                 45000.0,
                 0,
@@ -388,7 +388,7 @@ mod tests {
         summaries.add(
             BookSummary::new(
                 "ETH-PERPETUAL".to_string(),
-                Currency::Ethereum,
+                Currencies::Ethereum,
                 "USD".to_string(),
                 3000.0,
                 0,
@@ -397,18 +397,18 @@ mod tests {
         );
 
         assert_eq!(summaries.summaries.len(), 2);
-        assert_eq!(summaries.by_currency(Currency::Bitcoin).len(), 1);
+        assert_eq!(summaries.by_currency(Currencies::Bitcoin).len(), 1);
         assert_eq!(summaries.perpetuals().len(), 2);
 
         summaries.sort_by_volume();
-        assert_eq!(summaries.summaries[0].base_currency, Currency::Bitcoin);
+        assert_eq!(summaries.summaries[0].base_currency, Currencies::Bitcoin);
     }
 
     #[test]
     fn test_serde() {
         let summary = BookSummary::new(
             "BTC-PERPETUAL".to_string(),
-            Currency::Bitcoin,
+            Currencies::Bitcoin,
             "USD".to_string(),
             45000.0,
             1640995200000,

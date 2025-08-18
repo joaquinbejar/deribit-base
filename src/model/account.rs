@@ -4,7 +4,7 @@
    Date: 21/7/25
 ******************************************************************************/
 
-use crate::model::currency::Currency;
+use crate::model::currency::Currencies;
 use serde::{Deserialize, Serialize};
 
 use crate::{impl_json_debug_pretty, impl_json_display};
@@ -12,7 +12,7 @@ use crate::{impl_json_debug_pretty, impl_json_display};
 #[derive(Clone, Serialize, Deserialize)]
 pub struct AccountSummary {
     /// Account currency
-    pub currency: Currency,
+    pub currency: Currencies,
     /// Total balance
     pub balance: f64,
     /// Account equity
@@ -116,7 +116,7 @@ impl AccountSummary {
 #[derive(Clone, Serialize, Deserialize)]
 pub struct Portfolio {
     /// Currency of the portfolio
-    pub currency: Currency,
+    pub currency: Currencies,
     /// Account summaries for different currencies
     pub accounts: Vec<AccountSummary>,
     /// Total portfolio value in USD
@@ -127,7 +127,7 @@ pub struct Portfolio {
 
 impl Portfolio {
     /// Create a new empty portfolio
-    pub fn new(currency: Currency) -> Self {
+    pub fn new(currency: Currencies) -> Self {
         Self {
             currency,
             accounts: Vec::new(),
@@ -142,7 +142,7 @@ impl Portfolio {
     }
 
     /// Get account summary for a specific currency
-    pub fn get_account(&self, currency: &Currency) -> Option<&AccountSummary> {
+    pub fn get_account(&self, currency: &Currencies) -> Option<&AccountSummary> {
         self.accounts.iter().find(|acc| &acc.currency == currency)
     }
 

@@ -4,7 +4,7 @@
    Date: 21/7/25
 ******************************************************************************/
 
-use crate::model::{currency::Currency, instrument::InstrumentKind, order::OrderSide};
+use crate::model::{currency::Currencies, instrument::InstrumentKind, order::OrderSide};
 use serde::{Deserialize, Serialize};
 
 use crate::{impl_json_debug_pretty, impl_json_display};
@@ -42,7 +42,7 @@ pub struct Trade {
     /// Fee amount
     pub fee: f64,
     /// Fee currency
-    pub fee_currency: Currency,
+    pub fee_currency: Currencies,
     /// Liquidity type (maker/taker)
     pub liquidity: Liquidity,
     /// Mark price at time of trade

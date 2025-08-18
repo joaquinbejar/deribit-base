@@ -4,7 +4,7 @@
    Date: 21/7/25
 ******************************************************************************/
 
-use crate::prelude::Currency;
+use crate::prelude::Currencies;
 use crate::{impl_json_debug_pretty, impl_json_display};
 use serde::{Deserialize, Serialize};
 
@@ -56,7 +56,7 @@ pub struct Transfer {
     /// Transfer ID
     pub id: i64,
     /// Currency being transferred
-    pub currency: Currency,
+    pub currency: Currencies,
     /// Transfer amount
     pub amount: f64,
     /// Transfer fee
@@ -84,7 +84,7 @@ impl Transfer {
     /// Create a new transfer
     pub fn new(
         id: i64,
-        currency: Currency,
+        currency: Currencies,
         amount: f64,
         fee: f64,
         address: String,
@@ -169,7 +169,7 @@ pub struct AddressBookEntry {
     /// Cryptocurrency address
     pub address: String,
     /// Currency for this address
-    pub currency: Currency,
+    pub currency: Currencies,
     /// User-defined label for the address
     pub label: String,
     /// Type of address
@@ -203,7 +203,7 @@ impl AddressBookEntry {
     /// Create a new address book entry
     pub fn new(
         address: String,
-        currency: Currency,
+        currency: Currencies,
         label: String,
         address_type: AddressType,
         creation_timestamp: i64,
@@ -281,7 +281,7 @@ pub struct SubaccountTransfer {
     /// Transfer amount
     pub amount: f64,
     /// Currency being transferred
-    pub currency: Currency,
+    pub currency: Currencies,
     /// Destination subaccount ID
     pub destination: i64,
     /// Transfer ID
@@ -301,7 +301,7 @@ impl SubaccountTransfer {
     pub fn new(
         id: i64,
         amount: f64,
-        currency: Currency,
+        currency: Currencies,
         source: i64,
         destination: i64,
         timestamp: i64,
@@ -365,7 +365,7 @@ impl Transfers {
     }
 
     /// Get transfers by currency
-    pub fn by_currency(&self, currency: Currency) -> Vec<&Transfer> {
+    pub fn by_currency(&self, currency: Currencies) -> Vec<&Transfer> {
         self.transfers
             .iter()
             .filter(|t| t.currency == currency)
@@ -388,7 +388,7 @@ impl Transfers {
     }
 
     /// Calculate total amount by currency
-    pub fn total_amount(&self, currency: Currency) -> f64 {
+    pub fn total_amount(&self, currency: Currencies) -> f64 {
         self.transfers
             .iter()
             .filter(|t| t.currency == currency)
@@ -397,7 +397,7 @@ impl Transfers {
     }
 
     /// Calculate total fees by currency
-    pub fn total_fees(&self, currency: Currency) -> f64 {
+    pub fn total_fees(&self, currency: Currencies) -> f64 {
         self.transfers
             .iter()
             .filter(|t| t.currency == currency)
@@ -423,7 +423,7 @@ mod tests {
     fn test_transfer_creation() {
         let transfer = Transfer::new(
             12345,
-            Currency::Bitcoin,
+            Currencies::Bitcoin,
             1.0,
             0.0005,
             "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh".to_string(),
@@ -431,7 +431,7 @@ mod tests {
         );
 
         assert_eq!(transfer.id, 12345);
-        assert_eq!(transfer.currency, Currency::Bitcoin);
+        assert_eq!(transfer.currency, Currencies::Bitcoin);
         assert_eq!(transfer.amount, 1.0);
         assert_eq!(transfer.fee, 0.0005);
         assert_eq!(transfer.net_amount(), 0.9995);
@@ -442,7 +442,7 @@ mod tests {
     fn test_transfer_state_changes() {
         let mut transfer = Transfer::new(
             1,
-            Currency::Bitcoin,
+            Currencies::Bitcoin,
             1.0,
             0.001,
             "address".to_string(),
@@ -466,7 +466,7 @@ mod tests {
     fn test_address_book_entry() {
         let entry = AddressBookEntry::new(
             "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh".to_string(),
-            Currency::Bitcoin,
+            Currencies::Bitcoin,
             "Main wallet".to_string(),
             AddressType::Withdrawal,
             1640995200000,
@@ -490,7 +490,7 @@ mod tests {
         let transfer = SubaccountTransfer::new(
             1,
             100.0,
-            Currency::Bitcoin,
+            Currencies::Bitcoin,
             0,   // main account
             123, // subaccount
             1640995200000,
@@ -505,13 +505,20 @@ mod tests {
         let mut transfers = Transfers::new();
 
         transfers.add(
-            Transfer::new(1, Currency::Bitcoin, 1.0, 0.001, "addr1".to_string(), 1000)
-                .with_state(TransferState::Confirmed),
+            Transfer::new(
+                1,
+                Currencies::Bitcoin,
+                1.0,
+                0.001,
+                "addr1".to_string(),
+                1000,
+            )
+            .with_state(TransferState::Confirmed),
         );
 
         transfers.add(Transfer::new(
             2,
-            Currency::Bitcoin,
+            Currencies::Bitcoin,
             0.5,
             0.0005,
             "addr2".to_string(),
@@ -519,18 +526,18 @@ mod tests {
         ));
 
         assert_eq!(transfers.transfers.len(), 2);
-        assert_eq!(transfers.by_currency(Currency::Bitcoin).len(), 2);
+        assert_eq!(transfers.by_currency(Currencies::Bitcoin).len(), 2);
         assert_eq!(transfers.confirmed().len(), 1);
         assert_eq!(transfers.pending().len(), 1);
-        assert_eq!(transfers.total_amount(Currency::Bitcoin), 1.5);
-        assert_eq!(transfers.total_fees(Currency::Bitcoin), 0.0015);
+        assert_eq!(transfers.total_amount(Currencies::Bitcoin), 1.5);
+        assert_eq!(transfers.total_fees(Currencies::Bitcoin), 0.0015);
     }
 
     #[test]
     fn test_serde() {
         let transfer = Transfer::new(
             12345,
-            Currency::Bitcoin,
+            Currencies::Bitcoin,
             1.0,
             0.0005,
             "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh".to_string(),

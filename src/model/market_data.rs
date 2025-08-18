@@ -4,7 +4,7 @@
    Date: 21/7/25
 ******************************************************************************/
 
-use crate::model::{currency::Currency, instrument::InstrumentKind};
+use crate::model::{currency::Currencies, instrument::InstrumentKind};
 use serde::{Deserialize, Serialize};
 
 use crate::{impl_json_debug_pretty, impl_json_display};
@@ -207,7 +207,7 @@ pub struct Greeks {
 #[derive(Clone, Serialize, Deserialize)]
 pub struct MarketStats {
     /// Currency
-    pub currency: Currency,
+    pub currency: Currencies,
     /// Total volume in 24h
     pub volume_24h: f64,
     /// Volume change in 24h

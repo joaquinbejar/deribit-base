@@ -4,7 +4,7 @@
    Date: 21/7/25
 ******************************************************************************/
 
-use crate::model::currency::Currency;
+use crate::model::currency::Currencies;
 use serde::{Deserialize, Serialize};
 
 use crate::{impl_json_debug_pretty, impl_json_display};
@@ -54,7 +54,7 @@ pub struct Instrument {
     /// Instrument kind
     pub kind: InstrumentKind,
     /// Base currency
-    pub currency: Currency,
+    pub currency: Currencies,
     /// Whether the instrument is active for trading
     pub is_active: bool,
     /// Expiration timestamp (None for perpetuals)
@@ -74,9 +74,9 @@ pub struct Instrument {
     /// Instrument type (linear/reversed)
     pub instrument_type: Option<InstrumentType>,
     /// Quote currency
-    pub quote_currency: Option<Currency>,
+    pub quote_currency: Option<Currencies>,
     /// Settlement currency
-    pub settlement_currency: Option<Currency>,
+    pub settlement_currency: Option<Currencies>,
     /// Creation timestamp
     pub creation_timestamp: Option<i64>,
     /// Maximum leverage
