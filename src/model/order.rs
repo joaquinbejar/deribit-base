@@ -166,8 +166,8 @@ pub struct OrderInfo {
     pub label: String,
     /// Last update timestamp
     pub last_update_timestamp: u64,
-    /// Maximum amount to show in order book
-    pub max_show: f64,
+    /// Maximum amount to show in order book (optional)
+    pub max_show: Option<f64>,
     /// Unique order identifier
     pub order_id: String,
     /// Current order state

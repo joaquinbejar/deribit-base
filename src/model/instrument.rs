@@ -103,22 +103,32 @@ pub struct Instrument {
 impl Instrument {
     /// Check if the instrument is a perpetual contract
     pub fn is_perpetual(&self) -> bool {
-        self.expiration_timestamp.is_none() && self.kind.as_ref().map_or(false, |k| matches!(k, InstrumentKind::Future))
+        self.expiration_timestamp.is_none()
+            && self
+                .kind
+                .as_ref()
+                .map_or(false, |k| matches!(k, InstrumentKind::Future))
     }
 
     /// Check if the instrument is an option
     pub fn is_option(&self) -> bool {
-        self.kind.as_ref().map_or(false, |k| matches!(k, InstrumentKind::Option | InstrumentKind::OptionCombo))
+        self.kind.as_ref().map_or(false, |k| {
+            matches!(k, InstrumentKind::Option | InstrumentKind::OptionCombo)
+        })
     }
 
     /// Check if the instrument is a future
     pub fn is_future(&self) -> bool {
-        self.kind.as_ref().map_or(false, |k| matches!(k, InstrumentKind::Future | InstrumentKind::FutureCombo))
+        self.kind.as_ref().map_or(false, |k| {
+            matches!(k, InstrumentKind::Future | InstrumentKind::FutureCombo)
+        })
     }
 
     /// Check if the instrument is a spot
     pub fn is_spot(&self) -> bool {
-        self.kind.as_ref().map_or(false, |k| matches!(k, InstrumentKind::Spot))
+        self.kind
+            .as_ref()
+            .map_or(false, |k| matches!(k, InstrumentKind::Spot))
     }
 }
 
