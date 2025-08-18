@@ -14,7 +14,7 @@ pub use crate::error::{
 
 // Model exports
 pub use crate::model::{
-    account::{AccountSummary, Portfolio},
+    account::{AccountSummary, Portfolio, Subaccount},
     book_summary::{BookSummaries, BookSummary},
     config::{DeribitConfig, DeribitUrls, HttpConfig, WebSocketConfig},
     extended_market_data::{
@@ -22,9 +22,9 @@ pub use crate::model::{
         MarketStatistics, WithdrawalPriority,
     },
     funding::{FundingChartData, FundingDataPoint, FundingRateData, TradingViewChartData},
-    instrument::{Instrument, InstrumentKind, InstrumentType, OptionType},
+    instrument::{Instrument, InstrumentKind, InstrumentType, OptionType, IndexData, IndexPriceData},
     market_data::{Candle, Greeks, MarketStats, OrderBook, OrderBookEntry, Ticker},
-    order::{OrderSide, OrderStatus, OrderType, TimeInForce},
+    order::{OrderSide, OrderStatus, OrderType, TimeInForce, OrderInfo},
     order_management::{
         BuyOrderRequest, EditOrderRequest, MassQuoteItem, MassQuoteRequest, SellOrderRequest,
         TransferResult,
@@ -37,10 +37,13 @@ pub use crate::model::{
     response::{
         AuthResponse, HeartbeatResponse, JsonRpcError, JsonRpcResponse, Notification,
         PaginatedResponse, Pagination, ServerTimeResponse, SubscriptionResponse, TestResponse,
+        OrderResponse, MassQuoteResponse, AprHistoryResponse, ContractSizeResponse, DeliveryPricesResponse,
+        ExpirationsResponse, HelloResponse, LastTradesResponse,
+        SettlementsResponse, StatusResponse,
     },
     settlement::{Settlement, SettlementType, Settlements},
     ticker::{TickerData, TickerStats},
-    trade::{Liquidity, Trade, TradeStats},
+    trade::{Liquidity, Trade, TradeStats,UserTrade},
     transaction::{
         Deposit, DepositsResponse, TransactionLog, TransactionLogEntry, TransactionType,
         Withdrawal, WithdrawalsResponse,
@@ -48,6 +51,7 @@ pub use crate::model::{
     transfer::{
         AddressBookEntry, AddressType, SubaccountTransfer, Transfer, TransferState, Transfers,
     },
+    currency::Currency,
 };
 
 // Utility exports - macros and functions

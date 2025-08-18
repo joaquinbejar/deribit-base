@@ -83,14 +83,6 @@ pub struct TransferResult {
 impl_json_display!(TransferResult);
 impl_json_debug_pretty!(TransferResult);
 
-/// Mass quote response
-#[derive(Clone, Serialize, Deserialize)]
-pub struct MassQuoteResponse {
-    pub quotes: Vec<QuoteResult>,
-}
-
-impl_json_display!(MassQuoteResponse);
-impl_json_debug_pretty!(MassQuoteResponse);
 
 /// Quote result
 #[derive(Clone, Serialize, Deserialize)]

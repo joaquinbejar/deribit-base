@@ -4,9 +4,11 @@
    Date: 21/7/25
 ******************************************************************************/
 
-use crate::model::trade::LastTrade;
+use crate::model::trade::{LastTrade, TradeExecution};
 use crate::{impl_json_debug_pretty, impl_json_display};
 use serde::{Deserialize, Serialize};
+use crate::model::order::OrderInfo;
+use crate::model::order_management::QuoteResult;
 
 /// Generic JSON-RPC 2.0 response wrapper
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -378,7 +380,22 @@ pub struct LastTradesResponse {
     pub trades: Vec<LastTrade>,
 }
 
+/// Order response
+#[derive(Clone, Serialize, Deserialize)]
+pub struct OrderResponse {
+    pub order: OrderInfo,
+    pub trades: Vec<TradeExecution>,
+}
+
+/// Mass quote response
+#[derive(Clone, Serialize, Deserialize)]
+pub struct MassQuoteResponse {
+    pub quotes: Vec<QuoteResult>,
+}
+
+
 impl_json_display!(
+    MassQuoteResponse,
     JsonRpcError,
     AuthResponse,
     Pagination,
@@ -395,9 +412,11 @@ impl_json_display!(
     DeliveryPricesResponse,
     DeliveryPriceData,
     ExpirationsResponse,
-    LastTradesResponse
+    LastTradesResponse,
+    OrderResponse
 );
 impl_json_debug_pretty!(
+    MassQuoteResponse,
     JsonRpcError,
     AuthResponse,
     Pagination,
@@ -414,7 +433,8 @@ impl_json_debug_pretty!(
     DeliveryPricesResponse,
     DeliveryPriceData,
     ExpirationsResponse,
-    LastTradesResponse
+    LastTradesResponse,
+    OrderResponse
 );
 
 impl std::error::Error for JsonRpcError {}

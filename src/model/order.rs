@@ -130,12 +130,7 @@ pub enum OrderStatus {
     PendingReplace,
 }
 
-/// Order response
-#[derive(Clone, Serialize, Deserialize)]
-pub struct OrderResponse {
-    pub order: OrderInfo,
-    pub trades: Vec<TradeExecution>,
-}
+
 
 /// Order information
 #[derive(Clone, Serialize, Deserialize)]
@@ -175,7 +170,6 @@ impl_json_debug_pretty!(
     OrderType,
     NewOrderRequest,
     OrderStatus,
-    OrderResponse,
     OrderInfo
 );
 impl_json_display!(
@@ -184,6 +178,5 @@ impl_json_display!(
     OrderType,
     NewOrderRequest,
     OrderStatus,
-    OrderResponse,
     OrderInfo
 );
