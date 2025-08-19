@@ -53,7 +53,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-deribit-base = "0.1"
+deribit-base = "0.2"
 ```
 
 #### Basic Usage
