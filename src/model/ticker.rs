@@ -48,8 +48,7 @@ pub struct TickerData {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_price: Option<f64>,
     /// Current mark price
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub mark_price: Option<f64>,
+    pub mark_price: f64,
     /// Best bid price available
     #[serde(skip_serializing_if = "Option::is_none")]
     pub best_bid_price: Option<f64>,
@@ -57,11 +56,9 @@ pub struct TickerData {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub best_ask_price: Option<f64>,
     /// Amount available at best bid price
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub best_bid_amount: Option<f64>,
+    pub best_bid_amount: f64,
     /// Amount available at best ask price
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub best_ask_amount: Option<f64>,
+    pub best_ask_amount: f64,
     /// Trading volume in base currency
     #[serde(skip_serializing_if = "Option::is_none")]
     pub volume: Option<f64>,
@@ -100,8 +97,7 @@ pub struct TickerData {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub settlement_price: Option<f64>,
     /// Additional ticker statistics
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub stats: Option<TickerStats>,
+    pub stats: TickerStats,
     /// Greeks for options (delta, gamma, vega, theta, rho)
     #[serde(skip_serializing_if = "Option::is_none")]
     pub greeks: Option<Greeks>,
@@ -191,11 +187,11 @@ mod tests {
         assert_eq!(ticker_data.timestamp, 1757433676689);
         assert_eq!(ticker_data.state, "open");
         assert_eq!(ticker_data.last_price, Some(0.0002));
-        assert_eq!(ticker_data.mark_price, Some(0.0001));
+        assert_eq!(ticker_data.mark_price, 0.0001);
         assert_eq!(ticker_data.best_bid_price, Some(0.0001));
         assert_eq!(ticker_data.best_ask_price, Some(0.0002));
-        assert_eq!(ticker_data.best_bid_amount, Some(2.2));
-        assert_eq!(ticker_data.best_ask_amount, Some(4.1));
+        assert_eq!(ticker_data.best_bid_amount, 2.2);
+        assert_eq!(ticker_data.best_ask_amount, 4.1);
         assert_eq!(ticker_data.open_interest, Some(18.6));
         assert_eq!(ticker_data.settlement_price, Some(2.533e-4));
         assert_eq!(ticker_data.min_price, Some(0.0001));
@@ -213,7 +209,7 @@ mod tests {
         assert_eq!(ticker_data.index_price, Some(110881.2));
 
         // Verify stats
-        let stats = ticker_data.stats.as_ref().expect("Stats should be present");
+        let stats = ticker_data.stats.clone();
         assert_eq!(stats.high, Some(0.0002));
         assert_eq!(stats.low, Some(0.0001));
         assert_eq!(stats.price_change, Some(100.0));
