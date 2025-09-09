@@ -33,6 +33,8 @@ pub mod funding;
 pub mod instrument;
 /// Market data structures
 pub mod market_data;
+/// Options-related data structures and types
+pub mod options;
 /// Order-related data structures and types
 pub mod order;
 /// Order management operations and requests

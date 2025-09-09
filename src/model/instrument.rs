@@ -50,6 +50,9 @@ pub enum InstrumentType {
 pub struct Instrument {
     /// Instrument name (e.g., "BTC-PERPETUAL", "ETH-25JUL25-3000-C")
     pub instrument_name: String,
+    /// Price index used for mark price calculation
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub price_index: Option<String>,
     /// Instrument kind
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kind: Option<InstrumentKind>,
