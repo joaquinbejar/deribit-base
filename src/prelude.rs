@@ -27,6 +27,7 @@ pub use crate::model::{
         IndexData, IndexPriceData, Instrument, InstrumentKind, InstrumentType, OptionType,
     },
     market_data::{Candle, Greeks, MarketStats, OrderBook, OrderBookEntry, Ticker},
+    options::OptionInstrument,
     order::{OrderInfo, OrderSide, OrderStatus, OrderType, TimeInForce},
     order_management::{
         BuyOrderRequest, EditOrderRequest, MassQuoteItem, MassQuoteRequest, SellOrderRequest,
