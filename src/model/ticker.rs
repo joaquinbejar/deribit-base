@@ -24,8 +24,7 @@ pub struct Greeks {
 #[derive(Clone, Serialize, Deserialize)]
 pub struct TickerStats {
     /// Trading volume
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub volume: Option<f64>,
+    pub volume: f64,
     /// Trading volume in USD
     #[serde(skip_serializing_if = "Option::is_none")]
     pub volume_usd: Option<f64>,
@@ -218,7 +217,7 @@ mod tests {
         assert_eq!(stats.high, Some(0.0002));
         assert_eq!(stats.low, Some(0.0001));
         assert_eq!(stats.price_change, Some(100.0));
-        assert_eq!(stats.volume, Some(70.7));
+        assert_eq!(stats.volume, 70.7);
         assert_eq!(stats.volume_usd, Some(974.07));
 
         // Verify greeks
