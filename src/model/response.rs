@@ -3,11 +3,11 @@
    Email: jb@taunais.com
    Date: 21/7/25
 ******************************************************************************/
-
 use crate::model::order::OrderInfo;
 use crate::model::order_management::QuoteResult;
 use crate::model::trade::{LastTrade, TradeExecution};
-use crate::{impl_json_debug_pretty, impl_json_display};
+use pretty_simple_display::{DebugPretty, DisplaySimple};
+
 use serde::{Deserialize, Serialize};
 
 /// Generic JSON-RPC 2.0 response wrapper
@@ -89,7 +89,7 @@ impl<T> JsonRpcResponse<T> {
 }
 
 /// JSON-RPC error information
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize, PartialEq)]
 pub struct JsonRpcError {
     /// Error code
     pub code: i32,
@@ -155,7 +155,7 @@ impl JsonRpcError {
 }
 
 /// Authentication response
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct AuthResponse {
     /// Access token
     pub access_token: String,
@@ -170,7 +170,7 @@ pub struct AuthResponse {
 }
 
 /// Pagination information
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Pagination {
     /// Current page
     pub page: Option<u32>,
@@ -252,7 +252,7 @@ impl<T> Notification<T> {
 }
 
 /// Subscription response
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct SubscriptionResponse {
     /// Subscription ID
     pub subscription: String,
@@ -261,7 +261,7 @@ pub struct SubscriptionResponse {
 }
 
 /// Heartbeat response
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct HeartbeatResponse {
     /// Type (always "heartbeat")
     #[serde(rename = "type")]
@@ -269,21 +269,21 @@ pub struct HeartbeatResponse {
 }
 
 /// Test response for connectivity checks
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct TestResponse {
     /// Version information
     pub version: String,
 }
 
 /// Server time response
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct ServerTimeResponse {
     /// Current server timestamp in milliseconds
     pub timestamp: i64,
 }
 
 /// Settlements response structure
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct SettlementsResponse {
     /// Continuation token for pagination
     pub continuation: Option<String>,
@@ -318,14 +318,14 @@ impl SettlementsResponse {
 }
 
 /// Contract size response
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct ContractSizeResponse {
     /// Contract size value
     pub contract_size: f64,
 }
 
 /// Status response
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct StatusResponse {
     /// Whether the system is locked (optional)
     pub locked: Option<bool>,
@@ -339,7 +339,7 @@ pub struct StatusResponse {
 }
 
 /// APR history response
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct AprHistoryResponse {
     /// List of APR data points
     pub data: Vec<AprDataPoint>,
@@ -347,7 +347,7 @@ pub struct AprHistoryResponse {
     pub continuation: Option<String>,
 }
 /// APR data point
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct AprDataPoint {
     /// Annual percentage rate
     pub apr: f64,
@@ -358,14 +358,14 @@ pub struct AprDataPoint {
 }
 
 /// Hello response
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct HelloResponse {
     /// Version string
     pub version: String,
 }
 
 /// Delivery prices response
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct DeliveryPricesResponse {
     /// List of delivery price data
     pub data: Vec<DeliveryPriceData>,
@@ -374,7 +374,7 @@ pub struct DeliveryPricesResponse {
 }
 
 /// Delivery price data
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct DeliveryPriceData {
     /// Date of the delivery price
     pub date: String,
@@ -383,7 +383,7 @@ pub struct DeliveryPriceData {
 }
 
 /// Currency-specific expirations
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct CurrencyExpirations {
     /// Future instrument expirations
     pub future: Option<Vec<String>>,
@@ -392,7 +392,7 @@ pub struct CurrencyExpirations {
 }
 
 /// Expirations response
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct ExpirationsResponse {
     /// Direct future expirations (when currency="any")
     pub future: Option<Vec<String>>,
@@ -404,7 +404,7 @@ pub struct ExpirationsResponse {
 }
 
 /// Last trades response
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct LastTradesResponse {
     /// Whether there are more trades available
     pub has_more: bool,
@@ -413,7 +413,7 @@ pub struct LastTradesResponse {
 }
 
 /// Order response
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct OrderResponse {
     /// Order information
     pub order: OrderInfo,
@@ -422,55 +422,434 @@ pub struct OrderResponse {
 }
 
 /// Mass quote response
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct MassQuoteResponse {
     /// List of quote results
     pub quotes: Vec<QuoteResult>,
 }
 
-impl_json_display!(
-    MassQuoteResponse,
-    JsonRpcError,
-    AuthResponse,
-    Pagination,
-    SubscriptionResponse,
-    HeartbeatResponse,
-    TestResponse,
-    ServerTimeResponse,
-    SettlementsResponse,
-    ContractSizeResponse,
-    StatusResponse,
-    AprHistoryResponse,
-    AprDataPoint,
-    HelloResponse,
-    DeliveryPricesResponse,
-    DeliveryPriceData,
-    CurrencyExpirations,
-    ExpirationsResponse,
-    LastTradesResponse,
-    OrderResponse
-);
-impl_json_debug_pretty!(
-    MassQuoteResponse,
-    JsonRpcError,
-    AuthResponse,
-    Pagination,
-    SubscriptionResponse,
-    HeartbeatResponse,
-    TestResponse,
-    ServerTimeResponse,
-    SettlementsResponse,
-    ContractSizeResponse,
-    StatusResponse,
-    AprHistoryResponse,
-    AprDataPoint,
-    HelloResponse,
-    DeliveryPricesResponse,
-    DeliveryPriceData,
-    CurrencyExpirations,
-    ExpirationsResponse,
-    LastTradesResponse,
-    OrderResponse
-);
-
 impl std::error::Error for JsonRpcError {}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json::json;
+
+    #[test]
+    fn test_json_rpc_response_success() {
+        let response = JsonRpcResponse::success(Some(json!(1)), "test_result".to_string());
+        assert_eq!(response.jsonrpc, "2.0");
+        assert_eq!(response.id, Some(json!(1)));
+        assert_eq!(response.result, Some("test_result".to_string()));
+        assert_eq!(response.error, None);
+        assert!(response.is_success());
+        assert!(!response.is_error());
+    }
+
+    #[test]
+    fn test_json_rpc_response_error() {
+        let error = JsonRpcError::new(-32600, "Invalid Request".to_string());
+        let response: JsonRpcResponse<String> =
+            JsonRpcResponse::error(Some(json!(1)), error.clone());
+
+        assert_eq!(response.jsonrpc, "2.0");
+        assert_eq!(response.id, Some(json!(1)));
+        assert_eq!(response.result, None);
+        assert!(response.error.is_some());
+        assert!(!response.is_success());
+        assert!(response.is_error());
+    }
+
+    #[test]
+    fn test_json_rpc_response_into_result_success() {
+        let response = JsonRpcResponse::success(Some(json!(1)), "test_result".to_string());
+        let result = response.into_result().unwrap();
+        assert_eq!(result, "test_result");
+    }
+
+    #[test]
+    fn test_json_rpc_response_into_result_error() {
+        let error = JsonRpcError::new(-32600, "Invalid Request".to_string());
+        let response: JsonRpcResponse<String> =
+            JsonRpcResponse::error(Some(json!(1)), error.clone());
+        let result = response.into_result();
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert_eq!(err.code, -32600);
+        assert_eq!(err.message, "Invalid Request");
+    }
+
+    #[test]
+    fn test_json_rpc_response_into_result_neither() {
+        let response: JsonRpcResponse<String> = JsonRpcResponse {
+            jsonrpc: "2.0".to_string(),
+            id: Some(json!(1)),
+            result: None,
+            error: None,
+            testnet: None,
+            us_in: None,
+            us_out: None,
+            us_diff: None,
+        };
+        let result = response.into_result();
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert_eq!(err.code, -32603);
+        assert!(err.message.contains("Internal error"));
+    }
+
+    #[test]
+    fn test_json_rpc_error_new() {
+        let error = JsonRpcError::new(-32600, "Invalid Request".to_string());
+        assert_eq!(error.code, -32600);
+        assert_eq!(error.message, "Invalid Request");
+        assert_eq!(error.data, None);
+    }
+
+    #[test]
+    fn test_json_rpc_error_with_data() {
+        let data = json!({"details": "Additional error information"});
+        let error = JsonRpcError::with_data(-32602, "Invalid params".to_string(), data.clone());
+        assert_eq!(error.code, -32602);
+        assert_eq!(error.message, "Invalid params");
+        assert_eq!(error.data, Some(data));
+    }
+
+    #[test]
+    fn test_json_rpc_error_standard_errors() {
+        let parse_error = JsonRpcError::parse_error();
+        assert_eq!(parse_error.code, -32700);
+        assert_eq!(parse_error.message, "Parse error");
+
+        let invalid_request = JsonRpcError::invalid_request();
+        assert_eq!(invalid_request.code, -32600);
+        assert_eq!(invalid_request.message, "Invalid Request");
+
+        let method_not_found = JsonRpcError::method_not_found();
+        assert_eq!(method_not_found.code, -32601);
+        assert_eq!(method_not_found.message, "Method not found");
+
+        let invalid_params = JsonRpcError::invalid_params();
+        assert_eq!(invalid_params.code, -32602);
+        assert_eq!(invalid_params.message, "Invalid params");
+
+        let internal_error = JsonRpcError::internal_error();
+        assert_eq!(internal_error.code, -32603);
+        assert_eq!(internal_error.message, "Internal error");
+    }
+
+    #[test]
+    fn test_json_rpc_error_is_server_error() {
+        let server_error = JsonRpcError::new(-32001, "Server error".to_string());
+        assert!(server_error.is_server_error());
+        assert!(!server_error.is_application_error());
+
+        let app_error = JsonRpcError::new(-31999, "Application error".to_string());
+        assert!(!app_error.is_server_error());
+        assert!(app_error.is_application_error());
+    }
+
+    #[test]
+    fn test_json_rpc_error_display() {
+        let error = JsonRpcError::new(-32600, "Invalid Request".to_string());
+        let display_str = format!("{}", error);
+        // The display implementation uses JSON formatting from the macro
+        assert!(display_str.contains("-32600"));
+        assert!(display_str.contains("Invalid Request"));
+    }
+
+    #[test]
+    fn test_auth_response() {
+        let auth_response = AuthResponse {
+            access_token: "access_token_123".to_string(),
+            token_type: "bearer".to_string(),
+            expires_in: 3600,
+            refresh_token: "refresh_token_456".to_string(),
+            scope: "read write".to_string(),
+        };
+
+        assert_eq!(auth_response.access_token, "access_token_123");
+        assert_eq!(auth_response.token_type, "bearer");
+        assert_eq!(auth_response.expires_in, 3600);
+        assert_eq!(auth_response.refresh_token, "refresh_token_456");
+        assert_eq!(auth_response.scope, "read write");
+    }
+
+    #[test]
+    fn test_pagination() {
+        let pagination = Pagination {
+            page: Some(1),
+            per_page: Some(50),
+            total: Some(1000),
+            pages: Some(20),
+            has_more: Some(true),
+        };
+
+        assert_eq!(pagination.page, Some(1));
+        assert_eq!(pagination.per_page, Some(50));
+        assert_eq!(pagination.total, Some(1000));
+        assert_eq!(pagination.pages, Some(20));
+        assert_eq!(pagination.has_more, Some(true));
+    }
+
+    #[test]
+    fn test_paginated_response_new() {
+        let data = vec!["item1".to_string(), "item2".to_string()];
+        let response = PaginatedResponse::new(data.clone());
+
+        assert_eq!(response.data, data);
+        assert_eq!(response.pagination, None);
+        assert_eq!(response.len(), 2);
+        assert!(!response.is_empty());
+        assert!(!response.has_more());
+    }
+
+    #[test]
+    fn test_paginated_response_with_pagination() {
+        let data = vec!["item1".to_string(), "item2".to_string()];
+        let pagination = Pagination {
+            page: Some(1),
+            per_page: Some(2),
+            total: Some(10),
+            pages: Some(5),
+            has_more: Some(true),
+        };
+        let response = PaginatedResponse::with_pagination(data.clone(), pagination);
+
+        assert_eq!(response.data, data);
+        assert!(response.pagination.is_some());
+        assert_eq!(response.len(), 2);
+        assert!(!response.is_empty());
+        assert!(response.has_more());
+    }
+
+    #[test]
+    fn test_paginated_response_empty() {
+        let response: PaginatedResponse<String> = PaginatedResponse::new(vec![]);
+        assert_eq!(response.len(), 0);
+        assert!(response.is_empty());
+        assert!(!response.has_more());
+    }
+
+    #[test]
+    fn test_notification() {
+        let notification = Notification::new("ticker".to_string(), "BTC-PERPETUAL".to_string());
+        assert_eq!(notification.jsonrpc, "2.0");
+        assert_eq!(notification.method, "ticker");
+        assert_eq!(notification.params, "BTC-PERPETUAL");
+    }
+
+    #[test]
+    fn test_subscription_response() {
+        let subscription = SubscriptionResponse {
+            subscription: "sub_123".to_string(),
+            channel: "ticker.BTC-PERPETUAL".to_string(),
+        };
+        assert_eq!(subscription.subscription, "sub_123");
+        assert_eq!(subscription.channel, "ticker.BTC-PERPETUAL");
+    }
+
+    #[test]
+    fn test_heartbeat_response() {
+        let heartbeat = HeartbeatResponse {
+            type_: "heartbeat".to_string(),
+        };
+        assert_eq!(heartbeat.type_, "heartbeat");
+    }
+
+    #[test]
+    fn test_test_response() {
+        let test_response = TestResponse {
+            version: "1.2.3".to_string(),
+        };
+        assert_eq!(test_response.version, "1.2.3");
+    }
+
+    #[test]
+    fn test_server_time_response() {
+        let server_time = ServerTimeResponse {
+            timestamp: 1640995200000,
+        };
+        assert_eq!(server_time.timestamp, 1640995200000);
+    }
+
+    #[test]
+    fn test_settlements_response_new() {
+        let settlements = vec![];
+        let response = SettlementsResponse::new(settlements);
+        assert_eq!(response.continuation, None);
+        assert!(response.settlements.is_empty());
+        assert!(!response.has_more());
+    }
+
+    #[test]
+    fn test_settlements_response_with_continuation() {
+        let settlements = vec![];
+        let response = SettlementsResponse::with_continuation(settlements, "token_123".to_string());
+        assert_eq!(response.continuation, Some("token_123".to_string()));
+        assert!(response.has_more());
+    }
+
+    #[test]
+    fn test_contract_size_response() {
+        let contract_size = ContractSizeResponse { contract_size: 1.0 };
+        assert_eq!(contract_size.contract_size, 1.0);
+    }
+
+    #[test]
+    fn test_status_response() {
+        let mut additional_fields = std::collections::HashMap::new();
+        additional_fields.insert("custom_field".to_string(), json!("custom_value"));
+
+        let status = StatusResponse {
+            locked: Some(false),
+            message: Some("System operational".to_string()),
+            locked_indices: Some(vec!["BTC".to_string(), "ETH".to_string()]),
+            additional_fields,
+        };
+
+        assert_eq!(status.locked, Some(false));
+        assert_eq!(status.message, Some("System operational".to_string()));
+        assert_eq!(
+            status.locked_indices,
+            Some(vec!["BTC".to_string(), "ETH".to_string()])
+        );
+        assert_eq!(
+            status.additional_fields.get("custom_field"),
+            Some(&json!("custom_value"))
+        );
+    }
+
+    #[test]
+    fn test_apr_data_point() {
+        let apr_point = AprDataPoint {
+            apr: 5.25,
+            timestamp: Some(1640995200000),
+            day: 365,
+        };
+        assert_eq!(apr_point.apr, 5.25);
+        assert_eq!(apr_point.timestamp, Some(1640995200000));
+        assert_eq!(apr_point.day, 365);
+    }
+
+    #[test]
+    fn test_apr_history_response() {
+        let data_points = vec![AprDataPoint {
+            apr: 5.25,
+            timestamp: Some(1640995200000),
+            day: 365,
+        }];
+        let apr_history = AprHistoryResponse {
+            data: data_points,
+            continuation: Some("token_456".to_string()),
+        };
+        assert_eq!(apr_history.data.len(), 1);
+        assert_eq!(apr_history.continuation, Some("token_456".to_string()));
+    }
+
+    #[test]
+    fn test_hello_response() {
+        let hello = HelloResponse {
+            version: "2.1.1".to_string(),
+        };
+        assert_eq!(hello.version, "2.1.1");
+    }
+
+    #[test]
+    fn test_delivery_price_data() {
+        let delivery_price = DeliveryPriceData {
+            date: "2024-01-01".to_string(),
+            delivery_price: 50000.0,
+        };
+        assert_eq!(delivery_price.date, "2024-01-01");
+        assert_eq!(delivery_price.delivery_price, 50000.0);
+    }
+
+    #[test]
+    fn test_delivery_prices_response() {
+        let data = vec![DeliveryPriceData {
+            date: "2024-01-01".to_string(),
+            delivery_price: 50000.0,
+        }];
+        let delivery_prices = DeliveryPricesResponse {
+            data,
+            records_total: 1,
+        };
+        assert_eq!(delivery_prices.data.len(), 1);
+        assert_eq!(delivery_prices.records_total, 1);
+    }
+
+    #[test]
+    fn test_currency_expirations() {
+        let expirations = CurrencyExpirations {
+            future: Some(vec!["2024-03-29".to_string()]),
+            option: Some(vec!["2024-01-26".to_string(), "2024-02-23".to_string()]),
+        };
+        assert_eq!(expirations.future, Some(vec!["2024-03-29".to_string()]));
+        assert_eq!(
+            expirations.option,
+            Some(vec!["2024-01-26".to_string(), "2024-02-23".to_string()])
+        );
+    }
+
+    #[test]
+    fn test_expirations_response() {
+        let mut currencies = std::collections::HashMap::new();
+        currencies.insert(
+            "BTC".to_string(),
+            CurrencyExpirations {
+                future: Some(vec!["2024-03-29".to_string()]),
+                option: Some(vec!["2024-01-26".to_string()]),
+            },
+        );
+
+        let expirations = ExpirationsResponse {
+            future: Some(vec!["2024-03-29".to_string()]),
+            option: Some(vec!["2024-01-26".to_string()]),
+            currencies,
+        };
+
+        assert_eq!(expirations.future, Some(vec!["2024-03-29".to_string()]));
+        assert_eq!(expirations.option, Some(vec!["2024-01-26".to_string()]));
+        assert!(expirations.currencies.contains_key("BTC"));
+    }
+
+    #[test]
+    fn test_last_trades_response() {
+        let last_trades = LastTradesResponse {
+            has_more: true,
+            trades: vec![],
+        };
+        assert!(last_trades.has_more);
+        assert!(last_trades.trades.is_empty());
+    }
+
+    #[test]
+    fn test_serialization_roundtrip() {
+        let response = JsonRpcResponse::success(Some(json!(1)), "test_result".to_string());
+        let json = serde_json::to_string(&response).unwrap();
+        let deserialized: JsonRpcResponse<String> = serde_json::from_str(&json).unwrap();
+
+        assert_eq!(response.jsonrpc, deserialized.jsonrpc);
+        assert_eq!(response.id, deserialized.id);
+        assert_eq!(response.result, deserialized.result);
+        assert_eq!(response.error.is_none(), deserialized.error.is_none());
+    }
+
+    #[test]
+    fn test_debug_and_display_implementations() {
+        let auth_response = AuthResponse {
+            access_token: "token".to_string(),
+            token_type: "bearer".to_string(),
+            expires_in: 3600,
+            refresh_token: "refresh".to_string(),
+            scope: "read".to_string(),
+        };
+
+        let debug_str = format!("{:?}", auth_response);
+        let display_str = format!("{}", auth_response);
+
+        assert!(debug_str.contains("token"));
+        assert!(display_str.contains("token"));
+    }
+}

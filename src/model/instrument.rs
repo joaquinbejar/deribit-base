@@ -3,10 +3,10 @@
    Email: jb@taunais.com
    Date: 21/7/25
 ******************************************************************************/
-
+use pretty_simple_display::{DebugPretty, DisplaySimple};
 use serde::{Deserialize, Serialize};
 
-use crate::{impl_json_debug_pretty, impl_json_display};
+
 /// Instrument kind enumeration
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
@@ -46,7 +46,7 @@ pub enum InstrumentType {
 }
 
 /// Instrument information
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct Instrument {
     /// Instrument name (e.g., "BTC-PERPETUAL", "ETH-25JUL25-3000-C")
     pub instrument_name: String,
@@ -136,7 +136,7 @@ impl Instrument {
 }
 
 /// Index data
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct IndexData {
     /// BTC component (optional)
     pub btc: Option<f64>,
@@ -153,7 +153,7 @@ pub struct IndexData {
 }
 
 /// Index price data
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct IndexPriceData {
     /// Current index price
     pub index_price: f64,
@@ -161,8 +161,179 @@ pub struct IndexPriceData {
     pub estimated_delivery_price: f64,
 }
 
-// Debug implementations using pretty JSON formatting
-impl_json_debug_pretty!(Instrument, IndexData, IndexPriceData);
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-// Display implementations using compact JSON formatting
-impl_json_display!(Instrument, IndexData, IndexPriceData);
+    fn create_test_instrument() -> Instrument {
+        Instrument {
+            instrument_name: "BTC-PERPETUAL".to_string(),
+            price_index: Some("btc_usd".to_string()),
+            kind: Some(InstrumentKind::Future),
+            currency: Some("BTC".to_string()),
+            is_active: Some(true),
+            expiration_timestamp: None, // Perpetual
+            strike: None,
+            option_type: None,
+            tick_size: Some(0.5),
+            min_trade_amount: Some(10.0),
+            contract_size: Some(1.0),
+            settlement_period: Some("perpetual".to_string()),
+            instrument_type: Some(InstrumentType::Linear),
+            quote_currency: Some("USD".to_string()),
+            settlement_currency: Some("BTC".to_string()),
+            creation_timestamp: Some(1640995200000),
+            max_leverage: Some(100.0),
+            maker_commission: Some(0.0001),
+            taker_commission: Some(0.0005),
+            instrument_id: Some(12345),
+            base_currency: Some("BTC".to_string()),
+            counter_currency: Some("USD".to_string()),
+        }
+    }
+
+    fn create_test_option() -> Instrument {
+        Instrument {
+            instrument_name: "BTC-25DEC25-50000-C".to_string(),
+            price_index: Some("btc_usd".to_string()),
+            kind: Some(InstrumentKind::Option),
+            currency: Some("BTC".to_string()),
+            is_active: Some(true),
+            expiration_timestamp: Some(1735084800000),
+            strike: Some(50000.0),
+            option_type: Some(OptionType::Call),
+            tick_size: Some(0.0005),
+            min_trade_amount: Some(0.1),
+            contract_size: Some(1.0),
+            settlement_period: Some("week".to_string()),
+            instrument_type: Some(InstrumentType::Linear),
+            quote_currency: Some("USD".to_string()),
+            settlement_currency: Some("BTC".to_string()),
+            creation_timestamp: Some(1640995200000),
+            max_leverage: Some(10.0),
+            maker_commission: Some(0.0003),
+            taker_commission: Some(0.0003),
+            instrument_id: Some(67890),
+            base_currency: Some("BTC".to_string()),
+            counter_currency: Some("USD".to_string()),
+        }
+    }
+
+    #[test]
+    fn test_instrument_is_perpetual() {
+        let perpetual = create_test_instrument();
+        assert!(perpetual.is_perpetual());
+
+        let option = create_test_option();
+        assert!(!option.is_perpetual());
+
+        let mut future_with_expiry = create_test_instrument();
+        future_with_expiry.expiration_timestamp = Some(1735084800000);
+        assert!(!future_with_expiry.is_perpetual());
+    }
+
+    #[test]
+    fn test_instrument_is_option() {
+        let option = create_test_option();
+        assert!(option.is_option());
+
+        let perpetual = create_test_instrument();
+        assert!(!perpetual.is_option());
+
+        let mut option_combo = create_test_option();
+        option_combo.kind = Some(InstrumentKind::OptionCombo);
+        assert!(option_combo.is_option());
+    }
+
+    #[test]
+    fn test_instrument_is_future() {
+        let future = create_test_instrument();
+        assert!(future.is_future());
+
+        let option = create_test_option();
+        assert!(!option.is_future());
+
+        let mut future_combo = create_test_instrument();
+        future_combo.kind = Some(InstrumentKind::FutureCombo);
+        assert!(future_combo.is_future());
+    }
+
+    #[test]
+    fn test_instrument_is_spot() {
+        let mut spot = create_test_instrument();
+        spot.kind = Some(InstrumentKind::Spot);
+        assert!(spot.is_spot());
+
+        let future = create_test_instrument();
+        assert!(!future.is_spot());
+
+        let option = create_test_option();
+        assert!(!option.is_spot());
+    }
+
+    #[test]
+    fn test_instrument_kind_serialization() {
+        assert_eq!(serde_json::to_string(&InstrumentKind::Future).unwrap(), "\"future\"");
+        assert_eq!(serde_json::to_string(&InstrumentKind::Option).unwrap(), "\"option\"");
+        assert_eq!(serde_json::to_string(&InstrumentKind::Spot).unwrap(), "\"spot\"");
+        assert_eq!(serde_json::to_string(&InstrumentKind::FutureCombo).unwrap(), "\"future_combo\"");
+        assert_eq!(serde_json::to_string(&InstrumentKind::OptionCombo).unwrap(), "\"option_combo\"");
+    }
+
+    #[test]
+    fn test_option_type_serialization() {
+        assert_eq!(serde_json::to_string(&OptionType::Call).unwrap(), "\"call\"");
+        assert_eq!(serde_json::to_string(&OptionType::Put).unwrap(), "\"put\"");
+    }
+
+    #[test]
+    fn test_instrument_type_serialization() {
+        assert_eq!(serde_json::to_string(&InstrumentType::Linear).unwrap(), "\"linear\"");
+        assert_eq!(serde_json::to_string(&InstrumentType::Reversed).unwrap(), "\"reversed\"");
+    }
+
+    #[test]
+    fn test_instrument_serialization() {
+        let instrument = create_test_instrument();
+        let json = serde_json::to_string(&instrument).unwrap();
+        let deserialized: Instrument = serde_json::from_str(&json).unwrap();
+        assert_eq!(instrument.instrument_name, deserialized.instrument_name);
+        assert_eq!(instrument.kind, deserialized.kind);
+    }
+
+    #[test]
+    fn test_index_data_creation() {
+        let index_data = IndexData {
+            btc: Some(0.5),
+            eth: Some(0.3),
+            usdc: Some(0.1),
+            usdt: Some(0.05),
+            eurr: Some(0.05),
+            edp: 50000.0,
+        };
+        
+        assert_eq!(index_data.btc, Some(0.5));
+        assert_eq!(index_data.edp, 50000.0);
+    }
+
+    #[test]
+    fn test_index_price_data_creation() {
+        let index_price_data = IndexPriceData {
+            index_price: 50000.0,
+            estimated_delivery_price: 50100.0,
+        };
+        
+        assert_eq!(index_price_data.index_price, 50000.0);
+        assert_eq!(index_price_data.estimated_delivery_price, 50100.0);
+    }
+
+    #[test]
+    fn test_debug_and_display_implementations() {
+        let instrument = create_test_instrument();
+        let debug_str = format!("{:?}", instrument);
+        let display_str = format!("{}", instrument);
+        
+        assert!(debug_str.contains("BTC-PERPETUAL"));
+        assert!(display_str.contains("BTC-PERPETUAL"));
+    }
+}

@@ -4,13 +4,14 @@
    Date: 9/9/25
 ******************************************************************************/
 use crate::prelude::{Instrument, TickerData};
-use crate::{impl_json_debug_pretty, impl_json_display};
+
 use chrono::{DateTime, TimeZone, Utc};
+use pretty_simple_display::{DebugPretty, DisplaySimple};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 /// Combined option instrument data with ticker information
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple,Clone, Serialize, Deserialize)]
 pub struct OptionInstrument {
     /// The instrument details
     pub instrument: Instrument,
@@ -24,7 +25,7 @@ pub struct OptionInstrument {
 /// allowing for easy access to both sides of an option strategy. Both options are optional,
 /// meaning you can have just a call, just a put, or both.
 ///
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple,Clone, Serialize, Deserialize)]
 pub struct OptionInstrumentPair {
     /// Call option instrument data, if available
     pub call: Option<OptionInstrument>,
@@ -33,7 +34,7 @@ pub struct OptionInstrumentPair {
 }
 
 /// Spread information for bid/ask prices
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple,Clone, Serialize, Deserialize)]
 pub struct Spread {
     /// Best bid price
     bid: Option<f64>,
@@ -44,7 +45,7 @@ pub struct Spread {
 }
 
 /// Basic Greeks values for option pricing
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple,Clone, Serialize, Deserialize)]
 pub struct BasicGreeks {
     /// Delta value for call option
     delta_call: Option<f64>,
@@ -55,7 +56,7 @@ pub struct BasicGreeks {
 }
 
 /// Comprehensive option data structure containing all relevant pricing and risk information
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple,Clone, Serialize, Deserialize)]
 pub struct BasicOptionData {
     /// Strike price of the option
     pub strike_price: f64,
@@ -265,21 +266,6 @@ impl OptionInstrumentPair {
         }
     }
 }
-
-impl_json_debug_pretty!(
-    OptionInstrument,
-    OptionInstrumentPair,
-    Spread,
-    BasicGreeks,
-    BasicOptionData
-);
-impl_json_display!(
-    OptionInstrument,
-    OptionInstrumentPair,
-    Spread,
-    BasicGreeks,
-    BasicOptionData
-);
 
 #[cfg(test)]
 mod tests {

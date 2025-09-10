@@ -3,13 +3,13 @@
    Email: jb@taunais.com
    Date: 21/7/25
 ******************************************************************************/
-
 use crate::model::order::{OrderSide, OrderType, TimeInForce};
-use crate::{impl_json_debug_pretty, impl_json_display};
+use pretty_simple_display::{DebugPretty, DisplaySimple};
+
 use serde::{Deserialize, Serialize};
 
 /// Buy order request
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct BuyOrderRequest {
     /// Name of the instrument to trade
     pub instrument_name: String,
@@ -29,11 +29,8 @@ pub struct BuyOrderRequest {
     pub type_: Option<OrderType>,
 }
 
-impl_json_display!(BuyOrderRequest);
-impl_json_debug_pretty!(BuyOrderRequest);
-
 /// Sell order request
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct SellOrderRequest {
     /// Name of the instrument to trade
     pub instrument_name: String,
@@ -53,11 +50,8 @@ pub struct SellOrderRequest {
     pub type_: Option<OrderType>,
 }
 
-impl_json_display!(SellOrderRequest);
-impl_json_debug_pretty!(SellOrderRequest);
-
 /// Edit order request
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct EditOrderRequest {
     /// Unique identifier of the order to edit
     pub order_id: String,
@@ -73,11 +67,8 @@ pub struct EditOrderRequest {
     pub time_in_force: Option<TimeInForce>,
 }
 
-impl_json_display!(EditOrderRequest);
-impl_json_debug_pretty!(EditOrderRequest);
-
 /// Mass quote request item
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct MassQuoteItem {
     /// Name of the instrument to quote
     pub instrument_name: String,
@@ -90,7 +81,7 @@ pub struct MassQuoteItem {
 }
 
 /// Mass quote request
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct MassQuoteRequest {
     /// List of quote items
     pub items: Vec<MassQuoteItem>,
@@ -98,11 +89,8 @@ pub struct MassQuoteRequest {
     pub label: Option<String>,
 }
 
-impl_json_display!(MassQuoteRequest);
-impl_json_debug_pretty!(MassQuoteRequest);
-
 /// Transfer result for order-related transfers (e.g., fee rebates)
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct TransferResult {
     /// Transfer identifier
     pub id: String,
@@ -110,11 +98,8 @@ pub struct TransferResult {
     pub status: String,
 }
 
-impl_json_display!(TransferResult);
-impl_json_debug_pretty!(TransferResult);
-
 /// Quote result
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct QuoteResult {
     /// Name of the instrument that was quoted
     pub instrument_name: String,
@@ -123,9 +108,6 @@ pub struct QuoteResult {
     /// Error message if quote failed
     pub error: Option<String>,
 }
-
-impl_json_display!(QuoteResult);
-impl_json_debug_pretty!(QuoteResult);
 
 #[cfg(test)]
 mod tests {

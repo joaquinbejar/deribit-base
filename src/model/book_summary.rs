@@ -3,12 +3,11 @@
    Email: jb@taunais.com
    Date: 21/7/25
 ******************************************************************************/
-
-use crate::{impl_json_debug_pretty, impl_json_display};
+use pretty_simple_display::{DebugPretty, DisplaySimple};
 use serde::{Deserialize, Serialize};
 
 /// Book summary information for an instrument
-#[derive(Clone, PartialEq, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple,Clone, PartialEq, Serialize, Deserialize)]
 pub struct BookSummary {
     /// Instrument name
     pub instrument_name: String,
@@ -213,11 +212,8 @@ impl BookSummary {
     }
 }
 
-impl_json_display!(BookSummary);
-impl_json_debug_pretty!(BookSummary);
-
 /// Collection of book summaries
-#[derive(Clone, PartialEq, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BookSummaries {
     /// List of book summaries
     pub summaries: Vec<BookSummary>,
@@ -277,9 +273,6 @@ impl Default for BookSummaries {
         Self::new()
     }
 }
-
-impl_json_display!(BookSummaries);
-impl_json_debug_pretty!(BookSummaries);
 
 #[cfg(test)]
 mod tests {

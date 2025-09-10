@@ -3,12 +3,11 @@
    Email: jb@taunais.com
    Date: 21/7/25
 ******************************************************************************/
-
-use crate::{impl_json_debug_pretty, impl_json_display};
+use pretty_simple_display::{DebugPretty, DisplaySimple};
 use serde::{Deserialize, Serialize};
 
 /// Deribit API configuration
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct DeribitConfig {
     /// Client ID for API authentication
     pub client_id: String,
@@ -130,7 +129,7 @@ impl DeribitUrls {
 }
 
 /// Connection configuration for WebSocket
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct WebSocketConfig {
     /// Base configuration
     pub base: DeribitConfig,
@@ -194,7 +193,7 @@ impl WebSocketConfig {
 }
 
 /// HTTP client configuration
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct HttpConfig {
     /// Base configuration
     pub base: DeribitConfig,
@@ -245,8 +244,232 @@ impl HttpConfig {
     }
 }
 
-// Debug implementations using pretty JSON formatting
-impl_json_debug_pretty!(DeribitConfig, WebSocketConfig, HttpConfig);
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-// Display implementations using compact JSON formatting
-impl_json_display!(DeribitConfig, WebSocketConfig, HttpConfig);
+    #[test]
+    fn test_deribit_config_new() {
+        let config = DeribitConfig::new("client123".to_string(), "secret456".to_string());
+        assert_eq!(config.client_id, "client123");
+        assert_eq!(config.client_secret, "secret456");
+        assert!(!config.test_net);
+        assert_eq!(config.timeout_seconds, 30);
+        assert_eq!(config.max_retries, 3);
+        assert_eq!(config.rate_limit, None);
+        assert_eq!(config.user_agent, None);
+    }
+
+    #[test]
+    fn test_deribit_config_testnet() {
+        let config = DeribitConfig::testnet("client123".to_string(), "secret456".to_string());
+        assert_eq!(config.client_id, "client123");
+        assert_eq!(config.client_secret, "secret456");
+        assert!(config.test_net);
+        assert_eq!(config.timeout_seconds, 30);
+        assert_eq!(config.max_retries, 3);
+        assert_eq!(config.rate_limit, None);
+        assert_eq!(config.user_agent, None);
+    }
+
+    #[test]
+    fn test_deribit_config_with_timeout() {
+        let config = DeribitConfig::new("client".to_string(), "secret".to_string())
+            .with_timeout(60);
+        assert_eq!(config.timeout_seconds, 60);
+    }
+
+    #[test]
+    fn test_deribit_config_with_max_retries() {
+        let config = DeribitConfig::new("client".to_string(), "secret".to_string())
+            .with_max_retries(5);
+        assert_eq!(config.max_retries, 5);
+    }
+
+    #[test]
+    fn test_deribit_config_with_rate_limit() {
+        let config = DeribitConfig::new("client".to_string(), "secret".to_string())
+            .with_rate_limit(10);
+        assert_eq!(config.rate_limit, Some(10));
+    }
+
+    #[test]
+    fn test_deribit_config_with_user_agent() {
+        let config = DeribitConfig::new("client".to_string(), "secret".to_string())
+            .with_user_agent("custom-agent".to_string());
+        assert_eq!(config.user_agent, Some("custom-agent".to_string()));
+    }
+
+    #[test]
+    fn test_deribit_config_base_url() {
+        let prod_config = DeribitConfig::new("client".to_string(), "secret".to_string());
+        assert_eq!(prod_config.base_url(), DeribitUrls::PROD_BASE_URL);
+
+        let test_config = DeribitConfig::testnet("client".to_string(), "secret".to_string());
+        assert_eq!(test_config.base_url(), DeribitUrls::TEST_BASE_URL);
+    }
+
+    #[test]
+    fn test_deribit_config_ws_url() {
+        let prod_config = DeribitConfig::new("client".to_string(), "secret".to_string());
+        assert_eq!(prod_config.ws_url(), DeribitUrls::PROD_WS_URL);
+
+        let test_config = DeribitConfig::testnet("client".to_string(), "secret".to_string());
+        assert_eq!(test_config.ws_url(), DeribitUrls::TEST_WS_URL);
+    }
+
+    #[test]
+    fn test_deribit_config_api_url() {
+        let prod_config = DeribitConfig::new("client".to_string(), "secret".to_string());
+        assert_eq!(prod_config.api_url(), "https://www.deribit.com/api/v2");
+
+        let test_config = DeribitConfig::testnet("client".to_string(), "secret".to_string());
+        assert_eq!(test_config.api_url(), "https://test.deribit.com/api/v2");
+    }
+
+    #[test]
+    fn test_deribit_config_default() {
+        let config = DeribitConfig::default();
+        assert_eq!(config.client_id, "");
+        assert_eq!(config.client_secret, "");
+        assert!(config.test_net);
+        assert_eq!(config.timeout_seconds, 30);
+        assert_eq!(config.max_retries, 3);
+        assert_eq!(config.rate_limit, None);
+        assert_eq!(config.user_agent, Some("deribit-rust-client/1.0".to_string()));
+    }
+
+    #[test]
+    fn test_deribit_urls_constants() {
+        assert_eq!(DeribitUrls::PROD_BASE_URL, "https://www.deribit.com");
+        assert_eq!(DeribitUrls::TEST_BASE_URL, "https://test.deribit.com");
+        assert_eq!(DeribitUrls::PROD_WS_URL, "wss://www.deribit.com/ws/api/v2");
+        assert_eq!(DeribitUrls::TEST_WS_URL, "wss://test.deribit.com/ws/api/v2");
+    }
+
+    #[test]
+    fn test_websocket_config_new() {
+        let base = DeribitConfig::new("client".to_string(), "secret".to_string());
+        let ws_config = WebSocketConfig::new(base.clone());
+        
+        assert_eq!(ws_config.base.client_id, base.client_id);
+        assert_eq!(ws_config.ping_interval, 30);
+        assert_eq!(ws_config.pong_timeout, 10);
+        assert_eq!(ws_config.reconnect_attempts, 5);
+        assert_eq!(ws_config.reconnect_delay, 5);
+        assert_eq!(ws_config.max_message_size, 1024 * 1024);
+        assert!(ws_config.compression);
+    }
+
+    #[test]
+    fn test_websocket_config_with_ping_interval() {
+        let base = DeribitConfig::new("client".to_string(), "secret".to_string());
+        let ws_config = WebSocketConfig::new(base).with_ping_interval(60);
+        assert_eq!(ws_config.ping_interval, 60);
+    }
+
+    #[test]
+    fn test_websocket_config_with_pong_timeout() {
+        let base = DeribitConfig::new("client".to_string(), "secret".to_string());
+        let ws_config = WebSocketConfig::new(base).with_pong_timeout(20);
+        assert_eq!(ws_config.pong_timeout, 20);
+    }
+
+    #[test]
+    fn test_websocket_config_with_reconnect_attempts() {
+        let base = DeribitConfig::new("client".to_string(), "secret".to_string());
+        let ws_config = WebSocketConfig::new(base).with_reconnect_attempts(10);
+        assert_eq!(ws_config.reconnect_attempts, 10);
+    }
+
+    #[test]
+    fn test_websocket_config_with_reconnect_delay() {
+        let base = DeribitConfig::new("client".to_string(), "secret".to_string());
+        let ws_config = WebSocketConfig::new(base).with_reconnect_delay(15);
+        assert_eq!(ws_config.reconnect_delay, 15);
+    }
+
+    #[test]
+    fn test_websocket_config_with_compression() {
+        let base = DeribitConfig::new("client".to_string(), "secret".to_string());
+        let ws_config = WebSocketConfig::new(base).with_compression(false);
+        assert!(!ws_config.compression);
+    }
+
+    #[test]
+    fn test_http_config_new() {
+        let base = DeribitConfig::new("client".to_string(), "secret".to_string());
+        let http_config = HttpConfig::new(base.clone());
+        
+        assert_eq!(http_config.base.client_id, base.client_id);
+        assert_eq!(http_config.pool_size, None);
+        assert_eq!(http_config.keep_alive, Some(30));
+        assert!(http_config.http2);
+        assert!(http_config.gzip);
+    }
+
+    #[test]
+    fn test_http_config_with_pool_size() {
+        let base = DeribitConfig::new("client".to_string(), "secret".to_string());
+        let http_config = HttpConfig::new(base).with_pool_size(20);
+        assert_eq!(http_config.pool_size, Some(20));
+    }
+
+    #[test]
+    fn test_http_config_with_keep_alive() {
+        let base = DeribitConfig::new("client".to_string(), "secret".to_string());
+        let http_config = HttpConfig::new(base).with_keep_alive(60);
+        assert_eq!(http_config.keep_alive, Some(60));
+    }
+
+    #[test]
+    fn test_http_config_with_http2() {
+        let base = DeribitConfig::new("client".to_string(), "secret".to_string());
+        let http_config = HttpConfig::new(base).with_http2(false);
+        assert!(!http_config.http2);
+    }
+
+    #[test]
+    fn test_http_config_with_gzip() {
+        let base = DeribitConfig::new("client".to_string(), "secret".to_string());
+        let http_config = HttpConfig::new(base).with_gzip(false);
+        assert!(!http_config.gzip);
+    }
+
+    #[test]
+    fn test_config_serialization() {
+        let config = DeribitConfig::new("client".to_string(), "secret".to_string());
+        let json = serde_json::to_string(&config).unwrap();
+        let deserialized: DeribitConfig = serde_json::from_str(&json).unwrap();
+        assert_eq!(config.client_id, deserialized.client_id);
+        assert_eq!(config.client_secret, deserialized.client_secret);
+    }
+
+    #[test]
+    fn test_websocket_config_serialization() {
+        let base = DeribitConfig::new("client".to_string(), "secret".to_string());
+        let ws_config = WebSocketConfig::new(base);
+        let json = serde_json::to_string(&ws_config).unwrap();
+        let deserialized: WebSocketConfig = serde_json::from_str(&json).unwrap();
+        assert_eq!(ws_config.ping_interval, deserialized.ping_interval);
+    }
+
+    #[test]
+    fn test_http_config_serialization() {
+        let base = DeribitConfig::new("client".to_string(), "secret".to_string());
+        let http_config = HttpConfig::new(base);
+        let json = serde_json::to_string(&http_config).unwrap();
+        let deserialized: HttpConfig = serde_json::from_str(&json).unwrap();
+        assert_eq!(http_config.http2, deserialized.http2);
+    }
+
+    #[test]
+    fn test_debug_and_display_implementations() {
+        let config = DeribitConfig::new("client".to_string(), "secret".to_string());
+        let debug_str = format!("{:?}", config);
+        let display_str = format!("{}", config);
+        
+        assert!(debug_str.contains("client"));
+        assert!(display_str.contains("client"));
+    }
+}

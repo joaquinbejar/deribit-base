@@ -3,12 +3,11 @@
    Email: jb@taunais.com
    Date: 21/7/25
 ******************************************************************************/
-
-use crate::{impl_json_debug_pretty, impl_json_display};
+use pretty_simple_display::{DebugPretty, DisplaySimple};
 use serde::{Deserialize, Serialize};
 
 /// Settlement event types
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum SettlementType {
     /// Regular settlement event
@@ -25,11 +24,8 @@ impl Default for SettlementType {
     }
 }
 
-impl_json_display!(SettlementType);
-impl_json_debug_pretty!(SettlementType);
-
 /// Settlement event information
-#[derive(Clone, PartialEq, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Settlement {
     /// Type of settlement event
     #[serde(alias = "type")]
@@ -162,11 +158,8 @@ impl Default for Settlement {
     }
 }
 
-impl_json_display!(Settlement);
-impl_json_debug_pretty!(Settlement);
-
 /// Collection of settlements
-#[derive(Clone, PartialEq, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Settlements {
     /// List of settlement events
     pub settlements: Vec<Settlement>,
@@ -211,9 +204,6 @@ impl Default for Settlements {
         Self::new()
     }
 }
-
-impl_json_display!(Settlements);
-impl_json_debug_pretty!(Settlements);
 
 #[cfg(test)]
 mod tests {

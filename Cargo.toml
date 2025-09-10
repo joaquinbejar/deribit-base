@@ -19,6 +19,7 @@ tracing-subscriber = { workspace = true }
 rand = { workspace = true }
 base64 = { workspace = true }
 chrono = { workspace = true }
+pretty-simple-display = { workspace = true }
 
 
 [workspace.dependencies]
@@ -29,3 +30,4 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 rand = "0.9"
 base64 = "0.22"
 chrono = { version = "0.4", features = ["serde"] }
+pretty-simple-display = "0.1"

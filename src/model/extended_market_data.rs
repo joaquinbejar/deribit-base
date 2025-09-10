@@ -3,12 +3,11 @@
    Email: jb@taunais.com
    Date: 21/7/25
 ******************************************************************************/
-
-use crate::{impl_json_debug_pretty, impl_json_display};
+use pretty_simple_display::{DebugPretty, DisplaySimple};
 use serde::{Deserialize, Serialize};
 
 /// Withdrawal priority information
-#[derive(Clone, PartialEq, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WithdrawalPriority {
     /// Priority name (e.g., "very_low", "low", "medium", "high", "very_high")
     pub name: String,
@@ -48,11 +47,9 @@ impl WithdrawalPriority {
     }
 }
 
-impl_json_display!(WithdrawalPriority);
-impl_json_debug_pretty!(WithdrawalPriority);
 
 /// Currency information and configuration
-#[derive(Clone, PartialEq, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CurrencyInfo {
     /// Coin type identifier (e.g., "BITCOIN", "ETHEREUM")
     pub coin_type: String,
@@ -155,11 +152,9 @@ impl CurrencyInfo {
     }
 }
 
-impl_json_display!(CurrencyInfo);
-impl_json_debug_pretty!(CurrencyInfo);
 
 /// Index price information
-#[derive(Clone, PartialEq, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, PartialEq, Serialize, Deserialize)]
 pub struct IndexPrice {
     /// Estimated delivery price
     pub estimated_delivery_price: f64,
@@ -204,11 +199,9 @@ impl IndexPrice {
     }
 }
 
-impl_json_display!(IndexPrice);
-impl_json_debug_pretty!(IndexPrice);
 
 /// Funding rate information
-#[derive(Clone, PartialEq, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple,Clone, PartialEq, Serialize, Deserialize)]
 pub struct FundingRate {
     /// Timestamp (milliseconds since Unix epoch)
     pub timestamp: i64,
@@ -267,11 +260,9 @@ impl FundingRate {
     }
 }
 
-impl_json_display!(FundingRate);
-impl_json_debug_pretty!(FundingRate);
 
 /// Historical volatility information
-#[derive(Clone, PartialEq, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple,Clone, PartialEq, Serialize, Deserialize)]
 pub struct HistoricalVolatility {
     /// Timestamp (milliseconds since Unix epoch)
     pub timestamp: i64,
@@ -309,11 +300,9 @@ impl HistoricalVolatility {
     }
 }
 
-impl_json_display!(HistoricalVolatility);
-impl_json_debug_pretty!(HistoricalVolatility);
 
 /// Market statistics
-#[derive(Clone, PartialEq, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple,Clone, PartialEq, Serialize, Deserialize)]
 pub struct MarketStatistics {
     /// Currency
     pub currency: String,
@@ -408,11 +397,9 @@ impl MarketStatistics {
     }
 }
 
-impl_json_display!(MarketStatistics);
-impl_json_debug_pretty!(MarketStatistics);
 
 /// Collection of currency information
-#[derive(Clone, PartialEq, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CurrencyInfoCollection {
     /// List of currency information
     pub currencies: Vec<CurrencyInfo>,
@@ -455,9 +442,6 @@ impl Default for CurrencyInfoCollection {
         Self::new()
     }
 }
-
-impl_json_display!(CurrencyInfoCollection);
-impl_json_debug_pretty!(CurrencyInfoCollection);
 
 #[cfg(test)]
 mod tests {

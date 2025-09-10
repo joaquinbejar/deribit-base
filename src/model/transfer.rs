@@ -3,12 +3,11 @@
    Email: jb@taunais.com
    Date: 21/7/25
 ******************************************************************************/
-
-use crate::{impl_json_debug_pretty, impl_json_display};
+use pretty_simple_display::{DebugPretty, DisplaySimple};
 use serde::{Deserialize, Serialize};
 
 /// Transfer state enumeration
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum TransferState {
     /// Transfer is prepared but not yet confirmed
@@ -32,7 +31,7 @@ impl Default for TransferState {
 }
 
 /// Address type enumeration
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum AddressType {
     /// Deposit address
@@ -50,7 +49,7 @@ impl Default for AddressType {
 }
 
 /// Transfer information
-#[derive(Clone, PartialEq, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Transfer {
     /// Transfer ID
     pub id: i64,
@@ -159,11 +158,8 @@ impl Transfer {
     }
 }
 
-impl_json_display!(Transfer);
-impl_json_debug_pretty!(Transfer);
-
 /// Address book entry
-#[derive(Clone, PartialEq, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AddressBookEntry {
     /// Cryptocurrency address
     pub address: String,
@@ -271,11 +267,8 @@ impl AddressBookEntry {
     }
 }
 
-impl_json_display!(AddressBookEntry);
-impl_json_debug_pretty!(AddressBookEntry);
-
 /// Subaccount transfer information
-#[derive(Clone, PartialEq, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SubaccountTransfer {
     /// Transfer amount
     pub amount: f64,
@@ -340,11 +333,8 @@ impl SubaccountTransfer {
     }
 }
 
-impl_json_display!(SubaccountTransfer);
-impl_json_debug_pretty!(SubaccountTransfer);
-
 /// Collection of transfers
-#[derive(Clone, PartialEq, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Transfers {
     /// List of transfers
     pub transfers: Vec<Transfer>,
@@ -410,9 +400,6 @@ impl Default for Transfers {
         Self::new()
     }
 }
-
-impl_json_display!(Transfers);
-impl_json_debug_pretty!(Transfers);
 
 #[cfg(test)]
 mod tests {

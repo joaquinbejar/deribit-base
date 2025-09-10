@@ -3,15 +3,15 @@
    Email: jb@taunais.com
    Date: 22/7/25
 ******************************************************************************/
+use pretty_simple_display::{DebugPretty, DisplaySimple};
 
-use crate::{impl_json_debug_pretty, impl_json_display};
 use serde::{Deserialize, Serialize};
 
 /// Deribit RPC Error Codes
 ///
 /// Complete enumeration of all error codes returned by the Deribit API
 /// as documented in the official API documentation v2.1.1
-#[derive(Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(from = "i32", into = "i32")]
 pub enum DeribitErrorCode {
     /// Success, No error
@@ -487,10 +487,6 @@ impl DeribitErrorCode {
 
 // Error trait implementation
 impl std::error::Error for DeribitErrorCode {}
-
-// JSON display and debug implementations
-impl_json_display!(DeribitErrorCode);
-impl_json_debug_pretty!(DeribitErrorCode);
 
 // Conversion from DeribitErrorCode to i32 (required for serde)
 impl From<DeribitErrorCode> for i32 {

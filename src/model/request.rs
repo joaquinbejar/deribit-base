@@ -3,9 +3,9 @@
    Email: jb@taunais.com
    Date: 21/7/25
 ******************************************************************************/
-
 use crate::model::order::{OrderSide, OrderType, TimeInForce};
-use crate::{impl_json_debug_pretty, impl_json_display};
+use pretty_simple_display::{DebugPretty, DisplaySimple};
+
 use serde::{Deserialize, Serialize};
 
 /// FIX protocol compatible structures
@@ -13,7 +13,7 @@ pub mod fix {
     use super::*;
 
     /// New order request structure for FIX protocol
-    #[derive(Clone, Serialize, Deserialize)]
+    #[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
     pub struct NewOrderRequest {
         /// Instrument symbol (e.g., "BTC-PERPETUAL")
         pub symbol: String,
@@ -138,7 +138,7 @@ pub mod fix {
 }
 
 /// Generic request for creating new orders
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct NewOrderRequest {
     /// Instrument name
     pub instrument_name: String,
@@ -290,7 +290,7 @@ impl NewOrderRequest {
 }
 
 /// Trigger type for stop orders
-#[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum TriggerType {
     /// Index price trigger
@@ -302,7 +302,7 @@ pub enum TriggerType {
 }
 
 /// Advanced order type
-#[derive(Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum AdvancedOrderType {
     /// USD denomination
@@ -312,7 +312,7 @@ pub enum AdvancedOrderType {
 }
 
 /// Order modification request
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct ModifyOrderRequest {
     /// Order ID to modify
     pub order_id: String,
@@ -333,14 +333,14 @@ pub struct ModifyOrderRequest {
 }
 
 /// Order cancellation request
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct CancelOrderRequest {
     /// Order ID to cancel
     pub order_id: String,
 }
 
 /// Cancel all orders request
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct CancelAllOrdersRequest {
     /// Currency filter
     pub currency: Option<String>,
@@ -352,7 +352,7 @@ pub struct CancelAllOrdersRequest {
 }
 
 /// Position close request
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct ClosePositionRequest {
     /// Instrument name
     pub instrument_name: String,
@@ -364,7 +364,7 @@ pub struct ClosePositionRequest {
 }
 
 /// Authentication request
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct AuthRequest {
     /// Grant type
     pub grant_type: String,
@@ -402,28 +402,390 @@ impl AuthRequest {
     }
 }
 
-// Debug implementations using pretty JSON formatting
-impl_json_debug_pretty!(
-    fix::NewOrderRequest,
-    NewOrderRequest,
-    TriggerType,
-    AdvancedOrderType,
-    ModifyOrderRequest,
-    CancelOrderRequest,
-    CancelAllOrdersRequest,
-    ClosePositionRequest,
-    AuthRequest
-);
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-// Display implementations using compact JSON formatting
-impl_json_display!(
-    fix::NewOrderRequest,
-    NewOrderRequest,
-    TriggerType,
-    AdvancedOrderType,
-    ModifyOrderRequest,
-    CancelOrderRequest,
-    CancelAllOrdersRequest,
-    ClosePositionRequest,
-    AuthRequest
-);
+    #[test]
+    fn test_fix_new_order_request_market_buy() {
+        let order = fix::NewOrderRequest::market_buy("BTC-PERPETUAL".to_string(), 1.0);
+        assert_eq!(order.symbol, "BTC-PERPETUAL");
+        assert_eq!(order.side, OrderSide::Buy);
+        assert_eq!(order.order_type, OrderType::Market);
+        assert_eq!(order.quantity, 1.0);
+        assert_eq!(order.price, None);
+        assert_eq!(order.time_in_force, TimeInForce::ImmediateOrCancel);
+        assert_eq!(order.client_order_id, None);
+    }
+
+    #[test]
+    fn test_fix_new_order_request_market_sell() {
+        let order = fix::NewOrderRequest::market_sell("ETH-PERPETUAL".to_string(), 2.0);
+        assert_eq!(order.symbol, "ETH-PERPETUAL");
+        assert_eq!(order.side, OrderSide::Sell);
+        assert_eq!(order.order_type, OrderType::Market);
+        assert_eq!(order.quantity, 2.0);
+        assert_eq!(order.price, None);
+        assert_eq!(order.time_in_force, TimeInForce::ImmediateOrCancel);
+    }
+
+    #[test]
+    fn test_fix_new_order_request_limit_buy() {
+        let order = fix::NewOrderRequest::limit_buy("BTC-PERPETUAL".to_string(), 1.0, 50000.0);
+        assert_eq!(order.symbol, "BTC-PERPETUAL");
+        assert_eq!(order.side, OrderSide::Buy);
+        assert_eq!(order.order_type, OrderType::Limit);
+        assert_eq!(order.quantity, 1.0);
+        assert_eq!(order.price, Some(50000.0));
+        assert_eq!(order.time_in_force, TimeInForce::GoodTilCancelled);
+    }
+
+    #[test]
+    fn test_fix_new_order_request_limit_sell() {
+        let order = fix::NewOrderRequest::limit_sell("ETH-PERPETUAL".to_string(), 2.0, 3500.0);
+        assert_eq!(order.symbol, "ETH-PERPETUAL");
+        assert_eq!(order.side, OrderSide::Sell);
+        assert_eq!(order.order_type, OrderType::Limit);
+        assert_eq!(order.quantity, 2.0);
+        assert_eq!(order.price, Some(3500.0));
+        assert_eq!(order.time_in_force, TimeInForce::GoodTilCancelled);
+    }
+
+    #[test]
+    fn test_fix_new_order_request_with_client_order_id() {
+        let order = fix::NewOrderRequest::market_buy("BTC-PERPETUAL".to_string(), 1.0)
+            .with_client_order_id("CLIENT_ORDER_123".to_string());
+        assert_eq!(order.client_order_id, Some("CLIENT_ORDER_123".to_string()));
+    }
+
+    #[test]
+    fn test_fix_new_order_request_with_time_in_force() {
+        let order = fix::NewOrderRequest::limit_buy("BTC-PERPETUAL".to_string(), 1.0, 50000.0)
+            .with_time_in_force(TimeInForce::FillOrKill);
+        assert_eq!(order.time_in_force, TimeInForce::FillOrKill);
+    }
+
+    #[test]
+    fn test_new_order_request_market_buy() {
+        let order = NewOrderRequest::market_buy("BTC-PERPETUAL".to_string(), 1.0);
+        assert_eq!(order.instrument_name, "BTC-PERPETUAL");
+        assert_eq!(order.amount, 1.0);
+        assert_eq!(order.order_type, OrderType::Market);
+        assert_eq!(order.side, OrderSide::Buy);
+        assert_eq!(order.price, None);
+        assert_eq!(order.time_in_force, TimeInForce::ImmediateOrCancel);
+        assert_eq!(order.post_only, None);
+        assert_eq!(order.reduce_only, None);
+    }
+
+    #[test]
+    fn test_new_order_request_market_sell() {
+        let order = NewOrderRequest::market_sell("ETH-PERPETUAL".to_string(), 2.0);
+        assert_eq!(order.instrument_name, "ETH-PERPETUAL");
+        assert_eq!(order.amount, 2.0);
+        assert_eq!(order.order_type, OrderType::Market);
+        assert_eq!(order.side, OrderSide::Sell);
+        assert_eq!(order.price, None);
+        assert_eq!(order.time_in_force, TimeInForce::ImmediateOrCancel);
+    }
+
+    #[test]
+    fn test_new_order_request_limit_buy() {
+        let order = NewOrderRequest::limit_buy("BTC-PERPETUAL".to_string(), 1.0, 50000.0);
+        assert_eq!(order.instrument_name, "BTC-PERPETUAL");
+        assert_eq!(order.amount, 1.0);
+        assert_eq!(order.order_type, OrderType::Limit);
+        assert_eq!(order.side, OrderSide::Buy);
+        assert_eq!(order.price, Some(50000.0));
+        assert_eq!(order.time_in_force, TimeInForce::GoodTilCancelled);
+    }
+
+    #[test]
+    fn test_new_order_request_limit_sell() {
+        let order = NewOrderRequest::limit_sell("ETH-PERPETUAL".to_string(), 2.0, 3500.0);
+        assert_eq!(order.instrument_name, "ETH-PERPETUAL");
+        assert_eq!(order.amount, 2.0);
+        assert_eq!(order.order_type, OrderType::Limit);
+        assert_eq!(order.side, OrderSide::Sell);
+        assert_eq!(order.price, Some(3500.0));
+        assert_eq!(order.time_in_force, TimeInForce::GoodTilCancelled);
+    }
+
+    #[test]
+    fn test_new_order_request_with_post_only() {
+        let order = NewOrderRequest::limit_buy("BTC-PERPETUAL".to_string(), 1.0, 50000.0)
+            .with_post_only(true);
+        assert_eq!(order.post_only, Some(true));
+    }
+
+    #[test]
+    fn test_new_order_request_with_reduce_only() {
+        let order = NewOrderRequest::limit_sell("BTC-PERPETUAL".to_string(), 1.0, 50000.0)
+            .with_reduce_only(true);
+        assert_eq!(order.reduce_only, Some(true));
+    }
+
+    #[test]
+    fn test_new_order_request_with_label() {
+        let order = NewOrderRequest::market_buy("BTC-PERPETUAL".to_string(), 1.0)
+            .with_label("test_order".to_string());
+        assert_eq!(order.label, Some("test_order".to_string()));
+    }
+
+    #[test]
+    fn test_new_order_request_with_time_in_force() {
+        let order = NewOrderRequest::limit_buy("BTC-PERPETUAL".to_string(), 1.0, 50000.0)
+            .with_time_in_force(TimeInForce::FillOrKill);
+        assert_eq!(order.time_in_force, TimeInForce::FillOrKill);
+    }
+
+    #[test]
+    fn test_trigger_type_serialization() {
+        let trigger_types = vec![
+            TriggerType::IndexPrice,
+            TriggerType::MarkPrice,
+            TriggerType::LastPrice,
+        ];
+
+        for trigger_type in trigger_types {
+            let json = serde_json::to_string(&trigger_type).unwrap();
+            let deserialized: TriggerType = serde_json::from_str(&json).unwrap();
+            assert_eq!(trigger_type, deserialized);
+        }
+    }
+
+    #[test]
+    fn test_advanced_order_type_serialization() {
+        let advanced_types = vec![AdvancedOrderType::Usd, AdvancedOrderType::Implv];
+
+        for advanced_type in advanced_types {
+            let json = serde_json::to_string(&advanced_type).unwrap();
+            let deserialized: AdvancedOrderType = serde_json::from_str(&json).unwrap();
+            assert_eq!(advanced_type, deserialized);
+        }
+    }
+
+    #[test]
+    fn test_modify_order_request() {
+        let modify_request = ModifyOrderRequest {
+            order_id: "ORDER_123".to_string(),
+            amount: Some(2.0),
+            price: Some(51000.0),
+            stop_price: None,
+            post_only: Some(true),
+            reduce_only: Some(false),
+            reject_post_only: None,
+            advanced: Some(AdvancedOrderType::Usd),
+        };
+
+        assert_eq!(modify_request.order_id, "ORDER_123");
+        assert_eq!(modify_request.amount, Some(2.0));
+        assert_eq!(modify_request.price, Some(51000.0));
+        assert_eq!(modify_request.post_only, Some(true));
+        assert_eq!(modify_request.advanced, Some(AdvancedOrderType::Usd));
+    }
+
+    #[test]
+    fn test_cancel_order_request() {
+        let cancel_request = CancelOrderRequest {
+            order_id: "ORDER_123".to_string(),
+        };
+        assert_eq!(cancel_request.order_id, "ORDER_123");
+    }
+
+    #[test]
+    fn test_cancel_all_orders_request() {
+        let cancel_all_request = CancelAllOrdersRequest {
+            currency: Some("BTC".to_string()),
+            kind: Some("future".to_string()),
+            instrument_type: Some("perpetual".to_string()),
+        };
+
+        assert_eq!(cancel_all_request.currency, Some("BTC".to_string()));
+        assert_eq!(cancel_all_request.kind, Some("future".to_string()));
+        assert_eq!(
+            cancel_all_request.instrument_type,
+            Some("perpetual".to_string())
+        );
+    }
+
+    #[test]
+    fn test_cancel_all_orders_request_empty() {
+        let cancel_all_request = CancelAllOrdersRequest {
+            currency: None,
+            kind: None,
+            instrument_type: None,
+        };
+
+        assert_eq!(cancel_all_request.currency, None);
+        assert_eq!(cancel_all_request.kind, None);
+        assert_eq!(cancel_all_request.instrument_type, None);
+    }
+
+    #[test]
+    fn test_close_position_request() {
+        let close_request = ClosePositionRequest {
+            instrument_name: "BTC-PERPETUAL".to_string(),
+            order_type: OrderType::Market,
+            price: None,
+        };
+
+        assert_eq!(close_request.instrument_name, "BTC-PERPETUAL");
+        assert_eq!(close_request.order_type, OrderType::Market);
+        assert_eq!(close_request.price, None);
+
+        let close_limit_request = ClosePositionRequest {
+            instrument_name: "ETH-PERPETUAL".to_string(),
+            order_type: OrderType::Limit,
+            price: Some(3500.0),
+        };
+
+        assert_eq!(close_limit_request.price, Some(3500.0));
+    }
+
+    #[test]
+    fn test_auth_request_client_credentials() {
+        let auth_request = AuthRequest::client_credentials(
+            "client_id_123".to_string(),
+            "client_secret_456".to_string(),
+        );
+
+        assert_eq!(auth_request.grant_type, "client_credentials");
+        assert_eq!(auth_request.client_id, "client_id_123");
+        assert_eq!(auth_request.client_secret, "client_secret_456");
+        assert_eq!(auth_request.refresh_token, None);
+        assert_eq!(auth_request.scope, None);
+    }
+
+    #[test]
+    fn test_auth_request_refresh_token() {
+        let auth_request = AuthRequest::refresh_token(
+            "client_id_123".to_string(),
+            "client_secret_456".to_string(),
+            "refresh_token_789".to_string(),
+        );
+
+        assert_eq!(auth_request.grant_type, "refresh_token");
+        assert_eq!(auth_request.client_id, "client_id_123");
+        assert_eq!(auth_request.client_secret, "client_secret_456");
+        assert_eq!(
+            auth_request.refresh_token,
+            Some("refresh_token_789".to_string())
+        );
+        assert_eq!(auth_request.scope, None);
+    }
+
+    #[test]
+    fn test_fix_to_rest_conversion() {
+        let fix_order = fix::NewOrderRequest::limit_buy("BTC-PERPETUAL".to_string(), 1.0, 50000.0)
+            .with_client_order_id("CLIENT_ORDER_123".to_string());
+
+        let rest_order: NewOrderRequest = fix_order.into();
+
+        assert_eq!(rest_order.instrument_name, "BTC-PERPETUAL");
+        assert_eq!(rest_order.amount, 1.0);
+        assert_eq!(rest_order.order_type, OrderType::Limit);
+        assert_eq!(rest_order.side, OrderSide::Buy);
+        assert_eq!(rest_order.price, Some(50000.0));
+        assert_eq!(
+            rest_order.client_order_id,
+            Some("CLIENT_ORDER_123".to_string())
+        );
+        assert_eq!(rest_order.post_only, None);
+        assert_eq!(rest_order.reduce_only, None);
+    }
+
+    #[test]
+    fn test_rest_to_fix_conversion() {
+        let rest_order = NewOrderRequest::limit_sell("ETH-PERPETUAL".to_string(), 2.0, 3500.0)
+            .with_label("test_order".to_string())
+            .with_post_only(true);
+
+        let fix_order: fix::NewOrderRequest = rest_order.into();
+
+        assert_eq!(fix_order.symbol, "ETH-PERPETUAL");
+        assert_eq!(fix_order.quantity, 2.0);
+        assert_eq!(fix_order.order_type, OrderType::Limit);
+        assert_eq!(fix_order.side, OrderSide::Sell);
+        assert_eq!(fix_order.price, Some(3500.0));
+        assert_eq!(fix_order.time_in_force, TimeInForce::GoodTilCancelled);
+    }
+
+    #[test]
+    fn test_serialization_roundtrip() {
+        let order = NewOrderRequest::limit_buy("BTC-PERPETUAL".to_string(), 1.0, 50000.0)
+            .with_post_only(true)
+            .with_label("test_order".to_string());
+
+        let json = serde_json::to_string(&order).unwrap();
+        let deserialized: NewOrderRequest = serde_json::from_str(&json).unwrap();
+
+        assert_eq!(order.instrument_name, deserialized.instrument_name);
+        assert_eq!(order.amount, deserialized.amount);
+        assert_eq!(order.order_type, deserialized.order_type);
+        assert_eq!(order.side, deserialized.side);
+        assert_eq!(order.price, deserialized.price);
+        assert_eq!(order.post_only, deserialized.post_only);
+        assert_eq!(order.label, deserialized.label);
+    }
+
+    #[test]
+    fn test_debug_and_display_implementations() {
+        let order = NewOrderRequest::market_buy("BTC-PERPETUAL".to_string(), 1.0);
+        let debug_str = format!("{:?}", order);
+        let display_str = format!("{}", order);
+
+        assert!(debug_str.contains("BTC-PERPETUAL"));
+        assert!(display_str.contains("BTC-PERPETUAL"));
+
+        let auth_request =
+            AuthRequest::client_credentials("client_id".to_string(), "client_secret".to_string());
+        let auth_debug = format!("{:?}", auth_request);
+        let auth_display = format!("{}", auth_request);
+
+        assert!(auth_debug.contains("client_credentials"));
+        assert!(auth_display.contains("client_credentials"));
+    }
+
+    #[test]
+    fn test_enum_equality_and_cloning() {
+        let trigger1 = TriggerType::IndexPrice;
+        let trigger2 = trigger1.clone();
+        assert_eq!(trigger1, trigger2);
+
+        let advanced1 = AdvancedOrderType::Usd;
+        let advanced2 = advanced1.clone();
+        assert_eq!(advanced1, advanced2);
+    }
+
+    #[test]
+    fn test_complex_order_with_all_fields() {
+        let order = NewOrderRequest {
+            instrument_name: "BTC-PERPETUAL".to_string(),
+            amount: 1.5,
+            order_type: OrderType::StopLimit,
+            side: OrderSide::Buy,
+            price: Some(50000.0),
+            time_in_force: TimeInForce::GoodTilDay,
+            post_only: Some(true),
+            reduce_only: Some(false),
+            label: Some("complex_order".to_string()),
+            stop_price: Some(49000.0),
+            trigger: Some(TriggerType::MarkPrice),
+            advanced: Some(AdvancedOrderType::Implv),
+            max_show: Some(0.5),
+            reject_post_only: Some(false),
+            valid_until: Some(1640995200000),
+            client_order_id: Some("CLIENT_ORDER_COMPLEX".to_string()),
+        };
+
+        assert_eq!(order.instrument_name, "BTC-PERPETUAL");
+        assert_eq!(order.amount, 1.5);
+        assert_eq!(order.order_type, OrderType::StopLimit);
+        assert_eq!(order.stop_price, Some(49000.0));
+        assert_eq!(order.trigger, Some(TriggerType::MarkPrice));
+        assert_eq!(order.advanced, Some(AdvancedOrderType::Implv));
+        assert_eq!(order.max_show, Some(0.5));
+        assert_eq!(order.valid_until, Some(1640995200000));
+    }
+}

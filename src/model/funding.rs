@@ -3,12 +3,11 @@
    Email: jb@taunais.com
    Date: 21/7/25
 ******************************************************************************/
-
-use crate::{impl_json_debug_pretty, impl_json_display};
+use pretty_simple_display::{DebugPretty, DisplaySimple};
 use serde::{Deserialize, Serialize};
 
 /// Funding chart data structure
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple,Clone, Serialize, Deserialize)]
 pub struct FundingChartData {
     /// Current interest rate
     pub current_interest: f64,
@@ -35,11 +34,9 @@ impl Default for FundingChartData {
     }
 }
 
-impl_json_display!(FundingChartData);
-impl_json_debug_pretty!(FundingChartData);
 
 /// Funding data point structure
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct FundingDataPoint {
     /// Index price at the time
     pub index_price: f64,
@@ -60,11 +57,9 @@ impl FundingDataPoint {
     }
 }
 
-impl_json_display!(FundingDataPoint);
-impl_json_debug_pretty!(FundingDataPoint);
 
 /// Funding rate data structure for historical funding rates
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct FundingRateData {
     /// Timestamp of the funding event
     pub timestamp: u64,
@@ -97,11 +92,9 @@ impl FundingRateData {
     }
 }
 
-impl_json_display!(FundingRateData);
-impl_json_debug_pretty!(FundingRateData);
 
 /// TradingView chart data structure
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct TradingViewChartData {
     /// Status of the data
     pub status: String,
@@ -163,9 +156,6 @@ impl Default for TradingViewChartData {
         Self::new()
     }
 }
-
-impl_json_display!(TradingViewChartData);
-impl_json_debug_pretty!(TradingViewChartData);
 
 #[cfg(test)]
 mod tests {

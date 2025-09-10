@@ -1,7 +1,8 @@
+use pretty_simple_display::{DebugPretty, DisplaySimple};
 use serde::{Deserialize, Serialize};
 
 /// Greeks sub-structure for options
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple,Clone, Serialize, Deserialize)]
 pub struct Greeks {
     /// Delta value
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -21,7 +22,7 @@ pub struct Greeks {
 }
 
 /// Ticker stats sub-structure
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple,Clone, Serialize, Deserialize)]
 pub struct TickerStats {
     /// Trading volume
     pub volume: f64,
@@ -40,7 +41,7 @@ pub struct TickerStats {
 }
 
 /// Ticker data structure with corrected field types
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple,Clone, Serialize, Deserialize)]
 pub struct TickerData {
     /// Name of the instrument
     pub instrument_name: String,
@@ -123,15 +124,6 @@ pub struct TickerData {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub estimated_delivery_price: Option<f64>,
 }
-
-crate::impl_json_display!(TickerData);
-crate::impl_json_debug_pretty!(TickerData);
-
-crate::impl_json_display!(TickerStats);
-crate::impl_json_debug_pretty!(TickerStats);
-
-crate::impl_json_display!(Greeks);
-crate::impl_json_debug_pretty!(Greeks);
 
 #[cfg(test)]
 mod tests {

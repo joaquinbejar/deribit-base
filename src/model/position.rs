@@ -3,11 +3,11 @@
    Email: jb@taunais.com
    Date: 21/7/25
 ******************************************************************************/
-use crate::{impl_json_debug_pretty, impl_json_display};
+use pretty_simple_display::{DebugPretty, DisplaySimple};
 use serde::{Deserialize, Serialize};
 
 /// Position direction enumeration
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum Direction {
     /// Buy direction
@@ -17,7 +17,7 @@ pub enum Direction {
 }
 
 /// Position structure
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple,Clone, Serialize, Deserialize)]
 pub struct Position {
     /// Average price of the position
     pub average_price: f64,
@@ -72,6 +72,3 @@ pub struct Position {
     /// Unrealized profit/loss
     pub unrealized_profit_loss: Option<f64>,
 }
-
-impl_json_debug_pretty!(Position);
-impl_json_display!(Position);
