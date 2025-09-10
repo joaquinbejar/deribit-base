@@ -11,6 +11,18 @@ homepage = "https://github.com/joaquinbejar/deribit-base"
 keywords = ["finance", "deribit", "trading", "api"]
 categories = ["finance", "data-structures", "api-bindings"]
 
+include = [
+    "benches/**/*",
+    "src/**/*",
+    "Cargo.toml",
+    "README.md",
+    "LICENSE",
+    "examples/**/*.rs",
+    "tests/**/*.rs",
+    "Makefile",
+    "rust-toolchain.toml",
+]
+
 [dependencies]
 serde = { workspace = true, features = ["derive"] }
 serde_json = { workspace = true }
