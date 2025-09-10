@@ -27,9 +27,9 @@ pub struct OptionInstrument {
 #[derive(Clone, Serialize, Deserialize)]
 pub struct OptionInstrumentPair {
     /// Call option instrument data, if available
-    call: Option<OptionInstrument>,
+    pub call: Option<OptionInstrument>,
     /// Put option instrument data, if available  
-    put: Option<OptionInstrument>,
+    pub put: Option<OptionInstrument>,
 }
 
 /// Spread information for bid/ask prices
