@@ -7,7 +7,7 @@ use pretty_simple_display::{DebugPretty, DisplaySimple};
 use serde::{Deserialize, Serialize};
 
 /// Funding chart data structure
-#[derive(DebugPretty, DisplaySimple,Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct FundingChartData {
     /// Current interest rate
     pub current_interest: f64,
@@ -34,7 +34,6 @@ impl Default for FundingChartData {
     }
 }
 
-
 /// Funding data point structure
 #[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct FundingDataPoint {
@@ -56,7 +55,6 @@ impl FundingDataPoint {
         }
     }
 }
-
 
 /// Funding rate data structure for historical funding rates
 #[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
@@ -91,7 +89,6 @@ impl FundingRateData {
         }
     }
 }
-
 
 /// TradingView chart data structure
 #[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]

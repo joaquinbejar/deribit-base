@@ -47,7 +47,6 @@ impl WithdrawalPriority {
     }
 }
 
-
 /// Currency information and configuration
 #[derive(DebugPretty, DisplaySimple, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CurrencyInfo {
@@ -152,7 +151,6 @@ impl CurrencyInfo {
     }
 }
 
-
 /// Index price information
 #[derive(DebugPretty, DisplaySimple, Clone, PartialEq, Serialize, Deserialize)]
 pub struct IndexPrice {
@@ -199,9 +197,8 @@ impl IndexPrice {
     }
 }
 
-
 /// Funding rate information
-#[derive(DebugPretty, DisplaySimple,Clone, PartialEq, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FundingRate {
     /// Timestamp (milliseconds since Unix epoch)
     pub timestamp: i64,
@@ -260,9 +257,8 @@ impl FundingRate {
     }
 }
 
-
 /// Historical volatility information
-#[derive(DebugPretty, DisplaySimple,Clone, PartialEq, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HistoricalVolatility {
     /// Timestamp (milliseconds since Unix epoch)
     pub timestamp: i64,
@@ -300,9 +296,8 @@ impl HistoricalVolatility {
     }
 }
 
-
 /// Market statistics
-#[derive(DebugPretty, DisplaySimple,Clone, PartialEq, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MarketStatistics {
     /// Currency
     pub currency: String,
@@ -396,7 +391,6 @@ impl MarketStatistics {
         }
     }
 }
-
 
 /// Collection of currency information
 #[derive(DebugPretty, DisplaySimple, Clone, PartialEq, Serialize, Deserialize)]

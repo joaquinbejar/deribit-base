@@ -274,22 +274,22 @@ mod tests {
 
     #[test]
     fn test_deribit_config_with_timeout() {
-        let config = DeribitConfig::new("client".to_string(), "secret".to_string())
-            .with_timeout(60);
+        let config =
+            DeribitConfig::new("client".to_string(), "secret".to_string()).with_timeout(60);
         assert_eq!(config.timeout_seconds, 60);
     }
 
     #[test]
     fn test_deribit_config_with_max_retries() {
-        let config = DeribitConfig::new("client".to_string(), "secret".to_string())
-            .with_max_retries(5);
+        let config =
+            DeribitConfig::new("client".to_string(), "secret".to_string()).with_max_retries(5);
         assert_eq!(config.max_retries, 5);
     }
 
     #[test]
     fn test_deribit_config_with_rate_limit() {
-        let config = DeribitConfig::new("client".to_string(), "secret".to_string())
-            .with_rate_limit(10);
+        let config =
+            DeribitConfig::new("client".to_string(), "secret".to_string()).with_rate_limit(10);
         assert_eq!(config.rate_limit, Some(10));
     }
 
@@ -336,7 +336,10 @@ mod tests {
         assert_eq!(config.timeout_seconds, 30);
         assert_eq!(config.max_retries, 3);
         assert_eq!(config.rate_limit, None);
-        assert_eq!(config.user_agent, Some("deribit-rust-client/1.0".to_string()));
+        assert_eq!(
+            config.user_agent,
+            Some("deribit-rust-client/1.0".to_string())
+        );
     }
 
     #[test]
@@ -351,7 +354,7 @@ mod tests {
     fn test_websocket_config_new() {
         let base = DeribitConfig::new("client".to_string(), "secret".to_string());
         let ws_config = WebSocketConfig::new(base.clone());
-        
+
         assert_eq!(ws_config.base.client_id, base.client_id);
         assert_eq!(ws_config.ping_interval, 30);
         assert_eq!(ws_config.pong_timeout, 10);
@@ -400,7 +403,7 @@ mod tests {
     fn test_http_config_new() {
         let base = DeribitConfig::new("client".to_string(), "secret".to_string());
         let http_config = HttpConfig::new(base.clone());
-        
+
         assert_eq!(http_config.base.client_id, base.client_id);
         assert_eq!(http_config.pool_size, None);
         assert_eq!(http_config.keep_alive, Some(30));
@@ -468,7 +471,7 @@ mod tests {
         let config = DeribitConfig::new("client".to_string(), "secret".to_string());
         let debug_str = format!("{:?}", config);
         let display_str = format!("{}", config);
-        
+
         assert!(debug_str.contains("client"));
         assert!(display_str.contains("client"));
     }

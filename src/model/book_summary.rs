@@ -7,7 +7,7 @@ use pretty_simple_display::{DebugPretty, DisplaySimple};
 use serde::{Deserialize, Serialize};
 
 /// Book summary information for an instrument
-#[derive(DebugPretty, DisplaySimple,Clone, PartialEq, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BookSummary {
     /// Instrument name
     pub instrument_name: String,

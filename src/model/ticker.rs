@@ -2,7 +2,7 @@ use pretty_simple_display::{DebugPretty, DisplaySimple};
 use serde::{Deserialize, Serialize};
 
 /// Greeks sub-structure for options
-#[derive(DebugPretty, DisplaySimple,Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct Greeks {
     /// Delta value
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -22,7 +22,7 @@ pub struct Greeks {
 }
 
 /// Ticker stats sub-structure
-#[derive(DebugPretty, DisplaySimple,Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct TickerStats {
     /// Trading volume
     pub volume: f64,
@@ -41,7 +41,7 @@ pub struct TickerStats {
 }
 
 /// Ticker data structure with corrected field types
-#[derive(DebugPretty, DisplaySimple,Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct TickerData {
     /// Name of the instrument
     pub instrument_name: String,

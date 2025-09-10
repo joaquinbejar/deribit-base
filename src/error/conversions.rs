@@ -5,144 +5,195 @@
 ******************************************************************************/
 
 use crate::error::codes::DeribitErrorCode;
+use crate::error::types::DeribitError;
 
-// Conversion from i32 to DeribitErrorCode
-impl From<i32> for DeribitErrorCode {
-    fn from(code: i32) -> Self {
-        match code {
-            0 => Self::Success,
-            10000 => Self::AuthorizationRequired,
-            10001 => Self::Error,
-            10002 => Self::QtyTooLow,
-            10003 => Self::OrderOverlap,
-            10004 => Self::OrderNotFound,
-            10005 => Self::PriceTooLow,
-            10006 => Self::PriceTooLow4Idx,
-            10007 => Self::PriceTooHigh,
-            10009 => Self::NotEnoughFunds,
-            10010 => Self::AlreadyClosed,
-            10011 => Self::PriceNotAllowed,
-            10012 => Self::BookClosed,
-            10013 => Self::PmeMaxTotalOpenOrders,
-            10014 => Self::PmeMaxFutureOpenOrders,
-            10015 => Self::PmeMaxOptionOpenOrders,
-            10016 => Self::PmeMaxFutureOpenOrdersSize,
-            10017 => Self::PmeMaxOptionOpenOrdersSize,
-            10018 => Self::NonPmeMaxFuturePositionSize,
-            10019 => Self::LockedByAdmin,
-            10020 => Self::InvalidOrUnsupportedInstrument,
-            10021 => Self::InvalidAmount,
-            10022 => Self::InvalidQuantity,
-            10023 => Self::InvalidPrice,
-            10024 => Self::InvalidMaxShow,
-            10025 => Self::InvalidOrderId,
-            10026 => Self::PricePrecisionExceeded,
-            10027 => Self::NonIntegerContractAmount,
-            10028 => Self::TooManyRequests,
-            10029 => Self::NotOwnerOfOrder,
-            10030 => Self::MustBeWebsocketRequest,
-            10031 => Self::InvalidArgsForInstrument,
-            10032 => Self::WholeCostTooLow,
-            10033 => Self::NotImplemented,
-            10034 => Self::TriggerPriceTooHigh,
-            10035 => Self::TriggerPriceTooLow,
-            10036 => Self::InvalidMaxShowAmount,
-            10037 => Self::NonPmeTotalShortOptionsPositionsSize,
-            10038 => Self::PmeMaxRiskReducingOrders,
-            10039 => Self::NotEnoughFundsInCurrency,
-            10040 => Self::Retry,
-            10041 => Self::SettlementInProgress,
-            10043 => Self::PriceWrongTick,
-            10044 => Self::TriggerPriceWrongTick,
-            10045 => Self::CanNotCancelLiquidationOrder,
-            10046 => Self::CanNotEditLiquidationOrder,
-            10047 => Self::MatchingEngineQueueFull,
-            10048 => Self::NotOnThisServer,
-            10049 => Self::CancelOnDisconnectFailed,
-            10066 => Self::TooManyConcurrentRequests,
-            10072 => Self::DisabledWhilePositionLock,
-            11008 => Self::AlreadyFilled,
-            11013 => Self::MaxSpotOpenOrders,
-            11021 => Self::PostOnlyPriceModificationNotPossible,
-            11022 => Self::MaxSpotOrderQuantity,
-            11029 => Self::InvalidArguments,
-            11030 => Self::OtherReject,
-            11031 => Self::OtherError,
-            11035 => Self::NoMoreTriggers,
-            11036 => Self::InvalidTriggerPrice,
-            11037 => Self::OutdatedInstrumentForIvOrder,
-            11038 => Self::NoAdvForFutures,
-            11039 => Self::NoAdvPostonly,
-            11041 => Self::NotAdvOrder,
-            11042 => Self::PermissionDenied,
-            11043 => Self::BadArgument,
-            11044 => Self::NotOpenOrder,
-            11045 => Self::InvalidEvent,
-            11046 => Self::OutdatedInstrument,
-            11047 => Self::UnsupportedArgCombination,
-            11048 => Self::WrongMaxShowForOption,
-            11049 => Self::BadArguments,
-            11050 => Self::BadRequest,
-            11051 => Self::SystemMaintenance,
-            11052 => Self::SubscribeErrorUnsubscribed,
-            11053 => Self::TransferNotFound,
-            11054 => Self::PostOnlyReject,
-            11055 => Self::PostOnlyNotAllowed,
-            11056 => Self::UnauthenticatedPublicRequestsTemporarilyDisabled,
-            11090 => Self::InvalidAddr,
-            11091 => Self::InvalidTransferAddress,
-            11092 => Self::AddressAlreadyExist,
-            11093 => Self::MaxAddrCountExceeded,
-            11094 => Self::InternalServerError,
-            11095 => Self::DisabledDepositAddressCreation,
-            11096 => Self::AddressBelongsToUser,
-            11097 => Self::NoDepositAddress,
-            11098 => Self::AccountLocked,
-            12001 => Self::TooManySubaccounts,
-            12002 => Self::WrongSubaccountName,
-            12003 => Self::LoginOverLimit,
-            12004 => Self::RegistrationOverLimit,
-            12005 => Self::CountryIsBanned,
-            12100 => Self::TransferNotAllowed,
-            12998 => Self::SecurityKeyAuthorizationOverLimit,
-            13004 => Self::InvalidCredentials,
-            13005 => Self::PwdMatchError,
-            13006 => Self::SecurityError,
-            13007 => Self::UserNotFound,
-            13008 => Self::RequestFailed,
-            13009 => Self::Unauthorized,
-            13010 => Self::ValueRequired,
-            13011 => Self::ValueTooShort,
-            13012 => Self::UnavailableInSubaccount,
-            13013 => Self::InvalidPhoneNumber,
-            13014 => Self::CannotSendSms,
-            13015 => Self::InvalidSmsCode,
-            13016 => Self::InvalidInput,
-            13018 => Self::InvalidContentType,
-            13019 => Self::OrderbookClosed,
-            13020 => Self::NotFound,
-            13021 => Self::Forbidden,
-            13025 => Self::MethodSwitchedOffByAdmin,
-            13028 => Self::TemporarilyUnavailable,
-            13030 => Self::MmpTrigger,
-            13031 => Self::VerificationRequired,
-            13032 => Self::NonUniqueOrderLabel,
-            13034 => Self::NoMoreSecurityKeysAllowed,
-            13035 => Self::ActiveComboLimitReached,
-            13036 => Self::UnavailableForComboBooks,
-            13037 => Self::IncompleteKycData,
-            13040 => Self::MmpRequired,
-            13042 => Self::CodNotEnabled,
-            13043 => Self::QuotesFrozen,
-            13403 => Self::ScopeExceeded,
-            13503 => Self::Unavailable,
-            13666 => Self::RequestCancelledByUser,
-            13777 => Self::Replaced,
-            13778 => Self::RawSubscriptionsNotAvailableForUnauthorized,
-            13780 => Self::MovePositionsOverLimit,
-            13781 => Self::CouponAlreadyUsed,
-            13791 => Self::KycTransferAlreadyInitiated,
-            _ => Self::Unknown(code),
+// Conversion from DeribitErrorCode to DeribitError
+impl From<DeribitErrorCode> for DeribitError {
+    fn from(error_code: DeribitErrorCode) -> Self {
+        DeribitError::Api {
+            code: error_code.code(),
+            message: error_code.message().to_string(),
+        }
+    }
+}
+
+// Conversion from HTTP status codes to DeribitErrorCode
+impl From<u16> for DeribitErrorCode {
+    fn from(status: u16) -> Self {
+        match status {
+            400 => DeribitErrorCode::BadRequest,
+            401 => DeribitErrorCode::Unauthorized,
+            403 => DeribitErrorCode::Forbidden,
+            404 => DeribitErrorCode::NotFound,
+            429 => DeribitErrorCode::TooManyRequests,
+            500 => DeribitErrorCode::InternalServerError,
+            503 => DeribitErrorCode::TemporarilyUnavailable,
+            _ => DeribitErrorCode::Unknown(status as i32),
+        }
+    }
+}
+
+// Conversion from string error messages to DeribitError
+impl From<String> for DeribitError {
+    fn from(message: String) -> Self {
+        DeribitError::Connection(message)
+    }
+}
+
+impl From<&str> for DeribitError {
+    fn from(message: &str) -> Self {
+        DeribitError::Connection(message.to_string())
+    }
+}
+
+// Conversion from serde_json::Error to DeribitError
+impl From<serde_json::Error> for DeribitError {
+    fn from(error: serde_json::Error) -> Self {
+        DeribitError::Serialization(error.to_string())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_error_code_to_deribit_error_conversion() {
+        let error_code = DeribitErrorCode::AuthorizationRequired;
+        let deribit_error: DeribitError = error_code.into();
+
+        match deribit_error {
+            DeribitError::Api { code, message } => {
+                assert_eq!(code, 10000);
+                assert_eq!(message, "authorization_required");
+            }
+            _ => panic!("Expected Api error"),
+        }
+    }
+
+    #[test]
+    fn test_http_status_to_error_code_conversion() {
+        // Test HTTP status to DeribitErrorCode conversion
+        let error_400 = DeribitErrorCode::from(400u16);
+        assert_eq!(error_400, DeribitErrorCode::BadRequest);
+        assert_eq!(error_400.code(), 11050); // BadRequest maps to 11050
+
+        let error_401 = DeribitErrorCode::from(401u16);
+        assert_eq!(error_401, DeribitErrorCode::Unauthorized);
+        assert_eq!(error_401.code(), 13009); // Unauthorized maps to 13009
+
+        let error_403 = DeribitErrorCode::from(403u16);
+        assert_eq!(error_403, DeribitErrorCode::Forbidden);
+        assert_eq!(error_403.code(), 13021); // Forbidden maps to 13021
+
+        let error_404 = DeribitErrorCode::from(404u16);
+        assert_eq!(error_404, DeribitErrorCode::NotFound);
+        assert_eq!(error_404.code(), 13020); // NotFound maps to 13020
+
+        let error_429 = DeribitErrorCode::from(429u16);
+        assert_eq!(error_429, DeribitErrorCode::TooManyRequests);
+        assert_eq!(error_429.code(), 10028); // TooManyRequests maps to 10028
+
+        let error_500 = DeribitErrorCode::from(500u16);
+        assert_eq!(error_500, DeribitErrorCode::InternalServerError);
+        assert_eq!(error_500.code(), 11094); // InternalServerError maps to 11094
+
+        let error_503 = DeribitErrorCode::from(503u16);
+        assert_eq!(error_503, DeribitErrorCode::TemporarilyUnavailable);
+        assert_eq!(error_503.code(), 13028); // TemporarilyUnavailable maps to 13028
+
+        // Test unknown status code
+        let error_418 = DeribitErrorCode::from(418u16);
+        assert_eq!(error_418, DeribitErrorCode::Unknown(418));
+        assert_eq!(error_418.code(), 418);
+
+        // Verify all have proper messages
+        for error in [
+            error_400, error_401, error_403, error_404, error_429, error_500, error_503, error_418,
+        ] {
+            assert!(!error.message().is_empty());
+        }
+    }
+
+    #[test]
+    fn test_string_to_deribit_error_conversion() {
+        let message = "Connection failed".to_string();
+        let error: DeribitError = message.clone().into();
+
+        match error {
+            DeribitError::Connection(msg) => {
+                assert_eq!(msg, message);
+            }
+            _ => panic!("Expected Connection error"),
+        }
+    }
+
+    #[test]
+    fn test_str_to_deribit_error_conversion() {
+        let message = "Connection timeout";
+        let error: DeribitError = message.into();
+
+        match error {
+            DeribitError::Connection(msg) => {
+                assert_eq!(msg, message);
+            }
+            _ => panic!("Expected Connection error"),
+        }
+    }
+
+    #[test]
+    fn test_serde_json_error_conversion() {
+        let invalid_json = r#"{"invalid": json}"#;
+        let json_error = serde_json::from_str::<serde_json::Value>(invalid_json).unwrap_err();
+        let deribit_error: DeribitError = json_error.into();
+
+        match deribit_error {
+            DeribitError::Serialization(message) => {
+                assert!(!message.is_empty());
+                assert!(message.contains("expected"));
+            }
+            _ => panic!("Expected Serialization error"),
+        }
+    }
+
+    #[test]
+    fn test_comprehensive_error_code_conversions() {
+        // Test various error codes to ensure they convert properly
+        let error_codes = vec![
+            DeribitErrorCode::Success,
+            DeribitErrorCode::Error,
+            DeribitErrorCode::QtyTooLow,
+            DeribitErrorCode::NotEnoughFunds,
+            DeribitErrorCode::InvalidAmount,
+            DeribitErrorCode::TooManyRequests,
+            DeribitErrorCode::Unknown(99999),
+        ];
+
+        for error_code in error_codes {
+            let deribit_error: DeribitError = error_code.clone().into();
+            match deribit_error {
+                DeribitError::Api { code, message } => {
+                    assert_eq!(code, error_code.code());
+                    assert_eq!(message, error_code.message());
+                }
+                _ => panic!("Expected Api error for {:?}", error_code),
+            }
+        }
+    }
+
+    #[test]
+    fn test_error_chain_conversions() {
+        // Test that we can chain conversions
+        let status_code: u16 = 401;
+        let error_code: DeribitErrorCode = status_code.into();
+        let deribit_error: DeribitError = error_code.into();
+
+        match deribit_error {
+            DeribitError::Api { code, message } => {
+                assert_eq!(code, 13009); // Unauthorized code
+                assert_eq!(message, "unauthorized");
+            }
+            _ => panic!("Expected Api error"),
         }
     }
 }

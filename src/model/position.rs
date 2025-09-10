@@ -17,7 +17,7 @@ pub enum Direction {
 }
 
 /// Position structure
-#[derive(DebugPretty, DisplaySimple,Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct Position {
     /// Average price of the position
     pub average_price: f64,

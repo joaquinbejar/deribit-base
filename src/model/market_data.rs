@@ -3,13 +3,12 @@
    Email: jb@taunais.com
    Date: 21/7/25
 ******************************************************************************/
-use pretty_simple_display::{DebugPretty, DisplaySimple};
 use crate::model::instrument::InstrumentKind;
+use pretty_simple_display::{DebugPretty, DisplaySimple};
 use serde::{Deserialize, Serialize};
 
-
 /// Ticker information
-#[derive(DebugPretty, DisplaySimple,Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct Ticker {
     /// Instrument name
     pub instrument_name: String,
@@ -91,7 +90,7 @@ impl Ticker {
 }
 
 /// Order book entry
-#[derive(DebugPretty, DisplaySimple,Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct OrderBookEntry {
     /// Price level
     pub price: f64,
@@ -112,7 +111,7 @@ impl OrderBookEntry {
 }
 
 /// Order book data
-#[derive(DebugPretty, DisplaySimple,Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct OrderBook {
     /// Instrument name
     pub instrument_name: String,
@@ -189,7 +188,7 @@ impl OrderBook {
 }
 
 /// Greeks for options
-#[derive(DebugPretty, DisplaySimple,Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct Greeks {
     /// Delta - sensitivity to underlying price changes
     pub delta: f64,
@@ -204,7 +203,7 @@ pub struct Greeks {
 }
 
 /// Market statistics
-#[derive(DebugPretty, DisplaySimple,Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct MarketStats {
     /// Currency
     pub currency: String,
@@ -225,7 +224,7 @@ pub struct MarketStats {
 }
 
 /// Candlestick/OHLCV data
-#[derive(DebugPretty, DisplaySimple,Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct Candle {
     /// Timestamp
     pub timestamp: i64,
@@ -554,7 +553,7 @@ mod tests {
         let ticker = create_test_ticker();
         let debug_str = format!("{:?}", ticker);
         let display_str = format!("{}", ticker);
-        
+
         assert!(debug_str.contains("BTC-PERPETUAL"));
         assert!(display_str.contains("BTC-PERPETUAL"));
     }

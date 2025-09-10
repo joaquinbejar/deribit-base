@@ -6,7 +6,6 @@
 use pretty_simple_display::{DebugPretty, DisplaySimple};
 use serde::{Deserialize, Serialize};
 
-
 /// Instrument kind enumeration
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
@@ -273,23 +272,47 @@ mod tests {
 
     #[test]
     fn test_instrument_kind_serialization() {
-        assert_eq!(serde_json::to_string(&InstrumentKind::Future).unwrap(), "\"future\"");
-        assert_eq!(serde_json::to_string(&InstrumentKind::Option).unwrap(), "\"option\"");
-        assert_eq!(serde_json::to_string(&InstrumentKind::Spot).unwrap(), "\"spot\"");
-        assert_eq!(serde_json::to_string(&InstrumentKind::FutureCombo).unwrap(), "\"future_combo\"");
-        assert_eq!(serde_json::to_string(&InstrumentKind::OptionCombo).unwrap(), "\"option_combo\"");
+        assert_eq!(
+            serde_json::to_string(&InstrumentKind::Future).unwrap(),
+            "\"future\""
+        );
+        assert_eq!(
+            serde_json::to_string(&InstrumentKind::Option).unwrap(),
+            "\"option\""
+        );
+        assert_eq!(
+            serde_json::to_string(&InstrumentKind::Spot).unwrap(),
+            "\"spot\""
+        );
+        assert_eq!(
+            serde_json::to_string(&InstrumentKind::FutureCombo).unwrap(),
+            "\"future_combo\""
+        );
+        assert_eq!(
+            serde_json::to_string(&InstrumentKind::OptionCombo).unwrap(),
+            "\"option_combo\""
+        );
     }
 
     #[test]
     fn test_option_type_serialization() {
-        assert_eq!(serde_json::to_string(&OptionType::Call).unwrap(), "\"call\"");
+        assert_eq!(
+            serde_json::to_string(&OptionType::Call).unwrap(),
+            "\"call\""
+        );
         assert_eq!(serde_json::to_string(&OptionType::Put).unwrap(), "\"put\"");
     }
 
     #[test]
     fn test_instrument_type_serialization() {
-        assert_eq!(serde_json::to_string(&InstrumentType::Linear).unwrap(), "\"linear\"");
-        assert_eq!(serde_json::to_string(&InstrumentType::Reversed).unwrap(), "\"reversed\"");
+        assert_eq!(
+            serde_json::to_string(&InstrumentType::Linear).unwrap(),
+            "\"linear\""
+        );
+        assert_eq!(
+            serde_json::to_string(&InstrumentType::Reversed).unwrap(),
+            "\"reversed\""
+        );
     }
 
     #[test]
@@ -311,7 +334,7 @@ mod tests {
             eurr: Some(0.05),
             edp: 50000.0,
         };
-        
+
         assert_eq!(index_data.btc, Some(0.5));
         assert_eq!(index_data.edp, 50000.0);
     }
@@ -322,7 +345,7 @@ mod tests {
             index_price: 50000.0,
             estimated_delivery_price: 50100.0,
         };
-        
+
         assert_eq!(index_price_data.index_price, 50000.0);
         assert_eq!(index_price_data.estimated_delivery_price, 50100.0);
     }
@@ -332,7 +355,7 @@ mod tests {
         let instrument = create_test_instrument();
         let debug_str = format!("{:?}", instrument);
         let display_str = format!("{}", instrument);
-        
+
         assert!(debug_str.contains("BTC-PERPETUAL"));
         assert!(display_str.contains("BTC-PERPETUAL"));
     }

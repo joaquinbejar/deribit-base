@@ -7,7 +7,7 @@ use pretty_simple_display::{DebugPretty, DisplaySimple};
 use serde::{Deserialize, Serialize};
 
 /// Time in force enumeration
-#[derive(DebugPretty, DisplaySimple,Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum TimeInForce {
     /// Order remains active until explicitly cancelled
     #[serde(rename = "good_til_cancelled")]
@@ -36,7 +36,7 @@ impl TimeInForce {
 }
 
 /// Order side enumeration
-#[derive(DebugPretty, DisplaySimple,Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum OrderSide {
     /// Buy order
     Buy,
@@ -45,7 +45,7 @@ pub enum OrderSide {
 }
 
 /// Order type enum
-#[derive(DebugPretty, DisplaySimple,Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum OrderType {
     /// Limit order - executes at specified price or better
     #[serde(rename = "limit")]
@@ -90,7 +90,7 @@ impl OrderType {
 }
 
 /// New order request structure
-#[derive(DebugPretty, DisplaySimple,Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct NewOrderRequest {
     /// Trading symbol/instrument name
     pub symbol: String,
@@ -109,7 +109,7 @@ pub struct NewOrderRequest {
 }
 
 /// Order status enumeration
-#[derive(DebugPretty, DisplaySimple,Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum OrderStatus {
     /// Order has been accepted by the system
     New,
@@ -144,7 +144,7 @@ pub enum OrderStatus {
 }
 
 /// Order information
-#[derive(DebugPretty, DisplaySimple,Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct OrderInfo {
     /// Order amount
     pub amount: f64,
@@ -209,7 +209,10 @@ mod tests {
         assert_eq!(TimeInForce::GoodTilCancelled.as_str(), "good_til_cancelled");
         assert_eq!(TimeInForce::GoodTilDay.as_str(), "good_til_day");
         assert_eq!(TimeInForce::FillOrKill.as_str(), "fill_or_kill");
-        assert_eq!(TimeInForce::ImmediateOrCancel.as_str(), "immediate_or_cancel");
+        assert_eq!(
+            TimeInForce::ImmediateOrCancel.as_str(),
+            "immediate_or_cancel"
+        );
     }
 
     #[test]
@@ -217,7 +220,7 @@ mod tests {
         let tif = TimeInForce::GoodTilCancelled;
         let json = serde_json::to_string(&tif).unwrap();
         assert_eq!(json, "\"good_til_cancelled\"");
-        
+
         let deserialized: TimeInForce = serde_json::from_str(&json).unwrap();
         assert_eq!(deserialized, TimeInForce::GoodTilCancelled);
     }
@@ -226,16 +229,16 @@ mod tests {
     fn test_order_side_serialization() {
         let buy_side = OrderSide::Buy;
         let sell_side = OrderSide::Sell;
-        
+
         let buy_json = serde_json::to_string(&buy_side).unwrap();
         let sell_json = serde_json::to_string(&sell_side).unwrap();
-        
+
         assert_eq!(buy_json, "\"Buy\"");
         assert_eq!(sell_json, "\"Sell\"");
-        
+
         let buy_deserialized: OrderSide = serde_json::from_str(&buy_json).unwrap();
         let sell_deserialized: OrderSide = serde_json::from_str(&sell_json).unwrap();
-        
+
         assert_eq!(buy_deserialized, OrderSide::Buy);
         assert_eq!(sell_deserialized, OrderSide::Sell);
     }
@@ -257,7 +260,7 @@ mod tests {
         let order_type = OrderType::Limit;
         let json = serde_json::to_string(&order_type).unwrap();
         assert_eq!(json, "\"limit\"");
-        
+
         let deserialized: OrderType = serde_json::from_str(&json).unwrap();
         assert_eq!(deserialized, OrderType::Limit);
     }
@@ -273,7 +276,7 @@ mod tests {
             time_in_force: TimeInForce::GoodTilCancelled,
             client_order_id: Some("CLIENT_ORDER_123".to_string()),
         };
-        
+
         assert_eq!(order.symbol, "BTC-PERPETUAL");
         assert_eq!(order.side, OrderSide::Buy);
         assert_eq!(order.order_type, OrderType::Limit);
@@ -294,7 +297,7 @@ mod tests {
             time_in_force: TimeInForce::ImmediateOrCancel,
             client_order_id: None,
         };
-        
+
         assert_eq!(market_order.order_type, OrderType::Market);
         assert_eq!(market_order.price, None);
         assert_eq!(market_order.client_order_id, None);
@@ -319,10 +322,10 @@ mod tests {
             OrderStatus::AcceptedForBidding,
             OrderStatus::PendingReplace,
         ];
-        
+
         // Test that all variants can be created and compared
         for status in statuses {
-            let cloned = status.clone();
+            let cloned = status;
             assert_eq!(status, cloned);
         }
     }
@@ -357,7 +360,7 @@ mod tests {
             usd: Some(50000.0),
             web: false,
         };
-        
+
         assert_eq!(order_info.amount, 1.0);
         assert_eq!(order_info.instrument_name, "BTC-PERPETUAL");
         assert_eq!(order_info.filled_amount, 0.5);
@@ -397,7 +400,7 @@ mod tests {
             usd: None,
             web: false,
         };
-        
+
         assert_eq!(minimal_order_info.max_show, None);
         assert_eq!(minimal_order_info.profit_loss, None);
         assert_eq!(minimal_order_info.triggered, None);
@@ -416,10 +419,10 @@ mod tests {
             time_in_force: TimeInForce::GoodTilCancelled,
             client_order_id: Some("CLIENT_ORDER_123".to_string()),
         };
-        
+
         let json = serde_json::to_string(&order).unwrap();
         let deserialized: NewOrderRequest = serde_json::from_str(&json).unwrap();
-        
+
         assert_eq!(order.symbol, deserialized.symbol);
         assert_eq!(order.side, deserialized.side);
         assert_eq!(order.order_type, deserialized.order_type);
@@ -440,10 +443,10 @@ mod tests {
             time_in_force: TimeInForce::GoodTilCancelled,
             client_order_id: Some("CLIENT_ORDER_123".to_string()),
         };
-        
+
         let debug_str = format!("{:?}", order);
         let display_str = format!("{}", order);
-        
+
         assert!(debug_str.contains("BTC-PERPETUAL"));
         assert!(display_str.contains("BTC-PERPETUAL"));
     }
@@ -451,19 +454,19 @@ mod tests {
     #[test]
     fn test_enum_equality_and_cloning() {
         let tif1 = TimeInForce::GoodTilCancelled;
-        let tif2 = tif1.clone();
+        let tif2 = tif1;
         assert_eq!(tif1, tif2);
-        
+
         let side1 = OrderSide::Buy;
-        let side2 = side1.clone();
+        let side2 = side1;
         assert_eq!(side1, side2);
-        
+
         let type1 = OrderType::Limit;
-        let type2 = type1.clone();
+        let type2 = type1;
         assert_eq!(type1, type2);
-        
+
         let status1 = OrderStatus::New;
-        let status2 = status1.clone();
+        let status2 = status1;
         assert_eq!(status1, status2);
     }
 
@@ -480,12 +483,12 @@ mod tests {
             OrderType::MarketLimit,
             OrderType::TrailingStop,
         ];
-        
+
         for order_type in types {
             // Test as_str method
             let str_repr = order_type.as_str();
             assert!(!str_repr.is_empty());
-            
+
             // Test serialization
             let json = serde_json::to_string(&order_type).unwrap();
             let deserialized: OrderType = serde_json::from_str(&json).unwrap();
@@ -501,12 +504,12 @@ mod tests {
             TimeInForce::FillOrKill,
             TimeInForce::ImmediateOrCancel,
         ];
-        
+
         for tif in tifs {
             // Test as_str method
             let str_repr = tif.as_str();
             assert!(!str_repr.is_empty());
-            
+
             // Test serialization
             let json = serde_json::to_string(&tif).unwrap();
             let deserialized: TimeInForce = serde_json::from_str(&json).unwrap();

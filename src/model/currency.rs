@@ -8,7 +8,6 @@ use serde::{Deserialize, Serialize};
 
 use crate::prelude::WithdrawalPriority;
 
-
 /// Currency structure
 #[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct Currency {

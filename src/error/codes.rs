@@ -629,6 +629,147 @@ impl From<DeribitErrorCode> for i32 {
     }
 }
 
+// Conversion from i32 to DeribitErrorCode (required for serde)
+impl From<i32> for DeribitErrorCode {
+    fn from(code: i32) -> Self {
+        match code {
+            0 => DeribitErrorCode::Success,
+            10000 => DeribitErrorCode::AuthorizationRequired,
+            10001 => DeribitErrorCode::Error,
+            10002 => DeribitErrorCode::QtyTooLow,
+            10003 => DeribitErrorCode::OrderOverlap,
+            10004 => DeribitErrorCode::OrderNotFound,
+            10005 => DeribitErrorCode::PriceTooLow,
+            10006 => DeribitErrorCode::PriceTooLow4Idx,
+            10007 => DeribitErrorCode::PriceTooHigh,
+            10009 => DeribitErrorCode::NotEnoughFunds,
+            10010 => DeribitErrorCode::AlreadyClosed,
+            10011 => DeribitErrorCode::PriceNotAllowed,
+            10012 => DeribitErrorCode::BookClosed,
+            10013 => DeribitErrorCode::PmeMaxTotalOpenOrders,
+            10014 => DeribitErrorCode::PmeMaxFutureOpenOrders,
+            10015 => DeribitErrorCode::PmeMaxOptionOpenOrders,
+            10016 => DeribitErrorCode::PmeMaxFutureOpenOrdersSize,
+            10017 => DeribitErrorCode::PmeMaxOptionOpenOrdersSize,
+            10018 => DeribitErrorCode::NonPmeMaxFuturePositionSize,
+            10019 => DeribitErrorCode::LockedByAdmin,
+            10020 => DeribitErrorCode::InvalidOrUnsupportedInstrument,
+            10021 => DeribitErrorCode::InvalidAmount,
+            10022 => DeribitErrorCode::InvalidQuantity,
+            10023 => DeribitErrorCode::InvalidPrice,
+            10024 => DeribitErrorCode::InvalidMaxShow,
+            10025 => DeribitErrorCode::InvalidOrderId,
+            10026 => DeribitErrorCode::PricePrecisionExceeded,
+            10027 => DeribitErrorCode::NonIntegerContractAmount,
+            10028 => DeribitErrorCode::TooManyRequests,
+            10029 => DeribitErrorCode::NotOwnerOfOrder,
+            10030 => DeribitErrorCode::MustBeWebsocketRequest,
+            10031 => DeribitErrorCode::InvalidArgsForInstrument,
+            10032 => DeribitErrorCode::WholeCostTooLow,
+            10033 => DeribitErrorCode::NotImplemented,
+            10034 => DeribitErrorCode::TriggerPriceTooHigh,
+            10035 => DeribitErrorCode::TriggerPriceTooLow,
+            10036 => DeribitErrorCode::InvalidMaxShowAmount,
+            10037 => DeribitErrorCode::NonPmeTotalShortOptionsPositionsSize,
+            10038 => DeribitErrorCode::PmeMaxRiskReducingOrders,
+            10039 => DeribitErrorCode::NotEnoughFundsInCurrency,
+            10040 => DeribitErrorCode::Retry,
+            10041 => DeribitErrorCode::SettlementInProgress,
+            10043 => DeribitErrorCode::PriceWrongTick,
+            10044 => DeribitErrorCode::TriggerPriceWrongTick,
+            10045 => DeribitErrorCode::CanNotCancelLiquidationOrder,
+            10046 => DeribitErrorCode::CanNotEditLiquidationOrder,
+            10047 => DeribitErrorCode::MatchingEngineQueueFull,
+            10048 => DeribitErrorCode::NotOnThisServer,
+            10049 => DeribitErrorCode::CancelOnDisconnectFailed,
+            10066 => DeribitErrorCode::TooManyConcurrentRequests,
+            10072 => DeribitErrorCode::DisabledWhilePositionLock,
+            11008 => DeribitErrorCode::AlreadyFilled,
+            11013 => DeribitErrorCode::MaxSpotOpenOrders,
+            11021 => DeribitErrorCode::PostOnlyPriceModificationNotPossible,
+            11022 => DeribitErrorCode::MaxSpotOrderQuantity,
+            11029 => DeribitErrorCode::InvalidArguments,
+            11030 => DeribitErrorCode::OtherReject,
+            11031 => DeribitErrorCode::OtherError,
+            11035 => DeribitErrorCode::NoMoreTriggers,
+            11036 => DeribitErrorCode::InvalidTriggerPrice,
+            11037 => DeribitErrorCode::OutdatedInstrumentForIvOrder,
+            11038 => DeribitErrorCode::NoAdvForFutures,
+            11039 => DeribitErrorCode::NoAdvPostonly,
+            11041 => DeribitErrorCode::NotAdvOrder,
+            11042 => DeribitErrorCode::PermissionDenied,
+            11043 => DeribitErrorCode::BadArgument,
+            11044 => DeribitErrorCode::NotOpenOrder,
+            11045 => DeribitErrorCode::InvalidEvent,
+            11046 => DeribitErrorCode::OutdatedInstrument,
+            11047 => DeribitErrorCode::UnsupportedArgCombination,
+            11048 => DeribitErrorCode::WrongMaxShowForOption,
+            11049 => DeribitErrorCode::BadArguments,
+            11050 => DeribitErrorCode::BadRequest,
+            11051 => DeribitErrorCode::SystemMaintenance,
+            11052 => DeribitErrorCode::SubscribeErrorUnsubscribed,
+            11053 => DeribitErrorCode::TransferNotFound,
+            11054 => DeribitErrorCode::PostOnlyReject,
+            11055 => DeribitErrorCode::PostOnlyNotAllowed,
+            11056 => DeribitErrorCode::UnauthenticatedPublicRequestsTemporarilyDisabled,
+            11090 => DeribitErrorCode::InvalidAddr,
+            11091 => DeribitErrorCode::InvalidTransferAddress,
+            11092 => DeribitErrorCode::AddressAlreadyExist,
+            11093 => DeribitErrorCode::MaxAddrCountExceeded,
+            11094 => DeribitErrorCode::InternalServerError,
+            11095 => DeribitErrorCode::DisabledDepositAddressCreation,
+            11096 => DeribitErrorCode::AddressBelongsToUser,
+            11097 => DeribitErrorCode::NoDepositAddress,
+            11098 => DeribitErrorCode::AccountLocked,
+            12001 => DeribitErrorCode::TooManySubaccounts,
+            12002 => DeribitErrorCode::WrongSubaccountName,
+            12003 => DeribitErrorCode::LoginOverLimit,
+            12004 => DeribitErrorCode::RegistrationOverLimit,
+            12005 => DeribitErrorCode::CountryIsBanned,
+            12100 => DeribitErrorCode::TransferNotAllowed,
+            12998 => DeribitErrorCode::SecurityKeyAuthorizationOverLimit,
+            13004 => DeribitErrorCode::InvalidCredentials,
+            13005 => DeribitErrorCode::PwdMatchError,
+            13006 => DeribitErrorCode::SecurityError,
+            13007 => DeribitErrorCode::UserNotFound,
+            13008 => DeribitErrorCode::RequestFailed,
+            13009 => DeribitErrorCode::Unauthorized,
+            13010 => DeribitErrorCode::ValueRequired,
+            13011 => DeribitErrorCode::ValueTooShort,
+            13012 => DeribitErrorCode::UnavailableInSubaccount,
+            13013 => DeribitErrorCode::InvalidPhoneNumber,
+            13014 => DeribitErrorCode::CannotSendSms,
+            13015 => DeribitErrorCode::InvalidSmsCode,
+            13016 => DeribitErrorCode::InvalidInput,
+            13018 => DeribitErrorCode::InvalidContentType,
+            13019 => DeribitErrorCode::OrderbookClosed,
+            13020 => DeribitErrorCode::NotFound,
+            13021 => DeribitErrorCode::Forbidden,
+            13025 => DeribitErrorCode::MethodSwitchedOffByAdmin,
+            13028 => DeribitErrorCode::TemporarilyUnavailable,
+            13030 => DeribitErrorCode::MmpTrigger,
+            13031 => DeribitErrorCode::VerificationRequired,
+            13032 => DeribitErrorCode::NonUniqueOrderLabel,
+            13034 => DeribitErrorCode::NoMoreSecurityKeysAllowed,
+            13035 => DeribitErrorCode::ActiveComboLimitReached,
+            13036 => DeribitErrorCode::UnavailableForComboBooks,
+            13037 => DeribitErrorCode::IncompleteKycData,
+            13040 => DeribitErrorCode::MmpRequired,
+            13042 => DeribitErrorCode::CodNotEnabled,
+            13043 => DeribitErrorCode::QuotesFrozen,
+            13403 => DeribitErrorCode::ScopeExceeded,
+            13503 => DeribitErrorCode::Unavailable,
+            13666 => DeribitErrorCode::RequestCancelledByUser,
+            13777 => DeribitErrorCode::Replaced,
+            13778 => DeribitErrorCode::RawSubscriptionsNotAvailableForUnauthorized,
+            13780 => DeribitErrorCode::MovePositionsOverLimit,
+            13781 => DeribitErrorCode::CouponAlreadyUsed,
+            13791 => DeribitErrorCode::KycTransferAlreadyInitiated,
+            _ => DeribitErrorCode::Unknown(code),
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -702,5 +843,533 @@ mod tests {
         assert_eq!(DeribitErrorCode::Success.code(), 0);
         assert_eq!(DeribitErrorCode::AuthorizationRequired.code(), 10000);
         assert_eq!(DeribitErrorCode::TooManyRequests.code(), 10028);
+    }
+
+    #[test]
+    fn test_all_error_code_conversions() {
+        // Test all error codes for bidirectional conversion
+        let test_cases = vec![
+            (0, DeribitErrorCode::Success),
+            (10000, DeribitErrorCode::AuthorizationRequired),
+            (10001, DeribitErrorCode::Error),
+            (10002, DeribitErrorCode::QtyTooLow),
+            (10003, DeribitErrorCode::OrderOverlap),
+            (10004, DeribitErrorCode::OrderNotFound),
+            (10005, DeribitErrorCode::PriceTooLow),
+            (10006, DeribitErrorCode::PriceTooLow4Idx),
+            (10007, DeribitErrorCode::PriceTooHigh),
+            (10009, DeribitErrorCode::NotEnoughFunds),
+            (10010, DeribitErrorCode::AlreadyClosed),
+            (10011, DeribitErrorCode::PriceNotAllowed),
+            (10012, DeribitErrorCode::BookClosed),
+            (10013, DeribitErrorCode::PmeMaxTotalOpenOrders),
+            (10014, DeribitErrorCode::PmeMaxFutureOpenOrders),
+            (10015, DeribitErrorCode::PmeMaxOptionOpenOrders),
+            (10016, DeribitErrorCode::PmeMaxFutureOpenOrdersSize),
+            (10017, DeribitErrorCode::PmeMaxOptionOpenOrdersSize),
+            (10018, DeribitErrorCode::NonPmeMaxFuturePositionSize),
+            (10019, DeribitErrorCode::LockedByAdmin),
+            (10020, DeribitErrorCode::InvalidOrUnsupportedInstrument),
+            (10021, DeribitErrorCode::InvalidAmount),
+            (10022, DeribitErrorCode::InvalidQuantity),
+            (10023, DeribitErrorCode::InvalidPrice),
+            (10024, DeribitErrorCode::InvalidMaxShow),
+            (10025, DeribitErrorCode::InvalidOrderId),
+            (10026, DeribitErrorCode::PricePrecisionExceeded),
+            (10027, DeribitErrorCode::NonIntegerContractAmount),
+            (10028, DeribitErrorCode::TooManyRequests),
+            (10029, DeribitErrorCode::NotOwnerOfOrder),
+            (10030, DeribitErrorCode::MustBeWebsocketRequest),
+            (10031, DeribitErrorCode::InvalidArgsForInstrument),
+            (10032, DeribitErrorCode::WholeCostTooLow),
+            (10033, DeribitErrorCode::NotImplemented),
+            (10034, DeribitErrorCode::TriggerPriceTooHigh),
+            (10035, DeribitErrorCode::TriggerPriceTooLow),
+            (10036, DeribitErrorCode::InvalidMaxShowAmount),
+            (
+                10037,
+                DeribitErrorCode::NonPmeTotalShortOptionsPositionsSize,
+            ),
+            (10038, DeribitErrorCode::PmeMaxRiskReducingOrders),
+            (10039, DeribitErrorCode::NotEnoughFundsInCurrency),
+            (10040, DeribitErrorCode::Retry),
+            (10041, DeribitErrorCode::SettlementInProgress),
+            (10043, DeribitErrorCode::PriceWrongTick),
+            (10044, DeribitErrorCode::TriggerPriceWrongTick),
+            (10045, DeribitErrorCode::CanNotCancelLiquidationOrder),
+            (10046, DeribitErrorCode::CanNotEditLiquidationOrder),
+            (10047, DeribitErrorCode::MatchingEngineQueueFull),
+            (10048, DeribitErrorCode::NotOnThisServer),
+            (10049, DeribitErrorCode::CancelOnDisconnectFailed),
+            (10066, DeribitErrorCode::TooManyConcurrentRequests),
+            (10072, DeribitErrorCode::DisabledWhilePositionLock),
+            (11008, DeribitErrorCode::AlreadyFilled),
+            (11013, DeribitErrorCode::MaxSpotOpenOrders),
+            (
+                11021,
+                DeribitErrorCode::PostOnlyPriceModificationNotPossible,
+            ),
+            (11022, DeribitErrorCode::MaxSpotOrderQuantity),
+            (11029, DeribitErrorCode::InvalidArguments),
+            (11030, DeribitErrorCode::OtherReject),
+            (11031, DeribitErrorCode::OtherError),
+            (11035, DeribitErrorCode::NoMoreTriggers),
+            (11036, DeribitErrorCode::InvalidTriggerPrice),
+            (11037, DeribitErrorCode::OutdatedInstrumentForIvOrder),
+            (11038, DeribitErrorCode::NoAdvForFutures),
+            (11039, DeribitErrorCode::NoAdvPostonly),
+            (11041, DeribitErrorCode::NotAdvOrder),
+            (11042, DeribitErrorCode::PermissionDenied),
+            (11043, DeribitErrorCode::BadArgument),
+            (11044, DeribitErrorCode::NotOpenOrder),
+            (11045, DeribitErrorCode::InvalidEvent),
+            (11046, DeribitErrorCode::OutdatedInstrument),
+            (11047, DeribitErrorCode::UnsupportedArgCombination),
+            (11048, DeribitErrorCode::WrongMaxShowForOption),
+            (11049, DeribitErrorCode::BadArguments),
+            (11050, DeribitErrorCode::BadRequest),
+            (11051, DeribitErrorCode::SystemMaintenance),
+            (11052, DeribitErrorCode::SubscribeErrorUnsubscribed),
+            (11053, DeribitErrorCode::TransferNotFound),
+            (11054, DeribitErrorCode::PostOnlyReject),
+            (11055, DeribitErrorCode::PostOnlyNotAllowed),
+            (
+                11056,
+                DeribitErrorCode::UnauthenticatedPublicRequestsTemporarilyDisabled,
+            ),
+            (11090, DeribitErrorCode::InvalidAddr),
+            (11091, DeribitErrorCode::InvalidTransferAddress),
+            (11092, DeribitErrorCode::AddressAlreadyExist),
+            (11093, DeribitErrorCode::MaxAddrCountExceeded),
+            (11094, DeribitErrorCode::InternalServerError),
+            (11095, DeribitErrorCode::DisabledDepositAddressCreation),
+            (11096, DeribitErrorCode::AddressBelongsToUser),
+            (11097, DeribitErrorCode::NoDepositAddress),
+            (11098, DeribitErrorCode::AccountLocked),
+            (12001, DeribitErrorCode::TooManySubaccounts),
+            (12002, DeribitErrorCode::WrongSubaccountName),
+            (12003, DeribitErrorCode::LoginOverLimit),
+            (12004, DeribitErrorCode::RegistrationOverLimit),
+            (12005, DeribitErrorCode::CountryIsBanned),
+            (12100, DeribitErrorCode::TransferNotAllowed),
+            (12998, DeribitErrorCode::SecurityKeyAuthorizationOverLimit),
+            (13004, DeribitErrorCode::InvalidCredentials),
+            (13005, DeribitErrorCode::PwdMatchError),
+            (13006, DeribitErrorCode::SecurityError),
+            (13007, DeribitErrorCode::UserNotFound),
+            (13008, DeribitErrorCode::RequestFailed),
+            (13009, DeribitErrorCode::Unauthorized),
+            (13010, DeribitErrorCode::ValueRequired),
+            (13011, DeribitErrorCode::ValueTooShort),
+            (13012, DeribitErrorCode::UnavailableInSubaccount),
+            (13013, DeribitErrorCode::InvalidPhoneNumber),
+            (13014, DeribitErrorCode::CannotSendSms),
+            (13015, DeribitErrorCode::InvalidSmsCode),
+            (13016, DeribitErrorCode::InvalidInput),
+            (13018, DeribitErrorCode::InvalidContentType),
+            (13019, DeribitErrorCode::OrderbookClosed),
+            (13020, DeribitErrorCode::NotFound),
+            (13021, DeribitErrorCode::Forbidden),
+            (13025, DeribitErrorCode::MethodSwitchedOffByAdmin),
+            (13028, DeribitErrorCode::TemporarilyUnavailable),
+            (13030, DeribitErrorCode::MmpTrigger),
+            (13031, DeribitErrorCode::VerificationRequired),
+            (13032, DeribitErrorCode::NonUniqueOrderLabel),
+            (13034, DeribitErrorCode::NoMoreSecurityKeysAllowed),
+            (13035, DeribitErrorCode::ActiveComboLimitReached),
+            (13036, DeribitErrorCode::UnavailableForComboBooks),
+            (13037, DeribitErrorCode::IncompleteKycData),
+            (13040, DeribitErrorCode::MmpRequired),
+            (13042, DeribitErrorCode::CodNotEnabled),
+            (13043, DeribitErrorCode::QuotesFrozen),
+            (13403, DeribitErrorCode::ScopeExceeded),
+            (13503, DeribitErrorCode::Unavailable),
+            (13666, DeribitErrorCode::RequestCancelledByUser),
+            (13777, DeribitErrorCode::Replaced),
+            (
+                13778,
+                DeribitErrorCode::RawSubscriptionsNotAvailableForUnauthorized,
+            ),
+            (13780, DeribitErrorCode::MovePositionsOverLimit),
+            (13781, DeribitErrorCode::CouponAlreadyUsed),
+            (13791, DeribitErrorCode::KycTransferAlreadyInitiated),
+        ];
+
+        for (code, expected_error) in test_cases {
+            // Test conversion from i32 to DeribitErrorCode
+            let error = DeribitErrorCode::from(code);
+            assert_eq!(error, expected_error, "Failed for code {}", code);
+
+            // Test conversion from DeribitErrorCode to i32
+            assert_eq!(
+                error.code(),
+                code,
+                "Failed reverse conversion for {:?}",
+                expected_error
+            );
+        }
+    }
+
+    #[test]
+    fn test_all_error_messages() {
+        // Test that all error codes have proper messages
+        let error_codes = vec![
+            DeribitErrorCode::Success,
+            DeribitErrorCode::AuthorizationRequired,
+            DeribitErrorCode::Error,
+            DeribitErrorCode::QtyTooLow,
+            DeribitErrorCode::OrderOverlap,
+            DeribitErrorCode::OrderNotFound,
+            DeribitErrorCode::PriceTooLow,
+            DeribitErrorCode::PriceTooLow4Idx,
+            DeribitErrorCode::PriceTooHigh,
+            DeribitErrorCode::NotEnoughFunds,
+            DeribitErrorCode::AlreadyClosed,
+            DeribitErrorCode::PriceNotAllowed,
+            DeribitErrorCode::BookClosed,
+            DeribitErrorCode::PmeMaxTotalOpenOrders,
+            DeribitErrorCode::PmeMaxFutureOpenOrders,
+            DeribitErrorCode::PmeMaxOptionOpenOrders,
+            DeribitErrorCode::PmeMaxFutureOpenOrdersSize,
+            DeribitErrorCode::PmeMaxOptionOpenOrdersSize,
+            DeribitErrorCode::NonPmeMaxFuturePositionSize,
+            DeribitErrorCode::LockedByAdmin,
+            DeribitErrorCode::InvalidOrUnsupportedInstrument,
+            DeribitErrorCode::InvalidAmount,
+            DeribitErrorCode::InvalidQuantity,
+            DeribitErrorCode::InvalidPrice,
+            DeribitErrorCode::InvalidMaxShow,
+            DeribitErrorCode::InvalidOrderId,
+            DeribitErrorCode::PricePrecisionExceeded,
+            DeribitErrorCode::NonIntegerContractAmount,
+            DeribitErrorCode::TooManyRequests,
+            DeribitErrorCode::NotOwnerOfOrder,
+            DeribitErrorCode::MustBeWebsocketRequest,
+            DeribitErrorCode::InvalidArgsForInstrument,
+            DeribitErrorCode::WholeCostTooLow,
+            DeribitErrorCode::NotImplemented,
+            DeribitErrorCode::TriggerPriceTooHigh,
+            DeribitErrorCode::TriggerPriceTooLow,
+            DeribitErrorCode::InvalidMaxShowAmount,
+            DeribitErrorCode::NonPmeTotalShortOptionsPositionsSize,
+            DeribitErrorCode::PmeMaxRiskReducingOrders,
+            DeribitErrorCode::NotEnoughFundsInCurrency,
+            DeribitErrorCode::Retry,
+            DeribitErrorCode::SettlementInProgress,
+            DeribitErrorCode::PriceWrongTick,
+            DeribitErrorCode::TriggerPriceWrongTick,
+            DeribitErrorCode::CanNotCancelLiquidationOrder,
+            DeribitErrorCode::CanNotEditLiquidationOrder,
+            DeribitErrorCode::MatchingEngineQueueFull,
+            DeribitErrorCode::NotOnThisServer,
+            DeribitErrorCode::CancelOnDisconnectFailed,
+            DeribitErrorCode::TooManyConcurrentRequests,
+            DeribitErrorCode::DisabledWhilePositionLock,
+            DeribitErrorCode::AlreadyFilled,
+            DeribitErrorCode::MaxSpotOpenOrders,
+            DeribitErrorCode::PostOnlyPriceModificationNotPossible,
+            DeribitErrorCode::MaxSpotOrderQuantity,
+            DeribitErrorCode::InvalidArguments,
+            DeribitErrorCode::OtherReject,
+            DeribitErrorCode::OtherError,
+            DeribitErrorCode::NoMoreTriggers,
+            DeribitErrorCode::InvalidTriggerPrice,
+            DeribitErrorCode::OutdatedInstrumentForIvOrder,
+            DeribitErrorCode::NoAdvForFutures,
+            DeribitErrorCode::NoAdvPostonly,
+            DeribitErrorCode::NotAdvOrder,
+            DeribitErrorCode::PermissionDenied,
+            DeribitErrorCode::BadArgument,
+            DeribitErrorCode::NotOpenOrder,
+            DeribitErrorCode::InvalidEvent,
+            DeribitErrorCode::OutdatedInstrument,
+            DeribitErrorCode::UnsupportedArgCombination,
+            DeribitErrorCode::WrongMaxShowForOption,
+            DeribitErrorCode::BadArguments,
+            DeribitErrorCode::BadRequest,
+            DeribitErrorCode::SystemMaintenance,
+            DeribitErrorCode::SubscribeErrorUnsubscribed,
+            DeribitErrorCode::TransferNotFound,
+            DeribitErrorCode::PostOnlyReject,
+            DeribitErrorCode::PostOnlyNotAllowed,
+            DeribitErrorCode::UnauthenticatedPublicRequestsTemporarilyDisabled,
+            DeribitErrorCode::InvalidAddr,
+            DeribitErrorCode::InvalidTransferAddress,
+            DeribitErrorCode::AddressAlreadyExist,
+            DeribitErrorCode::MaxAddrCountExceeded,
+            DeribitErrorCode::InternalServerError,
+            DeribitErrorCode::DisabledDepositAddressCreation,
+            DeribitErrorCode::AddressBelongsToUser,
+            DeribitErrorCode::NoDepositAddress,
+            DeribitErrorCode::AccountLocked,
+            DeribitErrorCode::TooManySubaccounts,
+            DeribitErrorCode::WrongSubaccountName,
+            DeribitErrorCode::LoginOverLimit,
+            DeribitErrorCode::RegistrationOverLimit,
+            DeribitErrorCode::CountryIsBanned,
+            DeribitErrorCode::TransferNotAllowed,
+            DeribitErrorCode::SecurityKeyAuthorizationOverLimit,
+            DeribitErrorCode::InvalidCredentials,
+            DeribitErrorCode::PwdMatchError,
+            DeribitErrorCode::SecurityError,
+            DeribitErrorCode::UserNotFound,
+            DeribitErrorCode::RequestFailed,
+            DeribitErrorCode::Unauthorized,
+            DeribitErrorCode::ValueRequired,
+            DeribitErrorCode::ValueTooShort,
+            DeribitErrorCode::UnavailableInSubaccount,
+            DeribitErrorCode::InvalidPhoneNumber,
+            DeribitErrorCode::CannotSendSms,
+            DeribitErrorCode::InvalidSmsCode,
+            DeribitErrorCode::InvalidInput,
+            DeribitErrorCode::InvalidContentType,
+            DeribitErrorCode::OrderbookClosed,
+            DeribitErrorCode::NotFound,
+            DeribitErrorCode::Forbidden,
+            DeribitErrorCode::MethodSwitchedOffByAdmin,
+            DeribitErrorCode::TemporarilyUnavailable,
+            DeribitErrorCode::MmpTrigger,
+            DeribitErrorCode::VerificationRequired,
+            DeribitErrorCode::NonUniqueOrderLabel,
+            DeribitErrorCode::NoMoreSecurityKeysAllowed,
+            DeribitErrorCode::ActiveComboLimitReached,
+            DeribitErrorCode::UnavailableForComboBooks,
+            DeribitErrorCode::IncompleteKycData,
+            DeribitErrorCode::MmpRequired,
+            DeribitErrorCode::CodNotEnabled,
+            DeribitErrorCode::QuotesFrozen,
+            DeribitErrorCode::ScopeExceeded,
+            DeribitErrorCode::Unavailable,
+            DeribitErrorCode::RequestCancelledByUser,
+            DeribitErrorCode::Replaced,
+            DeribitErrorCode::RawSubscriptionsNotAvailableForUnauthorized,
+            DeribitErrorCode::MovePositionsOverLimit,
+            DeribitErrorCode::CouponAlreadyUsed,
+            DeribitErrorCode::KycTransferAlreadyInitiated,
+            DeribitErrorCode::Unknown(12345),
+        ];
+
+        for error_code in error_codes {
+            let message = error_code.message();
+            assert!(
+                !message.is_empty(),
+                "Message should not be empty for {:?}",
+                error_code
+            );
+            assert!(
+                !message.is_empty(),
+                "Message should have content for {:?}",
+                error_code
+            );
+        }
+    }
+
+    #[test]
+    fn test_comprehensive_error_categorization() {
+        // Test authorization errors
+        let auth_errors = vec![
+            DeribitErrorCode::AuthorizationRequired,
+            DeribitErrorCode::Unauthorized,
+        ];
+        for error in auth_errors {
+            assert!(
+                error.is_authorization_error(),
+                "{:?} should be authorization error",
+                error
+            );
+            assert!(!error.is_success(), "{:?} should not be success", error);
+            assert!(
+                !error.is_rate_limit_error(),
+                "{:?} should not be rate limit error",
+                error
+            );
+            assert!(
+                !error.is_validation_error(),
+                "{:?} should not be validation error",
+                error
+            );
+            assert!(
+                !error.is_trading_error(),
+                "{:?} should not be trading error",
+                error
+            );
+        }
+
+        // Test rate limit errors
+        let rate_limit_errors = vec![
+            DeribitErrorCode::TooManyRequests,
+            DeribitErrorCode::TooManyConcurrentRequests,
+        ];
+        for error in rate_limit_errors {
+            assert!(
+                error.is_rate_limit_error(),
+                "{:?} should be rate limit error",
+                error
+            );
+            assert!(!error.is_success(), "{:?} should not be success", error);
+            assert!(
+                !error.is_authorization_error(),
+                "{:?} should not be authorization error",
+                error
+            );
+            assert!(
+                !error.is_validation_error(),
+                "{:?} should not be validation error",
+                error
+            );
+            assert!(
+                !error.is_trading_error(),
+                "{:?} should not be trading error",
+                error
+            );
+        }
+
+        // Test validation errors
+        let validation_errors = vec![
+            DeribitErrorCode::InvalidAmount,
+            DeribitErrorCode::InvalidPrice,
+            DeribitErrorCode::InvalidQuantity,
+            DeribitErrorCode::InvalidOrderId,
+            DeribitErrorCode::InvalidArguments,
+            DeribitErrorCode::BadArgument,
+            DeribitErrorCode::BadArguments,
+            DeribitErrorCode::InvalidInput,
+        ];
+        for error in validation_errors {
+            assert!(
+                error.is_validation_error(),
+                "{:?} should be validation error",
+                error
+            );
+            assert!(!error.is_success(), "{:?} should not be success", error);
+            assert!(
+                !error.is_authorization_error(),
+                "{:?} should not be authorization error",
+                error
+            );
+            assert!(
+                !error.is_rate_limit_error(),
+                "{:?} should not be rate limit error",
+                error
+            );
+            assert!(
+                !error.is_trading_error(),
+                "{:?} should not be trading error",
+                error
+            );
+        }
+
+        // Test trading errors
+        let trading_errors = vec![
+            DeribitErrorCode::QtyTooLow,
+            DeribitErrorCode::OrderOverlap,
+            DeribitErrorCode::OrderNotFound,
+            DeribitErrorCode::PriceTooLow,
+            DeribitErrorCode::PriceTooHigh,
+            DeribitErrorCode::NotEnoughFunds,
+            DeribitErrorCode::AlreadyClosed,
+            DeribitErrorCode::PriceNotAllowed,
+            DeribitErrorCode::BookClosed,
+        ];
+        for error in trading_errors {
+            assert!(
+                error.is_trading_error(),
+                "{:?} should be trading error",
+                error
+            );
+            assert!(!error.is_success(), "{:?} should not be success", error);
+            assert!(
+                !error.is_authorization_error(),
+                "{:?} should not be authorization error",
+                error
+            );
+            assert!(
+                !error.is_rate_limit_error(),
+                "{:?} should not be rate limit error",
+                error
+            );
+            assert!(
+                !error.is_validation_error(),
+                "{:?} should not be validation error",
+                error
+            );
+        }
+
+        // Test success
+        let success = DeribitErrorCode::Success;
+        assert!(success.is_success(), "Success should be success");
+        assert!(
+            !success.is_authorization_error(),
+            "Success should not be authorization error"
+        );
+        assert!(
+            !success.is_rate_limit_error(),
+            "Success should not be rate limit error"
+        );
+        assert!(
+            !success.is_validation_error(),
+            "Success should not be validation error"
+        );
+        assert!(
+            !success.is_trading_error(),
+            "Success should not be trading error"
+        );
+    }
+
+    #[test]
+    fn test_error_trait_implementation() {
+        let error = DeribitErrorCode::AuthorizationRequired;
+        let error_trait: &dyn std::error::Error = &error;
+        assert!(error_trait.source().is_none());
+    }
+
+    #[test]
+    fn test_clone_and_equality() {
+        let error1 = DeribitErrorCode::AuthorizationRequired;
+        let error2 = error1.clone();
+        assert_eq!(error1, error2);
+
+        let error3 = DeribitErrorCode::Error;
+        assert_ne!(error1, error3);
+
+        let unknown1 = DeribitErrorCode::Unknown(12345);
+        let unknown2 = DeribitErrorCode::Unknown(12345);
+        let unknown3 = DeribitErrorCode::Unknown(54321);
+        assert_eq!(unknown1, unknown2);
+        assert_ne!(unknown1, unknown3);
+    }
+
+    #[test]
+    fn test_hash_implementation() {
+        use std::collections::HashSet;
+
+        let mut error_set = HashSet::new();
+        error_set.insert(DeribitErrorCode::AuthorizationRequired);
+        error_set.insert(DeribitErrorCode::Error);
+        error_set.insert(DeribitErrorCode::AuthorizationRequired); // Duplicate
+
+        assert_eq!(error_set.len(), 2); // Should only contain 2 unique errors
+        assert!(error_set.contains(&DeribitErrorCode::AuthorizationRequired));
+        assert!(error_set.contains(&DeribitErrorCode::Error));
+        assert!(!error_set.contains(&DeribitErrorCode::Success));
+    }
+
+    #[test]
+    fn test_display_and_debug_implementations() {
+        let error = DeribitErrorCode::AuthorizationRequired;
+        let display_str = format!("{}", error);
+        let debug_str = format!("{:?}", error);
+
+        // Both should contain some representation of the error
+        assert!(!display_str.is_empty());
+        assert!(!debug_str.is_empty());
+
+        // Test unknown error
+        let unknown_error = DeribitErrorCode::Unknown(99999);
+        let unknown_display = format!("{}", unknown_error);
+        let unknown_debug = format!("{:?}", unknown_error);
+
+        assert!(!unknown_display.is_empty());
+        assert!(!unknown_debug.is_empty());
     }
 }

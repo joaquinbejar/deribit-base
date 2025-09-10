@@ -58,7 +58,10 @@ mod tests {
     #[test]
     fn test_deribit_error_authentication() {
         let error = DeribitError::Authentication("Invalid credentials".to_string());
-        assert_eq!(error.to_string(), "Authentication error: Invalid credentials");
+        assert_eq!(
+            error.to_string(),
+            "Authentication error: Invalid credentials"
+        );
     }
 
     #[test]
@@ -116,10 +119,12 @@ mod tests {
     fn test_deribit_result_type() {
         let success: DeribitResult<i32> = Ok(42);
         let failure: DeribitResult<i32> = Err(DeribitError::Timeout);
-        
+
         assert!(success.is_ok());
         assert!(failure.is_err());
-        assert_eq!(success.unwrap(), 42);
+        if let Ok(value) = success {
+            assert_eq!(value, 42);
+        }
     }
 
     #[test]

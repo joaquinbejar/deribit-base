@@ -6,9 +6,8 @@
 use pretty_simple_display::{DebugPretty, DisplaySimple};
 use serde::{Deserialize, Serialize};
 
-
 /// Account summary information
-#[derive(DebugPretty, DisplaySimple,Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct AccountSummary {
     /// Account currency (kept as Currencies enum for compatibility)
     pub currency: String,
@@ -117,7 +116,7 @@ impl AccountSummary {
 }
 
 /// Subaccount information
-#[derive(DebugPretty, DisplaySimple,Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct Subaccount {
     /// Subaccount email
     pub email: String,
@@ -141,7 +140,7 @@ pub struct Subaccount {
 }
 
 /// Portfolio information
-#[derive(DebugPretty, DisplaySimple,Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct PortfolioInfo {
     /// Available funds
     pub available_funds: f64,
@@ -170,7 +169,7 @@ pub struct PortfolioInfo {
 }
 
 /// Portfolio information
-#[derive(DebugPretty, DisplaySimple,Clone, Serialize, Deserialize)]
+#[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
 pub struct Portfolio {
     /// Currency of the portfolio
     pub currency: String,
@@ -328,11 +327,11 @@ mod tests {
         let mut portfolio = Portfolio::new("USD".to_string());
         let account = create_test_account_summary();
         portfolio.add_account(account);
-        
+
         let found = portfolio.get_account(&"BTC".to_string());
         assert!(found.is_some());
         assert_eq!(found.unwrap().currency, "BTC");
-        
+
         let not_found = portfolio.get_account(&"ETH".to_string());
         assert!(not_found.is_none());
     }
@@ -344,10 +343,10 @@ mod tests {
         account1.equity = 1.0;
         let mut account2 = create_test_account_summary();
         account2.equity = 2.0;
-        
+
         portfolio.add_account(account1);
         portfolio.add_account(account2);
-        
+
         assert_eq!(portfolio.total_equity(), 3.0);
     }
 
@@ -358,10 +357,10 @@ mod tests {
         account1.unrealized_pnl = 0.1;
         let mut account2 = create_test_account_summary();
         account2.unrealized_pnl = -0.2;
-        
+
         portfolio.add_account(account1);
         portfolio.add_account(account2);
-        
+
         assert_eq!(portfolio.total_unrealized_pnl(), -0.1);
     }
 
@@ -372,10 +371,10 @@ mod tests {
         account1.realized_pnl = 0.05;
         let mut account2 = create_test_account_summary();
         account2.realized_pnl = 0.03;
-        
+
         portfolio.add_account(account1);
         portfolio.add_account(account2);
-        
+
         assert_eq!(portfolio.total_realized_pnl(), 0.08);
     }
 
@@ -409,7 +408,7 @@ mod tests {
             subaccount_type: "subaccount".to_string(),
             username: "testuser".to_string(),
         };
-        
+
         assert_eq!(subaccount.email, "test@example.com");
         assert_eq!(subaccount.id, 12345);
         assert!(subaccount.login_enabled);
@@ -431,7 +430,7 @@ mod tests {
             session_upl: -5.0,
             total_pl: 5.0,
         };
-        
+
         assert_eq!(portfolio_info.currency, "BTC");
         assert_eq!(portfolio_info.balance, 1100.0);
     }
@@ -441,7 +440,7 @@ mod tests {
         let account = create_test_account_summary();
         let debug_str = format!("{:?}", account);
         let display_str = format!("{}", account);
-        
+
         assert!(debug_str.contains("BTC"));
         assert!(display_str.contains("BTC"));
     }
