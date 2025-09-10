@@ -92,7 +92,7 @@ pub struct BasicOptionData {
 
 #[allow(dead_code)]
 impl OptionInstrumentPair {
-    fn expiration(&self) -> Option<DateTime<Utc>> {
+    pub fn expiration(&self) -> Option<DateTime<Utc>> {
         let expiration_timestamp = match self.instrument() {
             Some(i) => i.expiration_timestamp,
             None => return None,
@@ -104,20 +104,19 @@ impl OptionInstrumentPair {
             None
         }
     }
-    fn instrument(&self) -> Option<Instrument> {
+    pub fn instrument(&self) -> Option<Instrument> {
         self.call
             .as_ref()
             .map(|i| i.instrument.clone())
             .or_else(|| self.put.as_ref().map(|i| i.instrument.clone()))
     }
-    fn ticker(&self) -> Option<TickerData> {
+    pub fn ticker(&self) -> Option<TickerData> {
         self.call
             .as_ref()
             .map(|i| i.ticker.clone())
             .or_else(|| self.put.as_ref().map(|i| i.ticker.clone()))
     }
-
-    fn volume(&self) -> f64 {
+    pub fn volume(&self) -> f64 {
         let mut volume: f64 = 0.0;
         if let Some(call) = &self.call {
             volume += call.ticker.stats.volume
@@ -127,8 +126,7 @@ impl OptionInstrumentPair {
         }
         volume
     }
-
-    fn open_interest(&self) -> f64 {
+    pub fn open_interest(&self) -> f64 {
         let mut open_interest: f64 = 0.0;
         if let Some(call) = &self.call {
             open_interest += call.ticker.open_interest.unwrap_or(0.0)
@@ -139,7 +137,7 @@ impl OptionInstrumentPair {
         open_interest
     }
 
-    fn interest_rate(&self) -> f64 {
+    pub fn interest_rate(&self) -> f64 {
         let mut interest_rate: f64 = 0.0;
         if let Some(call) = &self.call {
             interest_rate += call.ticker.interest_rate.unwrap_or(0.0)
@@ -150,11 +148,11 @@ impl OptionInstrumentPair {
         interest_rate
     }
 
-    fn value(&self) -> Option<Value> {
+    pub fn value(&self) -> Option<Value> {
         serde_json::to_value(self).ok()
     }
 
-    fn call_spread(&self) -> Spread {
+    pub fn call_spread(&self) -> Spread {
         if let Some(call) = &self.call {
             let bid = call.ticker.best_bid_price;
             let ask = call.ticker.best_ask_price;
@@ -174,7 +172,7 @@ impl OptionInstrumentPair {
         }
     }
 
-    fn put_spread(&self) -> Spread {
+    pub fn put_spread(&self) -> Spread {
         if let Some(put) = &self.put {
             let bid = put.ticker.best_bid_price;
             let ask = put.ticker.best_ask_price;
@@ -194,13 +192,13 @@ impl OptionInstrumentPair {
         }
     }
 
-    fn iv(&self) -> (Option<f64>, Option<f64>) {
+    pub fn iv(&self) -> (Option<f64>, Option<f64>) {
         let call_iv = self.call.as_ref().and_then(|c| c.ticker.mark_iv);
         let put_iv = self.put.as_ref().and_then(|p| p.ticker.mark_iv);
         (call_iv, put_iv)
     }
 
-    fn greeks(&self) -> BasicGreeks {
+    pub fn greeks(&self) -> BasicGreeks {
         let delta_call = self
             .call
             .as_ref()
@@ -225,7 +223,7 @@ impl OptionInstrumentPair {
         }
     }
 
-    fn data(&self) -> BasicOptionData {
+    pub fn data(&self) -> BasicOptionData {
         let strike_price: f64 = match self.instrument() {
             Some(i) => i.strike.unwrap_or(0.0),
             None => 0.0,
