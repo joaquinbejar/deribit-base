@@ -301,6 +301,22 @@ pub enum TriggerType {
     LastPrice,
 }
 
+#[derive(DebugPretty, DisplaySimple, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum LinkedOrderType {
+    OneTriggersOther,
+    OneCancelsOther,
+    OneTriggersOneCancelsOther,
+}
+
+#[derive(DebugPretty, DisplaySimple, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum TriggerFillCondition {
+    FirstHit,
+    CompleteFill,
+    Incremental,
+}
+
 /// Advanced order type
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]

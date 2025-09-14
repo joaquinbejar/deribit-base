@@ -7,6 +7,8 @@ use crate::model::order::{OrderSide, OrderType, TimeInForce};
 use pretty_simple_display::{DebugPretty, DisplaySimple};
 
 use serde::{Deserialize, Serialize};
+use crate::model::request::{LinkedOrderType, TriggerFillCondition};
+use crate::prelude::{AdvancedOrderType, TriggerType};
 
 /// Buy order request
 #[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
@@ -14,19 +16,32 @@ pub struct BuyOrderRequest {
     /// Name of the instrument to trade
     pub instrument_name: String,
     /// Amount/quantity to buy
-    pub amount: f64,
-    /// Order price (required for limit orders)
-    pub price: Option<f64>,
-    /// User-defined label for the order
-    pub label: Option<String>,
-    /// Time in force specification
-    pub time_in_force: Option<TimeInForce>,
-    /// Whether this order only reduces position
-    pub reduce_only: Option<bool>,
-    /// Whether this is a post-only order
-    pub post_only: Option<bool>,
+    pub amount: Option<f64>,
+    pub contracts: Option<f64>,
     /// Type of order to place
     pub type_: Option<OrderType>,
+    /// User-defined label for the order
+    pub label: Option<String>,
+    /// Order price (required for limit orders)
+    pub price: Option<f64>,
+    /// Time in force specification
+    pub time_in_force: Option<TimeInForce>,
+    pub display_amount: Option<f64>,
+    /// Whether this is a post-only order
+    pub post_only: Option<bool>,
+    pub reject_post_only: Option<bool>,
+    /// Whether this order only reduces position
+    pub reduce_only: Option<bool>,
+    pub trigger_price: Option<f64>,
+    pub trigger_offset: Option<f64>,
+    pub trigger: Option<TriggerType>,
+    pub advanced: Option<AdvancedOrderType>,
+    pub mmp: Option<bool>,
+    pub valid_until: Option<i64>,
+    pub linked_order_type: Option<LinkedOrderType>,
+    pub trigger_fill_condition: Option<TriggerFillCondition>,
+    pub otoco_config: Option<Vec<String>>,
+
 }
 
 /// Sell order request
