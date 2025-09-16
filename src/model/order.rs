@@ -39,9 +39,21 @@ impl TimeInForce {
 #[derive(DebugPretty, DisplaySimple, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum OrderSide {
     /// Buy order
+    #[serde(rename = "buy")]
     Buy,
     /// Sell order
+    #[serde(rename = "sell")]
     Sell,
+}
+
+impl OrderSide {
+    /// Returns the string representation of the order side
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            OrderSide::Buy => "buy",
+            OrderSide::Sell => "sell",
+        }
+    }
 }
 
 /// Order type enum
@@ -233,8 +245,8 @@ mod tests {
         let buy_json = serde_json::to_string(&buy_side).unwrap();
         let sell_json = serde_json::to_string(&sell_side).unwrap();
 
-        assert_eq!(buy_json, "\"Buy\"");
-        assert_eq!(sell_json, "\"Sell\"");
+        assert_eq!(buy_json, "\"buy\"");
+        assert_eq!(sell_json, "\"sell\"");
 
         let buy_deserialized: OrderSide = serde_json::from_str(&buy_json).unwrap();
         let sell_deserialized: OrderSide = serde_json::from_str(&sell_json).unwrap();
