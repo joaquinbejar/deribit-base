@@ -16,7 +16,7 @@
 use crate::model::order::{OrderSide, OrderType, TimeInForce};
 use base64::prelude::*;
 use chrono::{DateTime, Utc};
-use rand::{Rng, rng};
+use rand::{RngExt, rng};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 /// Generates a random nonce string of the specified length.
