@@ -17,6 +17,7 @@ pub struct BuyOrderRequest {
     pub instrument_name: String,
     /// Amount/quantity to buy
     pub amount: Option<f64>,
+    /// Number of contracts to buy
     pub contracts: Option<f64>,
     /// Type of order to place
     pub type_: Option<OrderType>,
@@ -26,20 +27,31 @@ pub struct BuyOrderRequest {
     pub price: Option<f64>,
     /// Time in force specification
     pub time_in_force: Option<TimeInForce>,
+    /// Amount to display in the order book (iceberg orders)
     pub display_amount: Option<f64>,
     /// Whether this is a post-only order
     pub post_only: Option<bool>,
+    /// If true, reject order if it would be a taker
     pub reject_post_only: Option<bool>,
     /// Whether this order only reduces position
     pub reduce_only: Option<bool>,
+    /// Trigger price for stop/take orders
     pub trigger_price: Option<f64>,
+    /// Trigger offset from mark price
     pub trigger_offset: Option<f64>,
+    /// Trigger type (index_price, mark_price, last_price)
     pub trigger: Option<TriggerType>,
+    /// Advanced order type (usd, implv)
     pub advanced: Option<AdvancedOrderType>,
+    /// Market maker protection flag
     pub mmp: Option<bool>,
+    /// Order validity timestamp in milliseconds
     pub valid_until: Option<i64>,
+    /// Type of linked order (OTO, OCO, OTOCO)
     pub linked_order_type: Option<LinkedOrderType>,
+    /// Trigger fill condition for linked orders
     pub trigger_fill_condition: Option<TriggerFillCondition>,
+    /// OTOCO configuration for linked orders
     pub otoco_config: Option<Vec<String>>,
 }
 

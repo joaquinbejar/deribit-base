@@ -301,19 +301,27 @@ pub enum TriggerType {
     LastPrice,
 }
 
+/// Linked order type for conditional order execution
 #[derive(DebugPretty, DisplaySimple, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum LinkedOrderType {
+    /// One order triggers another (OTO)
     OneTriggersOther,
+    /// One order cancels another (OCO)
     OneCancelsOther,
+    /// One order triggers one and cancels another (OTOCO)
     OneTriggersOneCancelsOther,
 }
 
+/// Trigger fill condition for linked orders
 #[derive(DebugPretty, DisplaySimple, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum TriggerFillCondition {
+    /// Trigger on first partial fill
     FirstHit,
+    /// Trigger only when completely filled
     CompleteFill,
+    /// Trigger incrementally as fills occur
     Incremental,
 }
 

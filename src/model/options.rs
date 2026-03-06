@@ -92,6 +92,10 @@ pub struct BasicOptionData {
 
 #[allow(dead_code)]
 impl OptionInstrumentPair {
+    /// Returns the expiration date/time of the option instrument.
+    ///
+    /// Extracts the expiration timestamp from the call or put instrument
+    /// and converts it to a UTC datetime.
     pub fn expiration(&self) -> Option<DateTime<Utc>> {
         let expiration_timestamp = match self.instrument() {
             Some(i) => i.expiration_timestamp,
@@ -104,18 +108,28 @@ impl OptionInstrumentPair {
             None
         }
     }
+
+    /// Returns the first available instrument from call or put option.
+    ///
+    /// Prefers the call instrument if available, otherwise returns the put.
     pub fn instrument(&self) -> Option<Instrument> {
         self.call
             .as_ref()
             .map(|i| i.instrument.clone())
             .or_else(|| self.put.as_ref().map(|i| i.instrument.clone()))
     }
+
+    /// Returns the first available ticker data from call or put option.
+    ///
+    /// Prefers the call ticker if available, otherwise returns the put.
     pub fn ticker(&self) -> Option<TickerData> {
         self.call
             .as_ref()
             .map(|i| i.ticker.clone())
             .or_else(|| self.put.as_ref().map(|i| i.ticker.clone()))
     }
+
+    /// Calculates total trading volume across both call and put options.
     pub fn volume(&self) -> f64 {
         let mut volume: f64 = 0.0;
         if let Some(call) = &self.call {
@@ -126,6 +140,8 @@ impl OptionInstrumentPair {
         }
         volume
     }
+
+    /// Calculates total open interest across both call and put options.
     pub fn open_interest(&self) -> f64 {
         let mut open_interest: f64 = 0.0;
         if let Some(call) = &self.call {
@@ -137,6 +153,7 @@ impl OptionInstrumentPair {
         open_interest
     }
 
+    /// Calculates total interest rate across both call and put options.
     pub fn interest_rate(&self) -> f64 {
         let mut interest_rate: f64 = 0.0;
         if let Some(call) = &self.call {
@@ -148,10 +165,14 @@ impl OptionInstrumentPair {
         interest_rate
     }
 
+    /// Serializes the option pair to a JSON value.
     pub fn value(&self) -> Option<Value> {
         serde_json::to_value(self).ok()
     }
 
+    /// Calculates bid-ask spread for the call option.
+    ///
+    /// Returns bid, ask, and mid prices. Mid is the average of bid and ask.
     pub fn call_spread(&self) -> Spread {
         if let Some(call) = &self.call {
             let bid = call.ticker.best_bid_price;
@@ -172,6 +193,9 @@ impl OptionInstrumentPair {
         }
     }
 
+    /// Calculates bid-ask spread for the put option.
+    ///
+    /// Returns bid, ask, and mid prices. Mid is the average of bid and ask.
     pub fn put_spread(&self) -> Spread {
         if let Some(put) = &self.put {
             let bid = put.ticker.best_bid_price;
@@ -192,12 +216,16 @@ impl OptionInstrumentPair {
         }
     }
 
+    /// Returns implied volatility for both call and put options.
+    ///
+    /// Returns a tuple of (call_iv, put_iv).
     pub fn iv(&self) -> (Option<f64>, Option<f64>) {
         let call_iv = self.call.as_ref().and_then(|c| c.ticker.mark_iv);
         let put_iv = self.put.as_ref().and_then(|p| p.ticker.mark_iv);
         (call_iv, put_iv)
     }
 
+    /// Calculates basic Greeks (delta, gamma) for both call and put options.
     pub fn greeks(&self) -> BasicGreeks {
         let delta_call = self
             .call
@@ -223,6 +251,9 @@ impl OptionInstrumentPair {
         }
     }
 
+    /// Extracts and consolidates all option data into a structured format.
+    ///
+    /// Includes strike price, spreads, implied volatility, and Greeks.
     pub fn data(&self) -> BasicOptionData {
         let strike_price: f64 = match self.instrument() {
             Some(i) => i.strike.unwrap_or(0.0),
