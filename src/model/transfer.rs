@@ -9,8 +9,10 @@ use serde::{Deserialize, Serialize};
 /// Transfer state enumeration
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
+#[derive(Default)]
 pub enum TransferState {
     /// Transfer is prepared but not yet confirmed
+    #[default]
     Prepared,
     /// Transfer has been confirmed
     Confirmed,
@@ -24,28 +26,18 @@ pub enum TransferState {
     WithdrawalLimit,
 }
 
-impl Default for TransferState {
-    fn default() -> Self {
-        Self::Prepared
-    }
-}
-
 /// Address type enumeration
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
+#[derive(Default)]
 pub enum AddressType {
     /// Deposit address
+    #[default]
     Deposit,
     /// Withdrawal address
     Withdrawal,
     /// Transfer address
     Transfer,
-}
-
-impl Default for AddressType {
-    fn default() -> Self {
-        Self::Deposit
-    }
 }
 
 /// Transfer information

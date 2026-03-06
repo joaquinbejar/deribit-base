@@ -6,9 +6,9 @@
 use crate::model::order::{OrderSide, OrderType, TimeInForce};
 use pretty_simple_display::{DebugPretty, DisplaySimple};
 
-use serde::{Deserialize, Serialize};
 use crate::model::request::{LinkedOrderType, TriggerFillCondition};
 use crate::prelude::{AdvancedOrderType, TriggerType};
+use serde::{Deserialize, Serialize};
 
 /// Buy order request
 #[derive(DebugPretty, DisplaySimple, Clone, Serialize, Deserialize)]
@@ -41,7 +41,6 @@ pub struct BuyOrderRequest {
     pub linked_order_type: Option<LinkedOrderType>,
     pub trigger_fill_condition: Option<TriggerFillCondition>,
     pub otoco_config: Option<Vec<String>>,
-
 }
 
 /// Sell order request
