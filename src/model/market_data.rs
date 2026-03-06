@@ -274,6 +274,361 @@ impl Candle {
     }
 }
 
+/// Mark price history data point
+///
+/// Represents a single mark price value at a specific timestamp,
+/// returned by `/public/get_mark_price_history`.
+#[derive(DebugPretty, DisplaySimple, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MarkPricePoint {
+    /// Timestamp in milliseconds since Unix epoch
+    pub timestamp: i64,
+    /// Mark price value
+    pub mark_price: f64,
+}
+
+impl MarkPricePoint {
+    /// Create a new mark price point
+    #[must_use]
+    pub fn new(timestamp: i64, mark_price: f64) -> Self {
+        Self {
+            timestamp,
+            mark_price,
+        }
+    }
+
+    /// Create from raw API response tuple [timestamp, mark_price]
+    #[must_use]
+    pub fn from_tuple(data: (i64, f64)) -> Self {
+        Self {
+            timestamp: data.0,
+            mark_price: data.1,
+        }
+    }
+}
+
+/// Mark price history collection
+///
+/// Collection of mark price history points for an instrument,
+/// returned by `/public/get_mark_price_history`.
+#[derive(DebugPretty, DisplaySimple, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MarkPriceHistory {
+    /// Instrument name
+    pub instrument_name: String,
+    /// Collection of mark price points
+    pub points: Vec<MarkPricePoint>,
+}
+
+impl MarkPriceHistory {
+    /// Create a new empty mark price history
+    #[must_use]
+    pub fn new(instrument_name: String) -> Self {
+        Self {
+            instrument_name,
+            points: Vec::new(),
+        }
+    }
+
+    /// Create from raw API response data
+    #[must_use]
+    pub fn from_raw(instrument_name: String, data: Vec<(i64, f64)>) -> Self {
+        Self {
+            instrument_name,
+            points: data.into_iter().map(MarkPricePoint::from_tuple).collect(),
+        }
+    }
+
+    /// Add a mark price point
+    pub fn add_point(&mut self, point: MarkPricePoint) {
+        self.points.push(point);
+    }
+
+    /// Get the latest mark price point
+    #[must_use]
+    pub fn latest(&self) -> Option<&MarkPricePoint> {
+        self.points.iter().max_by_key(|p| p.timestamp)
+    }
+
+    /// Get the earliest mark price point
+    #[must_use]
+    pub fn earliest(&self) -> Option<&MarkPricePoint> {
+        self.points.iter().min_by_key(|p| p.timestamp)
+    }
+
+    /// Get the number of points
+    #[must_use]
+    pub fn len(&self) -> usize {
+        self.points.len()
+    }
+
+    /// Check if the history is empty
+    #[must_use]
+    pub fn is_empty(&self) -> bool {
+        self.points.is_empty()
+    }
+}
+
+/// Trade volume data for a currency
+///
+/// Aggregated 24h trade volumes for different instrument types,
+/// returned by `/public/get_trade_volumes`.
+#[derive(DebugPretty, DisplaySimple, Clone, PartialEq, Serialize, Deserialize)]
+pub struct TradeVolume {
+    /// Currency code (e.g., "BTC", "ETH")
+    pub currency: String,
+    /// 24h trade volume for put options
+    pub puts_volume: f64,
+    /// 24h trade volume for call options
+    pub calls_volume: f64,
+    /// 24h trade volume for futures
+    pub futures_volume: f64,
+    /// 24h trade volume for spot
+    #[serde(default)]
+    pub spot_volume: f64,
+    /// 7-day trade volume for put options (extended)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub puts_volume_7d: Option<f64>,
+    /// 30-day trade volume for put options (extended)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub puts_volume_30d: Option<f64>,
+    /// 7-day trade volume for call options (extended)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub calls_volume_7d: Option<f64>,
+    /// 30-day trade volume for call options (extended)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub calls_volume_30d: Option<f64>,
+    /// 7-day trade volume for futures (extended)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub futures_volume_7d: Option<f64>,
+    /// 30-day trade volume for futures (extended)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub futures_volume_30d: Option<f64>,
+    /// 7-day trade volume for spot (extended)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub spot_volume_7d: Option<f64>,
+    /// 30-day trade volume for spot (extended)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub spot_volume_30d: Option<f64>,
+}
+
+impl TradeVolume {
+    /// Create a new trade volume with basic 24h data
+    #[must_use]
+    pub fn new(
+        currency: String,
+        puts_volume: f64,
+        calls_volume: f64,
+        futures_volume: f64,
+        spot_volume: f64,
+    ) -> Self {
+        Self {
+            currency,
+            puts_volume,
+            calls_volume,
+            futures_volume,
+            spot_volume,
+            puts_volume_7d: None,
+            puts_volume_30d: None,
+            calls_volume_7d: None,
+            calls_volume_30d: None,
+            futures_volume_7d: None,
+            futures_volume_30d: None,
+            spot_volume_7d: None,
+            spot_volume_30d: None,
+        }
+    }
+
+    /// Calculate total options volume (puts + calls)
+    #[must_use]
+    pub fn total_options_volume(&self) -> f64 {
+        self.puts_volume + self.calls_volume
+    }
+
+    /// Calculate total 24h volume across all instrument types
+    #[must_use]
+    pub fn total_volume(&self) -> f64 {
+        self.puts_volume + self.calls_volume + self.futures_volume + self.spot_volume
+    }
+
+    /// Calculate put/call ratio
+    #[must_use]
+    pub fn put_call_ratio(&self) -> Option<f64> {
+        if self.calls_volume > 0.0 {
+            Some(self.puts_volume / self.calls_volume)
+        } else {
+            None
+        }
+    }
+}
+
+/// Volatility index OHLC candle
+///
+/// Represents a single volatility index candle with OHLC data,
+/// returned by `/public/get_volatility_index_data`.
+#[derive(DebugPretty, DisplaySimple, Clone, PartialEq, Serialize, Deserialize)]
+pub struct VolatilityIndexCandle {
+    /// Timestamp in milliseconds since Unix epoch
+    pub timestamp: i64,
+    /// Open volatility value
+    pub open: f64,
+    /// High volatility value
+    pub high: f64,
+    /// Low volatility value
+    pub low: f64,
+    /// Close volatility value
+    pub close: f64,
+}
+
+impl VolatilityIndexCandle {
+    /// Create a new volatility index candle
+    #[must_use]
+    pub fn new(timestamp: i64, open: f64, high: f64, low: f64, close: f64) -> Self {
+        Self {
+            timestamp,
+            open,
+            high,
+            low,
+            close,
+        }
+    }
+
+    /// Create from raw API response tuple [timestamp, open, high, low, close]
+    #[must_use]
+    pub fn from_tuple(data: (i64, f64, f64, f64, f64)) -> Self {
+        Self {
+            timestamp: data.0,
+            open: data.1,
+            high: data.2,
+            low: data.3,
+            close: data.4,
+        }
+    }
+
+    /// Calculate the range (high - low)
+    #[must_use]
+    pub fn range(&self) -> f64 {
+        self.high - self.low
+    }
+
+    /// Check if volatility increased (close > open)
+    #[must_use]
+    pub fn is_increasing(&self) -> bool {
+        self.close > self.open
+    }
+
+    /// Check if volatility decreased (close < open)
+    #[must_use]
+    pub fn is_decreasing(&self) -> bool {
+        self.close < self.open
+    }
+}
+
+/// Volatility index data response
+///
+/// Collection of volatility index candles with optional continuation token,
+/// returned by `/public/get_volatility_index_data`.
+#[derive(DebugPretty, DisplaySimple, Clone, PartialEq, Serialize, Deserialize)]
+pub struct VolatilityIndexData {
+    /// Currency for this volatility index
+    pub currency: String,
+    /// Collection of volatility candles
+    pub data: Vec<VolatilityIndexCandle>,
+    /// Continuation token for pagination
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub continuation: Option<String>,
+}
+
+impl VolatilityIndexData {
+    /// Create a new empty volatility index data
+    #[must_use]
+    pub fn new(currency: String) -> Self {
+        Self {
+            currency,
+            data: Vec::new(),
+            continuation: None,
+        }
+    }
+
+    /// Create from raw API response data
+    #[must_use]
+    pub fn from_raw(
+        currency: String,
+        data: Vec<(i64, f64, f64, f64, f64)>,
+        continuation: Option<String>,
+    ) -> Self {
+        Self {
+            currency,
+            data: data
+                .into_iter()
+                .map(VolatilityIndexCandle::from_tuple)
+                .collect(),
+            continuation,
+        }
+    }
+
+    /// Get the latest candle
+    #[must_use]
+    pub fn latest(&self) -> Option<&VolatilityIndexCandle> {
+        self.data.iter().max_by_key(|c| c.timestamp)
+    }
+
+    /// Get the earliest candle
+    #[must_use]
+    pub fn earliest(&self) -> Option<&VolatilityIndexCandle> {
+        self.data.iter().min_by_key(|c| c.timestamp)
+    }
+
+    /// Check if there are more results available
+    #[must_use]
+    pub fn has_more(&self) -> bool {
+        self.continuation.is_some()
+    }
+
+    /// Get the number of candles
+    #[must_use]
+    pub fn len(&self) -> usize {
+        self.data.len()
+    }
+
+    /// Check if the data is empty
+    #[must_use]
+    pub fn is_empty(&self) -> bool {
+        self.data.is_empty()
+    }
+}
+
+/// Index type filter for supported index names
+///
+/// Used to filter index names by type in `/public/get_supported_index_names`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize, Default)]
+#[serde(rename_all = "lowercase")]
+pub enum IndexType {
+    /// All index types
+    #[default]
+    All,
+    /// Spot price indexes
+    Spot,
+    /// Derivative price indexes
+    Derivative,
+}
+
+impl IndexType {
+    /// Get the string representation for API requests
+    #[must_use]
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            Self::All => "all",
+            Self::Spot => "spot",
+            Self::Derivative => "derivative",
+        }
+    }
+}
+
+impl std::fmt::Display for IndexType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -556,5 +911,231 @@ mod tests {
 
         assert!(debug_str.contains("BTC-PERPETUAL"));
         assert!(display_str.contains("BTC-PERPETUAL"));
+    }
+
+    #[test]
+    fn test_mark_price_point_new() {
+        let point = MarkPricePoint::new(1640995200000, 50000.0);
+        assert_eq!(point.timestamp, 1640995200000);
+        assert!((point.mark_price - 50000.0).abs() < f64::EPSILON);
+    }
+
+    #[test]
+    fn test_mark_price_point_from_tuple() {
+        let point = MarkPricePoint::from_tuple((1640995200000, 50000.0));
+        assert_eq!(point.timestamp, 1640995200000);
+        assert!((point.mark_price - 50000.0).abs() < f64::EPSILON);
+    }
+
+    #[test]
+    fn test_mark_price_history_new() {
+        let history = MarkPriceHistory::new("BTC-25JUN21-50000-C".to_string());
+        assert_eq!(history.instrument_name, "BTC-25JUN21-50000-C");
+        assert!(history.is_empty());
+        assert_eq!(history.len(), 0);
+    }
+
+    #[test]
+    fn test_mark_price_history_from_raw() {
+        let data = vec![
+            (1640995200000, 0.5165),
+            (1640995201000, 0.5166),
+            (1640995202000, 0.5167),
+        ];
+        let history = MarkPriceHistory::from_raw("BTC-25JUN21-50000-C".to_string(), data);
+        assert_eq!(history.len(), 3);
+        assert!(!history.is_empty());
+    }
+
+    #[test]
+    fn test_mark_price_history_latest_earliest() {
+        let data = vec![
+            (1640995200000, 0.5165),
+            (1640995202000, 0.5167),
+            (1640995201000, 0.5166),
+        ];
+        let history = MarkPriceHistory::from_raw("BTC-25JUN21-50000-C".to_string(), data);
+
+        let latest = history.latest();
+        assert!(latest.is_some());
+        assert_eq!(latest.map(|p| p.timestamp), Some(1640995202000));
+
+        let earliest = history.earliest();
+        assert!(earliest.is_some());
+        assert_eq!(earliest.map(|p| p.timestamp), Some(1640995200000));
+    }
+
+    #[test]
+    fn test_mark_price_history_serialization() {
+        let history = MarkPriceHistory::from_raw(
+            "BTC-25JUN21-50000-C".to_string(),
+            vec![(1640995200000, 0.5165)],
+        );
+        let json = serde_json::to_string(&history).unwrap();
+        let deserialized: MarkPriceHistory = serde_json::from_str(&json).unwrap();
+        assert_eq!(history, deserialized);
+    }
+
+    #[test]
+    fn test_trade_volume_new() {
+        let volume = TradeVolume::new("BTC".to_string(), 48.0, 145.0, 6.25, 11.1);
+        assert_eq!(volume.currency, "BTC");
+        assert!((volume.puts_volume - 48.0).abs() < f64::EPSILON);
+        assert!((volume.calls_volume - 145.0).abs() < f64::EPSILON);
+        assert!((volume.futures_volume - 6.25).abs() < f64::EPSILON);
+        assert!((volume.spot_volume - 11.1).abs() < f64::EPSILON);
+    }
+
+    #[test]
+    fn test_trade_volume_total_options() {
+        let volume = TradeVolume::new("BTC".to_string(), 48.0, 145.0, 6.25, 11.1);
+        assert!((volume.total_options_volume() - 193.0).abs() < f64::EPSILON);
+    }
+
+    #[test]
+    fn test_trade_volume_total() {
+        let volume = TradeVolume::new("BTC".to_string(), 48.0, 145.0, 6.25, 11.1);
+        let expected = 48.0 + 145.0 + 6.25 + 11.1;
+        assert!((volume.total_volume() - expected).abs() < f64::EPSILON);
+    }
+
+    #[test]
+    fn test_trade_volume_put_call_ratio() {
+        let volume = TradeVolume::new("BTC".to_string(), 48.0, 145.0, 6.25, 11.1);
+        let ratio = volume.put_call_ratio();
+        assert!(ratio.is_some());
+        assert!((ratio.unwrap() - (48.0 / 145.0)).abs() < 0.001);
+
+        let volume_zero_calls = TradeVolume::new("BTC".to_string(), 48.0, 0.0, 6.25, 11.1);
+        assert!(volume_zero_calls.put_call_ratio().is_none());
+    }
+
+    #[test]
+    fn test_trade_volume_serialization() {
+        let volume = TradeVolume::new("BTC".to_string(), 48.0, 145.0, 6.25, 11.1);
+        let json = serde_json::to_string(&volume).unwrap();
+        let deserialized: TradeVolume = serde_json::from_str(&json).unwrap();
+        assert_eq!(volume.currency, deserialized.currency);
+        assert!((volume.puts_volume - deserialized.puts_volume).abs() < f64::EPSILON);
+    }
+
+    #[test]
+    fn test_volatility_index_candle_new() {
+        let candle = VolatilityIndexCandle::new(1640995200000, 0.21, 0.22, 0.20, 0.215);
+        assert_eq!(candle.timestamp, 1640995200000);
+        assert!((candle.open - 0.21).abs() < f64::EPSILON);
+        assert!((candle.high - 0.22).abs() < f64::EPSILON);
+        assert!((candle.low - 0.20).abs() < f64::EPSILON);
+        assert!((candle.close - 0.215).abs() < f64::EPSILON);
+    }
+
+    #[test]
+    fn test_volatility_index_candle_from_tuple() {
+        let candle = VolatilityIndexCandle::from_tuple((1640995200000, 0.21, 0.22, 0.20, 0.215));
+        assert_eq!(candle.timestamp, 1640995200000);
+        assert!((candle.range() - 0.02).abs() < f64::EPSILON);
+    }
+
+    #[test]
+    fn test_volatility_index_candle_increasing_decreasing() {
+        let increasing = VolatilityIndexCandle::new(1640995200000, 0.20, 0.22, 0.19, 0.21);
+        assert!(increasing.is_increasing());
+        assert!(!increasing.is_decreasing());
+
+        let decreasing = VolatilityIndexCandle::new(1640995200000, 0.21, 0.22, 0.19, 0.20);
+        assert!(decreasing.is_decreasing());
+        assert!(!decreasing.is_increasing());
+    }
+
+    #[test]
+    fn test_volatility_index_data_new() {
+        let data = VolatilityIndexData::new("BTC".to_string());
+        assert_eq!(data.currency, "BTC");
+        assert!(data.is_empty());
+        assert_eq!(data.len(), 0);
+        assert!(!data.has_more());
+    }
+
+    #[test]
+    fn test_volatility_index_data_from_raw() {
+        let raw_data = vec![
+            (1640995200000, 0.21, 0.22, 0.20, 0.215),
+            (1640995260000, 0.215, 0.23, 0.21, 0.22),
+        ];
+        let data = VolatilityIndexData::from_raw("BTC".to_string(), raw_data, None);
+        assert_eq!(data.len(), 2);
+        assert!(!data.has_more());
+    }
+
+    #[test]
+    fn test_volatility_index_data_with_continuation() {
+        let raw_data = vec![(1640995200000, 0.21, 0.22, 0.20, 0.215)];
+        let data = VolatilityIndexData::from_raw(
+            "BTC".to_string(),
+            raw_data,
+            Some("next_page_token".to_string()),
+        );
+        assert!(data.has_more());
+        assert_eq!(data.continuation, Some("next_page_token".to_string()));
+    }
+
+    #[test]
+    fn test_volatility_index_data_latest_earliest() {
+        let raw_data = vec![
+            (1640995200000, 0.21, 0.22, 0.20, 0.215),
+            (1640995320000, 0.22, 0.24, 0.21, 0.23),
+            (1640995260000, 0.215, 0.23, 0.21, 0.22),
+        ];
+        let data = VolatilityIndexData::from_raw("BTC".to_string(), raw_data, None);
+
+        let latest = data.latest();
+        assert!(latest.is_some());
+        assert_eq!(latest.map(|c| c.timestamp), Some(1640995320000));
+
+        let earliest = data.earliest();
+        assert!(earliest.is_some());
+        assert_eq!(earliest.map(|c| c.timestamp), Some(1640995200000));
+    }
+
+    #[test]
+    fn test_volatility_index_data_serialization() {
+        let data = VolatilityIndexData::from_raw(
+            "BTC".to_string(),
+            vec![(1640995200000, 0.21, 0.22, 0.20, 0.215)],
+            None,
+        );
+        let json = serde_json::to_string(&data).unwrap();
+        let deserialized: VolatilityIndexData = serde_json::from_str(&json).unwrap();
+        assert_eq!(data, deserialized);
+    }
+
+    #[test]
+    fn test_index_type_default() {
+        let index_type = IndexType::default();
+        assert_eq!(index_type, IndexType::All);
+    }
+
+    #[test]
+    fn test_index_type_as_str() {
+        assert_eq!(IndexType::All.as_str(), "all");
+        assert_eq!(IndexType::Spot.as_str(), "spot");
+        assert_eq!(IndexType::Derivative.as_str(), "derivative");
+    }
+
+    #[test]
+    fn test_index_type_display() {
+        assert_eq!(format!("{}", IndexType::All), "all");
+        assert_eq!(format!("{}", IndexType::Spot), "spot");
+        assert_eq!(format!("{}", IndexType::Derivative), "derivative");
+    }
+
+    #[test]
+    fn test_index_type_serialization() {
+        let index_type = IndexType::Spot;
+        let json = serde_json::to_string(&index_type).unwrap();
+        assert_eq!(json, "\"spot\"");
+
+        let deserialized: IndexType = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized, IndexType::Spot);
     }
 }
