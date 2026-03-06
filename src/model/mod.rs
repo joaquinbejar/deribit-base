@@ -19,8 +19,12 @@
 
 /// Account-related data structures and types
 pub mod account;
+/// Block trade data structures and types
+pub mod block_trade;
 /// Book summary and market overview structures
 pub mod book_summary;
+/// Combo Books data structures and types
+pub mod combo;
 /// Configuration structures
 pub mod config;
 /// Currency enumeration and utilities
@@ -56,6 +60,11 @@ pub mod transaction;
 /// Transfer and withdrawal data structures
 pub mod transfer;
 
+pub use block_trade::{
+    BlockTrade, BlockTradeExecution, BlockTradeLeg, BlockTradeRole, BlockTradeSignature,
+    ExecuteBlockTradeRequest, VerifyBlockTradeRequest,
+};
+pub use combo::{ComboDetails, ComboIds, ComboLeg, ComboState, ComboTradeLeg, CreateComboRequest};
 pub use funding::{FundingChartData, FundingDataPoint, FundingRateData, TradingViewChartData};
 pub use order_management::{
     BuyOrderRequest, EditOrderRequest, MassQuoteItem, MassQuoteRequest, SellOrderRequest,
