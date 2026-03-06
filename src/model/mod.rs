@@ -59,6 +59,8 @@ pub mod trade;
 pub mod transaction;
 /// Transfer and withdrawal data structures
 pub mod transfer;
+/// Wallet-related data structures and types
+pub mod wallet;
 
 pub use block_trade::{
     BlockTrade, BlockTradeExecution, BlockTradeLeg, BlockTradeRole, BlockTradeSignature,
@@ -73,4 +75,8 @@ pub use order_management::{
 pub use transaction::{
     Deposit, DepositsResponse, TransactionLog, TransactionLogEntry, TransactionType, Withdrawal,
     WithdrawalsResponse,
+};
+pub use wallet::{
+    ClearanceOriginator, ClearanceState, DepositAddress, DepositId, WithdrawalPriority,
+    WithdrawalRequest, WithdrawalState,
 };
