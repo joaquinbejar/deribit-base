@@ -13,7 +13,7 @@
 //! - **🛡️ Comprehensive Error Handling**: 100+ official Deribit error codes with categorization
 //! - **🔐 Cryptographic Utilities**: Secure authentication, checksums, and FIX protocol support
 //! - **⚡ Protocol Agnostic**: Compatible with FIX, HTTP REST, and WebSocket implementations
-//! - **🧪 Fully Tested**: 74 comprehensive unit tests ensuring reliability
+//! - **🧪 Fully Tested**: 377 comprehensive unit tests ensuring reliability
 //! - **📚 Complete Documentation**: Extensive API documentation with examples
 //!
 //! ## Supported Protocols
@@ -37,7 +37,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! deribit-base = "0.2"
+//! deribit-base = "0.3"
 //! ```
 //!
 //! ### Basic Usage

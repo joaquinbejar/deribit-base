@@ -29,7 +29,7 @@ supporting FIX 4.4, HTTP REST, and WebSocket protocols with a unified, type-safe
 - **🛡️ Comprehensive Error Handling**: 100+ official Deribit error codes with categorization
 - **🔐 Cryptographic Utilities**: Secure authentication, checksums, and FIX protocol support
 - **⚡ Protocol Agnostic**: Compatible with FIX, HTTP REST, and WebSocket implementations
-- **🧪 Fully Tested**: 74 comprehensive unit tests ensuring reliability
+- **🧪 Fully Tested**: 377 comprehensive unit tests ensuring reliability
 - **📚 Complete Documentation**: Extensive API documentation with examples
 
 ### Supported Protocols
@@ -53,7 +53,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-deribit-base = "0.2"
+deribit-base = "0.3"
 ```
 
 #### Basic Usage

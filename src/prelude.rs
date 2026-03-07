@@ -57,6 +57,23 @@ pub use crate::model::{
     },
 };
 
+// Block trade exports
+pub use crate::model::block_trade::{
+    BlockTrade, BlockTradeExecution, BlockTradeLeg, BlockTradeRole, BlockTradeSignature,
+    ExecuteBlockTradeRequest, VerifyBlockTradeRequest,
+};
+
+// Combo exports
+pub use crate::model::combo::{
+    ComboDetails, ComboIds, ComboLeg, ComboState, ComboTradeLeg, CreateComboRequest,
+};
+
+// Wallet exports
+pub use crate::model::wallet::{
+    ClearanceOriginator, ClearanceState, DepositAddress, DepositId, WithdrawalRequest,
+    WithdrawalState,
+};
+
 // Utility exports - macros and functions
 pub use crate::constants::*;
 pub use crate::utils::{

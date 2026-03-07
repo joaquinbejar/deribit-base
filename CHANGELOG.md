@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2025-03-07
+
+### Added
+- **Block Trade Support**: Complete block trade model types for OTC trading
+  - `BlockTrade`, `BlockTradeExecution`, `BlockTradeLeg`, `BlockTradeRole`, `BlockTradeSignature`
+  - `ExecuteBlockTradeRequest`, `VerifyBlockTradeRequest`
+- **Combo Books Support**: Comprehensive combo instrument structures
+  - `ComboDetails`, `ComboIds`, `ComboLeg`, `ComboState`, `ComboTradeLeg`
+  - `CreateComboRequest`
+- **Wallet Types**: Full wallet and withdrawal management
+  - `ClearanceOriginator`, `ClearanceState`, `DepositAddress`, `DepositId`
+  - `WithdrawalPriority`, `WithdrawalRequest`, `WithdrawalState`
+- Extended `BuyOrderRequest` with advanced order options
+- `LinkedOrderType` and `TriggerFillCondition` enums for extended order management
+- Expanded prelude with block_trade, combo, wallet exports
+- Dependabot configuration for automated dependency updates
+
+### Changed
+- Updated Rust edition to 2024
+- Updated `rand` dependency from 0.9 to 0.10
+- Updated CI actions: `actions/checkout` v2→v6, `codecov/codecov-action` v4→v5
+- Expanded test coverage from 74 to 377 tests
+
+### Documentation
+- Added comprehensive documentation for 32 new public items
+- All public items now have `///` doc comments
+
+## [0.2.0] - 2024-12-15
+
 ### Added
 - Comprehensive constants module with all Deribit API v2.1.1 configuration values
 - Complete RPC error codes implementation based on official Deribit API documentation
