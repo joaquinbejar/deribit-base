@@ -97,10 +97,7 @@ impl OptionInstrumentPair {
     /// Extracts the expiration timestamp from the call or put instrument
     /// and converts it to a UTC datetime.
     pub fn expiration(&self) -> Option<DateTime<Utc>> {
-        let expiration_timestamp = match self.instrument() {
-            Some(i) => i.expiration_timestamp,
-            None => return None,
-        };
+        let expiration_timestamp = self.instrument()?.expiration_timestamp;
 
         if let Some(expiration_timestamp) = expiration_timestamp {
             Utc.timestamp_millis_opt(expiration_timestamp).single()
