@@ -193,12 +193,12 @@ Repositories by the same author that this project depends on, and repositories t
 
 | Repository | Description |
 |------------|-------------|
-| [pretty-simple-display](https://github.com/joaquinbejar/pretty-simple-display) · [crates.io](https://crates.io/crates/pretty-simple-display) | Derive macros for pretty and simple JSON display formatting. |
+| [pretty-simple-display](https://github.com/joaquinbejar/pretty-simple-display) | Provides the derive macros that give the shared Deribit structs their pretty and simple JSON `Debug`/`Display` output. |
 
 ### Used by
 
 | Repository | Description |
 |------------|-------------|
-| [deribit-mcp](https://github.com/joaquinbejar/deribit-mcp) | Model Context Protocol server exposing the Deribit client stack as MCP tools, resources and prompts. |
+| [deribit-mcp](https://github.com/joaquinbejar/deribit-mcp) | Model Context Protocol server for Deribit; uses deribit-base for the common models shared by its HTTP, WebSocket and FIX adapters. |
 
 <!-- related-projects:end -->
